@@ -1,0 +1,17 @@
+!!!
+%html{:lang => "en"}
+  = render partial: 'layouts/head'
+  %body.hold-transition.login-page
+    .login-box
+      / /.login-logo
+      .card.card-outline.card-primary
+        .card-header.text-center
+          %a.h1{:href => root_path}
+            %b AUDIT v2
+        .card-body
+          %p.login-box-msg Sign in to start your session
+          = render partial: 'layouts/flashes'
+          = yield
+
+    = javascript_include_tag 'application'
+    = yield :scripts
