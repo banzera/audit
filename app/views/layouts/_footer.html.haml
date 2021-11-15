@@ -1,0 +1,11 @@
+-# Main Footer
+%footer.main-footer
+  -# To the right
+  .float-right.d-none.d-sm-inline
+    -# Anything you want
+  -# Default to the left
+  %strong
+    Copyright © #{Time.current.year}
+    = succeed "." do
+      %a{:href => "#"} Accelerate United
+  All rights reserved.

@@ -40,6 +40,12 @@ gem "colorize", "~> 0.8.1"
 # Better console
 gem "pry-rails", "~> 0.3.9"
 
+# consistent page titles
+gem "flutie", "~> 2.2"
+
+# iconography
+gem "font-awesome-rails", "~> 4.7"
+
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 
@@ -72,4 +78,3 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-

@@ -1,0 +1,23 @@
+/ Main Sidebar Container
+%aside.main-sidebar.sidebar-dark-primary.elevation-4
+  / Brand Logo
+  %a.brand-link{:href => root_path}
+    %img.brand-image.img-circle.elevation-3{:alt => "AUDIT Logo", :src => "/img/logo.png", :style => "opacity: .8"}/
+    %span.brand-text.font-weight-light AUDIT v2
+  / Sidebar
+  .sidebar
+    / Sidebar user panel (optional)
+    .user-panel.mt-3.pb-3.mb-3.d-flex
+      .image
+        %img.img-circle.elevation-2{:alt => "User Image", :src => "/img/blank.png"}/
+      .info
+        %a.d-block{:href => "#"} User Name
+
+    / SidebarSearch Form
+    .form-inline
+      .input-group{"data-widget" => "sidebar-search"}
+        %input.form-control.form-control-sidebar{"aria-label" => "Search", :placeholder => "Search", :type => "search"}/
+        .input-group-append
+          %button.btn.btn-sidebar
+            %i.fas.fa-search.fa-fw
+

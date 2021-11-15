@@ -1,0 +1,12 @@
+%li.nav-item
+  %a.nav-link{"data-widget" => "navbar-search", :href => "#", :role => "button"}
+    %i.fas.fa-search
+  .navbar-search-block
+    %form.form-inline
+      .input-group.input-group-sm
+        %input.form-control.form-control-navbar{"aria-label" => "Search", :placeholder => "Search", :type => "search"}/
+        .input-group-append
+          %button.btn.btn-navbar{:type => "submit"}
+            %i.fas.fa-search
+          %button.btn.btn-navbar{"data-widget" => "navbar-search", :type => "button"}
+            %i.fas.fa-times

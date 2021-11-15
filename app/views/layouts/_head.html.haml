@@ -1,0 +1,16 @@
+%head
+  %meta{:charset => "utf-8"}/
+  %meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}/
+  %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+  %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
+
+  %meta{:content => "AUDIT", :name => "description"}/
+  %meta{:content => "5 & 2 Solutions", :name => "author"}/
+
+  %title=page_title app_name: 'AUDIT ERP', separator: ' | '
+
+  = csrf_meta_tags
+  = action_cable_meta_tag
+
+  = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+  = javascript_pack_tag    'application'

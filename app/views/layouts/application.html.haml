@@ -1,0 +1,39 @@
+!!!
+%html{:lang => "en"}
+  = render partial: 'layouts/head'
+
+  %body.hold-transition.sidebar-mini.layout-fixed.dark-mode
+    .wrapper
+      = render partial: 'layouts/nav'
+      = render partial: 'layouts/sidebar'
+
+      -# Content Wrapper. Contains page content
+      .content-wrapper
+        = render partial: 'layouts/flashes'
+
+        -# Content Header (Page header)
+        .content-header
+          .container-fluid
+            .row.mb-2
+              .col-sm-6
+                %ol.breadcrumb.float-sm-left
+                  %li.breadcrumb-item
+                    %a{:href => root_path} Home
+                  %li.breadcrumb-item.active=@page_title
+              -#.col-sm-6
+              -#  %h1.m-0=@page_title
+        -# Main content
+        %section.content
+          .container-fluid
+            =yield
+
+      -# = render partial: 'layouts/aside'
+    = render partial: 'layouts/footer'
+
+    = javascript_include_tag 'application'
+    = yield :scripts
+
+:coffee
+
+- content_for :page_title do
+  =@page_title
