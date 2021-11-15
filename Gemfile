@@ -50,6 +50,10 @@ gem "flutie", "~> 2.2"
 # iconography
 gem "font-awesome-rails", "~> 4.7"
 
+# Easy form creation
+gem "simple_form", "~> 5.1"
+gem "american_date", "~> 1.1"
+
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 
