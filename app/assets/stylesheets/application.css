@@ -10,6 +10,40 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
- *= require_tree .
- *= require_self
+ * require_tree .
+ *
+ *= require 'css/adminlte'
+ *= require 'fontawesome-free/css/all'
+ *= require 'fa-fix'
+ *
+ *= require effective_datatables
+ *= require effective_bootstrap
+ *
+ * Toastr toast alerts
+ *= require 'toastr/toastr'
+ *
+ * daterange picker
+ *= require 'daterangepicker/daterangepicker'
+ *
+ * iCheck for checkboxes and radio inputs
+ *= require 'icheck-bootstrap/icheck-bootstrap'
+ *
+ * Bootstrap Color Picker
+ *= require 'bootstrap-colorpicker/css/bootstrap-colorpicker'
+ *
+ * Tempusdominus Bootstrap 4
+ *= require 'tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4'
+ *
+ * Select2
+ *= require 'select2/css/select2'
+ *= require 'select2-bootstrap4-theme/select2-bootstrap4'
+ *
+ * Bootstrap4 Duallistbox
+ *= require 'bootstrap4-duallistbox/bootstrap-duallistbox'
+ *
+ * BS Stepper
+ *= require 'bs-stepper/css/bs-stepper'
+ *
+ * dropzonejs
+ *= require 'dropzone/min/dropzone'
  */

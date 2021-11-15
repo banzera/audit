@@ -1,0 +1,26 @@
+%li.nav-item.dropdown.user-menu
+  %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
+    %img.user-image.img-circle.elevation-2{:alt => "User Image", :src => "/img/blank.png"}/
+    %span.d-none.d-md-inline User Name
+  %ul.dropdown-menu.dropdown-menu-lg.dropdown-menu-right
+    / User image
+    %li.user-header.bg-primary
+      %img.img-circle.elevation-2{:alt => "User Image", :src => "/img/blank.png"}/
+      %p
+        User Name
+        %small Member since Nov. 2012
+    / Menu Body
+    %li.user-body
+      .row
+        .col-4.text-center
+          %a{:href => "#"} Followers
+        .col-4.text-center
+          %a{:href => "#"} Sales
+        .col-4.text-center
+          %a{:href => "#"} Friends
+      / /.row
+    / Menu Footer
+    %li.user-footer
+      -#%a.btn.btn-default.btn-flat{:href => edit_user_registration_path } Profile
+      %a.btn.btn-default.btn-flat.float-right{:href => '#destroy_user_session_path', :data => {:method=> :delete}} Sign out
+
