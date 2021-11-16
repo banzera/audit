@@ -30,4 +30,221 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    models:
+      category:
+        other: Categories
+      customer:
+        other: Customers
+      order:
+        other: Orders
+      pre_order:
+        other: Pre-Orders
+      purchase_order:
+        one: PO
+        other: POs
+      sku:
+        one: SKU
+        other: SKUs
+      supplier:
+        other: Suppliers
+      vendor:
+        other: Vendors
+    attributes:
+      customer:
+        custname: Name
+        custbusinessname: Business Name
+        custfirst: First Name
+        custlast: Last Name
+        custsal: Salutation
+        custtitle: Title
+        custaddress: Address
+        custcity: City
+        custst: State
+        custzip: Zip Code
+        custphone: Phone Number
+        custfax: Fax Number
+        custemail: Email
+        custprimarycontact1: Primary Contact
+        custphone1:
+        custphonetype1:
+        custemail1:
+        custprimarycontact2:
+        custphone2:
+        custphonetype2:
+        custemail2:
+        custtaxrate: Tax Rate
+        custnotes: Notes
+        custdatecreated:
+        custdatemodified:
+        custbillingbusinessname:
+        custbillingfirst:
+        custbillinglast:
+        custbillingsal:
+        custbillingtitle:
+        custbillingaddress:
+        custbillingcity:
+        custbillingst:
+        custbillingzip:
+        custbillingphone:
+        custbillingfax:
+        custbillingemail:
+        custbillingsame:
+        custqbo:
+        custccauth: Credit Card Auth
+        custcclast4: Credit Card Last 4
+        custtaxjurisid: Tax Jurisdiction
+        lastrewarddate: Last Reward Date
+        custhsacct:
+        discontinued:
+        custtyfirstname:
+        custtylastname:
+        custtyaddress:
+        custtycity:
+        custtyst:
+        custtyzip:
+        custtyphone:
+        custtyemail:
+      order:
+        orderid: ID
+        orderdate: Date
+        orderbatch: Batch
+        customer: Customer ID
+        ordertaxrate: Tax Rate
+        orderdelivereddate: Delivered Date
+        orderdeliverdfrom: Delivered From
+        orderdeliveredto: Delivered To
+        ordershipmethod: Ship Method
+        orderreceipthl: Receipt HL
+        orderdateinvoiced: Date Invoiced
+        orderdatepaid: Date Paid
+        orderpaymentmethod: Payment Method
+        orderpaymentamount: Payment Amount
+        ordernotes: Notes
+        orderccdate: CC Date
+        preordercompletedate: Pre-Order Completed Date
+        orderconfirmdate: Confirmed Date
+      pre_order:
+        preorderdate: Date
+        preorderbatch: Batch
+        custid: Customer ID
+        preordernotes: Notes
+        preordersh1: Ship 1
+        preordersh2: Ship 2
+        preordervendorid: Vendor ID
+        orderid: Order ID
+        ordercreatedate: Order Created On
+        preorderanalysisdate: Analysis Date
+        confirmationdate: Confirmation Date
+        preordercheck: Check Date
+      purchase_order:
+        poid: ID
+        podate: Date
+        pobatch: Batch
+        splrid: Supplier 1
+        splrid2: Supplier 2
+        poshipdate: Ship Date
+        poshiptype: Ship Type
+        potrackingno: PO Tracking Number
+        porcvdby: Received By
+        podatepaid: Payment Date
+        pomethodpaid: Payment Method
+        popaymentno: Payment Number
+        poamountpaid: Payment Amount
+        ponotes: Notes
+        posplrorderno: Supplier Order Number
+        pochecksentdate: Check Sent Date
+      purchase_order_item:
+        sku: SKU
+        poorderquant: Qty
+        poorderprice: Price
+        poordertax:  Tax
+        poordershipping: Shipping
+        poorderfees: Fees
+        poordertotal: Total
+        poorderpriceper: Price Per
+        poordertaxper:  Tax Per
+        poordershippingper: Shipping Per
+        poorderfeesper: Fees Per
+        poordertotalper: Total Per
+        poorderrcvddate: Received Date
+        poorderrcvdquant: Received Qty
+        poorderexpiration: Expiration
+        poorderrebatedeadline: Rebate Deadline
+        poorderrebatesubmitted: Rebate Submitted
+        poorderrebate: Rebate
+        poorderrebatenotes: Rebate Notes
+      sku:
+        skuid: ID
+        sku: SKU
+        manf: Manufacturer
+        itemno: Item Number
+        skudesc: Description
+        unitweight: Unit Weight
+        categoryid: Category
+        skuminunits: Minimum Units
+        skuminunitstype: Minimum Units Type
+        dcloc: DC Location
+        skuminpercs: Minimum Per Case
+        vno01: Vendor Number
+        vsku01: Vendor SKU
+        vhl01:  Vendor URL
+        vno02: Vendor Number
+        vsku02: Vendor SKU
+        vhl02: Vendor URL
+        vno03: Vendor Number
+        vsku03: Vendor SKU
+        vhl03: Vendor URL
+        vno04: Vendor Number
+        vsku04: Vendor SKU
+        vhl04: Vendor URL
+        vno05: Vendor Number
+        vsku05: Vendor SKU
+        vhl05: Vendor URL
+        vno06: Vendor Number
+        vsku06: Vendor SKU
+        vhl06: Vendor URL
+        vno07: Vendor Number
+        vsku07: Vendor SKU
+        vhl07: Vendor URL
+        vno08: Vendor Number
+        vsku08: Vendor SKU
+        vhl08: Vendor URL
+        vno09: Vendor Number
+        vsku09: Vendor SKU
+        vhl09: Vendor URL
+        vno10: Vendor Number
+        vsku10: Vendor SKU
+        skuhighprice: High Price
+        skuhighpricevno: High Price Vendor Number
+        skuhighpricedate: High Price Date
+        skuclassid: Class
+        skumaxtemp: Maximum Temperature
+        skumintemp: Minimum Temperature
+        skunotes: Notes
+        tsv: Text Search Vector (meta)
+      supplier:
+        splrname: Code
+        splrfirst: First Name
+        splrlast: Last Name
+        splrbusinessname: Business Name
+        splraddress: Address
+        splrcity: City
+        splrst: State
+        splrzip: Zip
+        splrwebsite: Website
+        splremail: Email
+        splrphone: Phone
+        splrfax: Fax
+        splrprimarycontact1: Contact 1
+        splrphone1: Phone 1
+        splremail1: Email 1
+        splrprimarycontact2: Contact 2
+        splrphone2: Phone 2
+        splremail2: Email 2
+        splrtaxid: Tax ID
+        splrqbo: QBO
+        splrnotes: Notes
+      vendor:
+        vendorname: Name
+        vendorabbr: Abbreviation

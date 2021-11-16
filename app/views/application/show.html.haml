@@ -1,0 +1,18 @@
+- resource = (@_effective_resource || Effective::Resource.new(controller_path))
+- @resource = instance_variable_get('@' + resource.name) if resource.name
+
+- if @resource
+  .row
+    .col-12
+      .card
+        .card-header
+          = link_to 'Continue', (resource.action_path(:index) || root_path), class: 'btn btn-primary'
+
+          .card-tools
+            = render_resource_buttons(@resource, show: false, destroy: false)
+
+        .card-body
+          - begin
+            = render_resource_partial(@resource)
+          - rescue
+            = render_resource_form(@resource, readonly: true)
