@@ -1,0 +1,74 @@
+.content
+  = simple_form_for @sku, defaults: { disabled: local_assigns[:readonly] }, wrapper: :horizontal_form do |f|
+    .row
+      .col-lg-6
+        .card.card-primary.card-outline
+          .card-header
+            %h3.card-title General
+            .card-tools
+              .button.btn.btn-tool{type: :button, 'data-card-widget': :collapse, title: :collapse}
+                %i.fas.fa-minus
+          .card-body
+            %p.card-text
+              =f.input :sku
+              =f.input :manf
+              =f.input :itemno
+              =f.input :skudesc
+              =f.input :unitweight
+              =f.association :category
+              =f.input :skuminunits
+              =f.input :skuminunitstype
+              =f.input :dcloc
+              =f.input :skuminpercs
+
+              =f.input :skuclassid
+              =f.input :skumaxtemp
+              =f.input :skumintemp
+              =f.input :skunotes
+      .col-lg-6
+        .card.card-primary.card-outline
+          .card-header
+            %h3.card-title Pricing
+            .card-tools
+              .button.btn.btn-tool{type: :button, 'data-card-widget': :collapse, title: :collapse}
+                %i.fas.fa-minus
+          .card-body
+            %p.card-text
+              =f.input :skuhighprice, as: :currency
+              =f.association :high_price_vendor
+              =f.input :skuhighpricedate
+
+        .card.card-primary.card-outline
+          .card-header
+            %h3.card-title Meta
+            .card-tools
+              .button.btn.btn-tool{type: :button, 'data-card-widget': :collapse, title: :collapse}
+                %i.fas.fa-minus
+          .card-body
+            %p.card-text
+              =f.input :tsv, as: :text
+        .card
+          .card-header
+            %h5.m-0 Vendor Info
+          .card-body
+            .row
+              .col-5.col-sm-3
+                #vert-tabs-tab.nav.flex-column.nav-tabs.h-100{"aria-orientation" => "vertical", :role => "tablist"}
+                  - @sku.vendors.each do |v|
+                    %a.nav-link[v, 'vert-tabs-tab']{:href => "#",
+                      "aria-controls" => "vert-tabs-home",
+                      "aria-selected" => "true",
+                      "data-toggle" => "pill",
+                      "role" => "tab"}
+                      =v.name
+              .col-7.col-sm-9
+                #vert-tabs-tabContent.tab-content
+                  - @sku.vendors.each do |v|
+                    .tab-pane.text-left.fade.show[v, 'vert-tabs']{"aria-labelledby" => "vert-tabs-home-tab", :role => "tabpanel"}
+                      %p=v.id
+                      %p=v.name
+                      %p=v.abbr
+                      %p=v.sku
+                      %p=v.url
+    .row
+      = simple_form_submit(f)

@@ -23,6 +23,13 @@ gem 'sass-rails', '>= 6'
 gem "haml-rails", "~> 2.0"
 gem "coffee-rails", "~> 5.0"
 
+# Easy resource tables
+gem "effective_datatables", "~> 4.9"
+
+# Charting/reporting
+gem "chartkick", "~> 4.1"
+gem "groupdate", "~> 5.2"
+
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '~> 5.0'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks

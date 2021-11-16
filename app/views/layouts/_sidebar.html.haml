@@ -21,3 +21,16 @@
           %button.btn.btn-sidebar
             %i.fas.fa-search.fa-fw
 
+    / Sidebar Menu
+    %nav.mt-2
+      %ul.nav.nav-pills.nav-sidebar.nav-flat.flex-column{"data-accordion" => "false", "data-widget" => "treeview", :role => "menu"}
+        =sidebar_link_to(home_path, icon: 'fa-tachometer-alt', label: 'Dashboard')
+        =sidebar_dropdown('Meta', 'fa-th', expanded: true, active: true) do
+          =sidebar_link_to(Category, icon: 'fa-bolt')
+          =sidebar_link_to(Customer, icon: 'fa-certificate')
+          =sidebar_link_to(PurchaseOrder, icon: 'fa-file')
+          =sidebar_link_to(Order, icon: 'fa-star')
+          =sidebar_link_to(PreOrder, icon: 'fa-star fa-inverse')
+          =sidebar_link_to(Supplier, icon: 'fa-suitcase')
+          =sidebar_link_to(Sku, icon: 'fa-barcode')
+          =sidebar_link_to(Vendor, icon: 'fa-truck')

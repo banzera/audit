@@ -1,0 +1,13 @@
+- resource = (@_effective_resource || Effective::Resource.new(controller_path))
+- @resource = instance_variable_get('@' + resource.name) if resource.name
+
+- if @resource
+  .col-12
+    .card
+      .card-header
+        %h3.card-title=@page_title
+        .card-tools
+          = render_resource_buttons(@resource, show: false)
+
+      .card-body
+        = render_resource_form(@resource)

@@ -1,0 +1,15 @@
+- resource = (@_effective_resource || Effective::Resource.new(controller_path))
+- @resource = instance_variable_get('@' + resource.name) if resource.name
+
+- if @resource
+  = simple_form_for @purchase_order, defaults: { disabled: local_assigns[:readonly] }, wrapper: :horizontal_form do |f|
+    .row
+      .col-12
+        .card
+          .card-header
+            %h3.card-title=@page_title
+            .card-tools
+              = simple_form_submit(f)
+
+          .card-body
+            = render_resource_form(@resource)

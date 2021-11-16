@@ -1,1 +1,99 @@
-%h2.text-center.display-4 Hello World!
+.content
+  .container-fluid
+    .row
+      .col-12.col-sm-6.col-md-3
+        .info-box
+          %span.info-box-icon.bg-info.elevation-1
+            %i.fas.fa-cog
+          .info-box-content
+            %span.info-box-text Orders Awaiting Confirmation
+            %span.info-box-number
+              = Order.awaiting_confirmation.count
+
+      .col-12.col-sm-6.col-md-3
+        .info-box.mb-3
+          %span.info-box-icon.bg-danger.elevation-1
+            %i.fas.fa-thumbs-up
+          .info-box-content
+            %span.info-box-text Pre-Orders Awaiting Analysis
+            %span.info-box-number
+              = PreOrder.awaiting_analysis.count
+
+      .clearfix.hidden-md-up
+
+      .col-12.col-sm-6.col-md-3
+        .info-box.mb-3
+          %span.info-box-icon.bg-success.elevation-1
+            %i.fas.fa-shopping-cart
+          .info-box-content
+            %span.info-box-text POs Outstanding
+            %span.info-box-number
+              = PurchaseOrder.outstanding.count
+      .col-12.col-sm-6.col-md-3
+        .info-box.mb-3
+          %span.info-box-icon.bg-warning.elevation-1
+            %i.fas.fa-users
+          .info-box-content
+            %span.info-box-text New Members
+            %span.info-box-number 2,000
+
+    .row
+      .col-lg-6
+        .card.card-primary.card-outline
+          .card-header
+            %h5.card-title Order Volume by Week
+            .card-tools
+              %a.btn.btn-primary.btn-tool{:href => orders_path} Go to Orders
+              %button.btn.btn-tool{"data-card-widget" => "collapse", :type => "button"}
+                %i.fas.fa-minus
+              .btn-group
+                %button.btn.btn-tool.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", :type => "button"}
+                  %i.fas.fa-wrench
+                .dropdown-menu.dropdown-menu-right{:role => "menu", :style => ""}
+                  %a.dropdown-item{:href => "#"} Action
+                  %a.dropdown-item{:href => "#"} Another action
+                  %a.dropdown-item{:href => "#"} Something else here
+                  %a.dropdown-divider
+                  %a.dropdown-item{:href => "#"} Separated link
+              %button.btn.btn-tool{"data-card-widget" => "remove", :type => "button"}
+                %i.fas.fa-times
+          .card-body
+            = line_chart Order.group_by_week(:orderdate).count
+      .col-lg-6
+        .card.card-primary.card-outline
+          .card-header
+            %h5.card-title Pre-Order Volume by Week
+            .card-tools
+              %a.btn.btn-primary.btn-tool{:href => pre_orders_path} Go to Pre-Orders
+              %button.btn.btn-tool{"data-card-widget" => "collapse", :type => "button"}
+                %i.fas.fa-minus
+              .btn-group
+                %button.btn.btn-tool.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", :type => "button"}
+                  %i.fas.fa-wrench
+                .dropdown-menu.dropdown-menu-right{:role => "menu", :style => ""}
+              %button.btn.btn-tool{"data-card-widget" => "remove", :type => "button"}
+                %i.fas.fa-times
+          .card-body
+            = line_chart PreOrder.group_by_week(:preorderdate).count
+    .row
+      .col-lg-6
+        .card
+          .card-body
+            %h5.card-title Or Monthly Volume Combined
+            = line_chart @combined_data
+
+      .col-lg-6
+        .card
+          .card-header
+            %h5.m-0 Order Flow
+          .card-body
+            %h6.card-title Special title treatment
+            %p.card-text With supporting text below as a natural lead-in to additional content.
+            %a.btn.btn-primary{:href => "#"} Go somewhere
+        .card.card-primary.card-outline
+          .card-header
+            %h5.m-0 Featured
+          .card-body
+            %h6.card-title Special title treatment
+            %p.card-text With supporting text below as a natural lead-in to additional content.
+            %a.btn.btn-primary{:href => "#"} Go somewhere

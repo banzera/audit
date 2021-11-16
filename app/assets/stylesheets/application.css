@@ -46,4 +46,10 @@
  *
  * dropzonejs
  *= require 'dropzone/min/dropzone'
+ *
+ *= require_self
  */
+
+table.dataTable > thead tr th {
+  vertical-align: top;
+}
