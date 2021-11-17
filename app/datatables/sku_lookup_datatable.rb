@@ -1,4 +1,4 @@
-class SkusDatatable < Effective::Datatable
+class SkuLookupDatatable < Effective::Datatable
 
   collection do
     scope = if attributes[:search]
@@ -9,11 +9,10 @@ class SkusDatatable < Effective::Datatable
   end
 
   datatable do
-    col :skuid
     col :sku
     col :manf
     col :itemno
-    col :skudesc,          visible: false
+    col :skudesc
     col :unitweight,       visible: false
     col :category
     col :skuminunits,      visible: false
@@ -28,6 +27,6 @@ class SkusDatatable < Effective::Datatable
     col :skumintemp,       visible: false
     col :skunotes,         visible: false
 
-    actions_col
+    actions_col only: :receive
   end
 end

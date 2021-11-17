@@ -18,15 +18,12 @@ class PurchaseOrder < ApplicationRecord
     select(:pomethodpaid).distinct.pluck(:pomethodpaid).compact
   end
 
+  def unfullfilled?
+    items.unfulfilled.any?
+  end
+
   def to_s
     pobatch
   end
 
-  def receive!
-    binding.pry
-  end
-
-  def receive
-    binding.pry
-  end
 end

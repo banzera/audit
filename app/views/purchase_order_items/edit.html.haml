@@ -2,7 +2,7 @@
 - @resource = instance_variable_get('@' + resource.name) if resource.name
 
 - if @resource
-  = simple_form_for @purchase_order, defaults: { disabled: local_assigns[:readonly] }, wrapper: :horizontal_form do |f|
+  = simple_form_for @resource, defaults: { disabled: local_assigns[:readonly] }, wrapper: :horizontal_form do |f|
     .row
       .col-12
         .card

@@ -33,12 +33,16 @@ en:
   activerecord:
     models:
       category:
+        one: Category
         other: Categories
       customer:
+        one:   Customer
         other: Customers
       order:
+        one: Order
         other: Orders
       pre_order:
+        one: Pre-Order
         other: Pre-Orders
       purchase_order:
         one: PO
@@ -47,8 +51,10 @@ en:
         one: SKU
         other: SKUs
       supplier:
+        one: Supplier
         other: Suppliers
       vendor:
+        one: Vendor
         other: Vendors
     attributes:
       category:

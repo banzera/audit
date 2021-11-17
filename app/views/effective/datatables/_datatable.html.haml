@@ -1,4 +1,5 @@
-- effective_datatable_params[:data]['reset'] = effective_datatable_params[:data]['reset'].gsub('link', 'secondary')
+- if effective_datatable_params[:data]['reset'].present?
+  - effective_datatable_params[:data]['reset'] = effective_datatable_params[:data]['reset'].gsub('link', 'secondary')
 
 %table{effective_datatable_params}
   %thead
