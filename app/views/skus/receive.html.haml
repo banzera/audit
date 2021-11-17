@@ -1,0 +1,46 @@
+%h2.text-center.display-4 Receiving SKU #{@sku.sku}
+.row
+  .col-12
+    .card
+      .card-header
+        %h3.card-title POs With this SKU Expected
+      .card-body
+        %table.table.table-bordered.table-hover
+          %thead
+            %tr
+              %th ID
+              %th Date
+              %th Batch
+              %th Ship Date
+              %th Supplier Order Number
+          %tbody
+            - @purchase_orders.each do |po|
+              %tr{"aria-expanded" => "#{po.unfullfilled?}", "data-widget" => "expandable-table"}
+                %td= po.poid
+                %td= po.podate
+                %td= po.pobatch
+                %td= po.poshipdate
+                %td= po.posplrorderno
+              %tr.expandable-body
+                %td{:colspan => "5"}
+                  %table.table.table-bordered.table-hover
+                    %thead
+                      %tr
+                        %th
+                        %th SKU
+                        %th SKU Description
+                        %th Order Qty
+                        %th Order Total
+                        %th Received On
+                        %th Received Qty
+                    %tbody
+                      - po.items.where(skuid: @sku.skuid).each do |item|
+                        %tr
+                          %td
+                            %a.btn.btn-small.btn-primary{href: receive_purchase_order_item_path(item)} Receive
+                          %td= item.sku.to_s
+                          %td= item.poorderquant
+                          %td= number_to_currency(item.poordertotal)
+                          %td= item.poorderrcvddate.to_s()
+                          %td= item.poorderrcvdquant
+

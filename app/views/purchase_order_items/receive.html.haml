@@ -1,0 +1,55 @@
+.content
+  = simple_form_for @purchase_order_item, defaults: { disabled: local_assigns[:readonly] } do |f|
+    .row
+      .col-8
+        .card.card-primary.card-outline
+          .card-header
+            %h3.card-title Item
+          .card-body
+            .row
+              %h3 Expected #{@purchase_order_item.poorderquant} items
+
+            .row
+              Correct number received?
+            .row
+              .col-1
+                %button.btn.btn-lg.btn-success#yes Yes
+              .col-1
+                %button.btn.btn-lg.btn-danger#no No
+              .col-10
+                = f.input :poorderrcvdquant, disabled: true
+
+            = f.input :poorderexpiration, wrapper: :vertical_form
+
+            - if @purchase_order_item.sku.missing_temperature_values?
+              = f.simple_fields_for :sku do |ff|
+                = ff.input :skumaxtemp
+                = ff.input :skumintemp
+
+    .row
+      = simple_form_submit(f)
+    .row
+      .col-12
+        .card
+          .card-header
+            %h3.card-title Items
+            .card-tools
+          .card-body.table-responsive.p-0
+            = render_datatable PurchaseOrderItemsDatatable.new(po: @purchase_order)
+
+- content_for :scripts do
+  :coffee
+    $(document).ready ->
+      # $('.form-group.purchase_order_item_poorderrcvdquant').hide()
+
+      $('#yes').click (e) ->
+        e.preventDefault()
+        $('.form-group.purchase_order_item_poorderrcvdquant').hide()
+        $('#purchase_order_item_poorderrcvdquant').attr('disabled', true)
+        $('#purchase_order_item_poorderrcvdquant').val(#{@purchase_order_item.poorderquant})
+
+      $('#no').click (e) ->
+        e.preventDefault()
+        $('.form-group.purchase_order_item_poorderrcvdquant').show()
+        $('#purchase_order_item_poorderrcvdquant').attr('disabled', false)
+        $('#purchase_order_item_poorderrcvdquant')

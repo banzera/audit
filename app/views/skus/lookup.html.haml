@@ -1,0 +1,28 @@
+%h2.text-center.display-4 SKU Search
+.row
+  .col-md-8.offset-md-2
+    = simple_form_for :sku, url: search_skus_path do |f|
+      .input-group
+        %input.form-control.form-control-lg#search{:name => 'sku[search]', :placeholder => "Type your keywords here", :type => "search", value: @query}
+        .input-group-append
+          %button.btn.btn-lg.btn-default{:type => "submit", data: { controller: 'receive', action: 'click->receive#search'}}
+            %i.fa.fa-search
+
+.row
+  .col-md-10.offset-md-1
+    = render_datatable(@datatable,
+          input_js: {},
+          buttons: false,
+          charts: false,
+          entries: false,
+          filters: true,
+          inline: false,
+          namespace: nil,
+          pagination: false,
+          search: false,
+          simple: false,
+          sort: false)
+
+:coffee
+  $(document).ready ->
+    $('#search').focus()

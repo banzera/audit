@@ -7,6 +7,16 @@ class PurchaseOrderItem < ApplicationRecord
 
   scope :unfulfilled, -> { where('poorderquant != poorderrcvdquant') }
 
+  def unfulfilled?
+    poorderquant != poorderrcvdquant
+  end
+
+  accepts_nested_attributes_for :sku, update_only: true
+
+  # def receive!
+  #   binding.pry
+  # end
+
   def to_s
     "#{sku} (#{poorderquant})"
   end

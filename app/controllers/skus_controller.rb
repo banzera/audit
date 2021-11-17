@@ -1,6 +1,30 @@
 class SkusController < ApplicationController
   include Effective::CrudController
 
+  load_and_authorize_resource
+
+  submit :receive, 'Receive Items', only: :show, redirect: -> { receive_skus_path(skuid: resource.id) }
+
+  def receive
+    @po_items        = PurchaseOrderItem.where(skuid: @sku) #.unfulfilled
+    @purchase_orders = PurchaseOrder.where(poid: @po_items.collect(&:poid))
+  end
+
+  def lookup
+    @datatable = SkuLookupDatatable.new()
+    collection_action(:lookup)
+  end
+
+  def search
+    @query = search_params[:search]
+    @datatable = SkuLookupDatatable.new(search: @query)
+    render :lookup
+  end
+
+  def search_params
+    params.require(:sku).permit(:search)
+  end
+
   def sku_params
     params.require(:sku).permit([
       :sku,

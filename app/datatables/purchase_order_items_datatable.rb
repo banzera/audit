@@ -29,5 +29,6 @@ class PurchaseOrderItemsDatatable < Effective::Datatable
     # col :poorderrebate, search: false
     # col :poorderrebatenotes, search: false
 
+    actions_col only: [:edit, :receive]
   end
 end
