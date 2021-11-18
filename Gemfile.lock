@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/banzera/effective_datatables.git
-  revision: b987c77ec8b849ef40aa1358318936a7d30792e1
+  revision: 2daf9e6fee7e4b8cf4f362f72b9ea66b0a6e1088
   branch: master
   specs:
     effective_datatables (4.9.4)
