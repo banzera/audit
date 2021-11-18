@@ -5,61 +5,59 @@ class CustomersDatatable < Effective::Datatable
   end
 
   datatable do
-
     col :custname
-    # col :custbusinessname
-    # col :custfirst
-    # col :custlast
-    # col :custsal
-    # col :custtitle
-    # col :custaddress
-    # col :custcity
-    col :custst
-    # col :custzip
-    # col :custphone
-    # col :custfax
-    # col :custemail
-    # col :custprimarycontact1
-    # col :custphone1
-    # col :custphonetype1
-    # col :custemail1
-    # col :custprimarycontact2
-    # col :custphone2
-    # col :custphonetype2
-    # col :custemail2
-    # col :custtaxrate
-    # col :custnotes
-    # col :custdatecreated
-    # col :custdatemodified
-    # col :custbillingbusinessname
-    # col :custbillingfirst
-    # col :custbillinglast
-    # col :custbillingsal
-    # col :custbillingtitle
-    # col :custbillingaddress
-    # col :custbillingcity
-    # col :custbillingst
-    # col :custbillingzip
-    # col :custbillingphone
-    # col :custbillingfax
-    # col :custbillingemail
-    # col :custbillingsame
-    # col :custqbo
-    # col :custccauth
-    # col :custcclast4
-    # col :custtaxjurisid
-    # col :lastrewarddate
-    # col :custhsacct
-    # col :discontinued
-    # col :custtyfirstname
-    # col :custtylastname
-    # col :custtyaddress
-    # col :custtycity
-    # col :custtyst
-    # col :custtyzip
-    # col :custtyphone
-    # col :custtyemail
-
+    col :custbusinessname,         visible: false
+    col :custfirst
+    col :custlast
+    col :custsal,                 visible: false
+    col :custtitle,               visible: false
+    col :custaddress,             visible: false
+    col :custcity,                visible: false
+    col :custst,                  visible: false
+    col :custzip,                 visible: false
+    col :custphone,               visible: false
+    col :custfax,                 visible: false
+    col :custemail,               visible: false
+    col :custprimarycontact1,     visible: false
+    col :custphone1,              visible: false
+    col :custphonetype1,          visible: false
+    col :custemail1,              visible: false
+    col :custprimarycontact2,     visible: false
+    col :custphone2,              visible: false
+    col :custphonetype2,          visible: false
+    col :custemail2,              visible: false
+    col :custtaxrate,             visible: false
+    col :custnotes,               visible: false
+    col :custdatecreated,         visible: false
+    col :custdatemodified,        visible: false
+    col :custbillingbusinessname, visible: false
+    col :custbillingfirst,        visible: false
+    col :custbillinglast,         visible: false
+    col :custbillingsal,          visible: false
+    col :custbillingtitle,        visible: false
+    col :custbillingaddress,      visible: false
+    col :custbillingcity,         visible: false
+    col :custbillingst,           visible: false
+    col :custbillingzip,          visible: false
+    col :custbillingphone,        visible: false
+    col :custbillingfax,          visible: false
+    col :custbillingemail,        visible: false
+    col :custbillingsame,         visible: false
+    col :custqbo,                 visible: false
+    col :custccauth,              visible: false
+    col :custcclast4,             visible: false
+    col :custtaxjurisid,          visible: false
+    col :lastrewarddate,          visible: false
+    col :custhsacct,              visible: false
+    col :discontinued,            visible: false
+    col :custtyfirstname,         visible: false
+    col :custtylastname,          visible: false
+    col :custtyaddress,           visible: false
+    col :custtycity,              visible: false
+    col :custtyst,                visible: false
+    col :custtyzip,               visible: false
+    col :custtyphone,             visible: false
+    col :custtyemail,             visible: false
 
     actions_col
   end

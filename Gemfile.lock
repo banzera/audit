@@ -1,3 +1,15 @@
+GIT
+  remote: https://github.com/banzera/effective_datatables.git
+  revision: b987c77ec8b849ef40aa1358318936a7d30792e1
+  branch: master
+  specs:
+    effective_datatables (4.9.4)
+      coffee-rails
+      effective_bootstrap
+      effective_resources
+      rails (>= 3.2.0)
+      sassc
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -116,7 +128,7 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
-    effective_bootstrap (0.9.46)
+    effective_bootstrap (0.9.47)
       bootstrap (< 5)
       coffee-rails
       effective_resources
@@ -125,13 +137,7 @@ GEM
       jquery-rails
       rails (>= 4.0.0)
       sassc
-    effective_datatables (4.9.4)
-      coffee-rails
-      effective_bootstrap
-      effective_resources
-      rails (>= 3.2.0)
-      sassc
-    effective_resources (1.9.3)
+    effective_resources (1.9.5)
       rails (>= 4.0.0)
     erubi (1.10.0)
     erubis (2.7.0)
@@ -332,7 +338,7 @@ DEPENDENCIES
   delayed_job (~> 4.1)
   delayed_job_active_record (~> 4.1)
   devise (~> 4.8)
-  effective_datatables (~> 4.9)
+  effective_datatables (~> 4.9)!
   flutie (~> 2.2)
   font-awesome-rails (~> 4.7)
   groupdate (~> 5.2)
