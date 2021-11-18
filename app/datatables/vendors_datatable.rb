@@ -8,8 +8,8 @@ class VendorsDatatable < Effective::Datatable
     order :vendorid, :desc
 
     col :vendorid, visible: false
-    col('Name') {|v| v.vendorname }
-    col('Abbreviation') {|v| v.vendorabbr}
+    col :vendorname
+    col :vendorabbr
 
     actions_col
   end

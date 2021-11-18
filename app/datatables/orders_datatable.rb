@@ -8,23 +8,23 @@ class OrdersDatatable < Effective::Datatable
     order :orderdate, :desc
 
     col :orderid, visible: false
-    col :orderdate
+    col :orderdate, as: :date
     col :orderbatch
     col :customer
-    # col :ordertaxrate
-    # col :orderdelivereddate
-    # col :orderdeliverdfrom
-    # col :orderdeliveredto
-    # col :ordershipmethod
-    # col :orderreceipthl
-    # col :orderdateinvoiced
-    # col :orderdatepaid
-    # col :orderpaymentmethod
-    # col :orderpaymentamount
-    # col :ordernotes
-    # col :orderccdate
-    # col :preordercompletedate
-    # col :orderconfirmdate
+    col :ordertaxrate,         visible: false
+    col :orderdelivereddate,   visible: false
+    col :orderdeliverdfrom,    visible: false
+    col :orderdeliveredto,     visible: false
+    col :ordershipmethod,      visible: false
+    col :orderreceipthl,       visible: false
+    col :orderdateinvoiced,    visible: false
+    col :orderdatepaid,        visible: false
+    col :orderpaymentmethod,   visible: false
+    col :orderpaymentamount,   visible: false
+    col :ordernotes,           visible: false
+    col :orderccdate,          visible: false
+    col :preordercompletedate, visible: false
+    col :orderconfirmdate,     visible: false
 
     actions_col
   end

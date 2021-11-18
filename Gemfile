@@ -24,7 +24,7 @@ gem "haml-rails", "~> 2.0"
 gem "coffee-rails", "~> 5.0"
 
 # Easy resource tables
-gem "effective_datatables", "~> 4.9"
+gem "effective_datatables", "~> 4.9", github: 'banzera/effective_datatables', branch: :master
 
 # Charting/reporting
 gem "chartkick", "~> 4.1"

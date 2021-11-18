@@ -51,8 +51,11 @@ en:
       vendor:
         other: Vendors
     attributes:
+      category:
+        categoryid: ID
+        categorydesc: Description
       customer:
-        custname: Name
+        custname: Code
         custbusinessname: Business Name
         custfirst: First Name
         custlast: Last Name
@@ -65,46 +68,46 @@ en:
         custphone: Phone Number
         custfax: Fax Number
         custemail: Email
-        custprimarycontact1: Primary Contact
-        custphone1:
-        custphonetype1:
-        custemail1:
-        custprimarycontact2:
-        custphone2:
-        custphonetype2:
-        custemail2:
+        custprimarycontact1: Primary Contact 1
+        custphone1: Phone 1
+        custphonetype1: Phone Type 1
+        custemail1: Email 1
+        custprimarycontact2: Primary Contact 2
+        custphone2: Phone 2
+        custphonetype2: Phone Type 2
+        custemail2: Email 2
         custtaxrate: Tax Rate
         custnotes: Notes
-        custdatecreated:
-        custdatemodified:
-        custbillingbusinessname:
-        custbillingfirst:
-        custbillinglast:
-        custbillingsal:
-        custbillingtitle:
-        custbillingaddress:
-        custbillingcity:
-        custbillingst:
-        custbillingzip:
-        custbillingphone:
-        custbillingfax:
-        custbillingemail:
-        custbillingsame:
-        custqbo:
+        custdatecreated: Date Created
+        custdatemodified: Date Modified
+        custbillingbusinessname: Billing Business Nmae
+        custbillingfirst: Billing First Name
+        custbillinglast: Billing Last Name
+        custbillingsal: Billing Salutation
+        custbillingtitle: Billing Title
+        custbillingaddress: Billing Address
+        custbillingcity: Billing City
+        custbillingst: Billing State
+        custbillingzip: Billing Zip
+        custbillingphone: Billing Phone
+        custbillingfax: Billing Fax
+        custbillingemail: Billing Email
+        custbillingsame: Billing Same
+        custqbo: QuickBooks Online
         custccauth: Credit Card Auth
         custcclast4: Credit Card Last 4
         custtaxjurisid: Tax Jurisdiction
         lastrewarddate: Last Reward Date
-        custhsacct:
-        discontinued:
-        custtyfirstname:
-        custtylastname:
-        custtyaddress:
-        custtycity:
-        custtyst:
-        custtyzip:
-        custtyphone:
-        custtyemail:
+        custhsacct: HS Account
+        discontinued: Discontinued
+        custtyfirstname: Thank You First Name
+        custtylastname: Thank You Last Name
+        custtyaddress: Thank You Address
+        custtycity: Thank You City
+        custtyst: Thank You State
+        custtyzip: Thank You Zip
+        custtyphone: Thank You Phone
+        custtyemail: Thank You Email
       order:
         orderid: ID
         orderdate: Date
