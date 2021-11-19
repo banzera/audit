@@ -101,7 +101,7 @@ namespace :db do
                       ]
 
   desc "Refresh the data in the database"
-  task :refresh => %w[reset_schema load:schema load:data]
+  task :refresh => %w[reset_schema load:schema load:data db:migrate db:seed]
 
   task :reset_schema => :environment do
     SCHEMA_NAME = 'public'.freeze
