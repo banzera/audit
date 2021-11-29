@@ -14,14 +14,14 @@ class PurchaseOrdersDatatable < Effective::Datatable
 
     col :podate,          visible: true,  search: false, as: :date
     col :pobatch
-    col :supplier1,       visible: true,  search: false
-    col :supplier2,       visible: true,  search: false
+    col :supplier1,       visible: true,  search: false, action: :show
+    col :supplier2,       visible: true,  search: false, action: :show
     col :poshipdate,      visible: true,  search: false, as: :date
-    col :poshiptype,      visible: true,  search: { as: :select, collection: PurchaseOrder.ship_types }
+    col :poshiptype,      visible: false, search: { as: :select, collection: PurchaseOrder.ship_types }
     col :potrackingno,    visible: false, search: false
     col :porcvdby,        visible: false, search: false
     col :podatepaid,      visible: false, search: false, as: :date
-    col :pomethodpaid,    visible: true,  search: { as: :select, collection: PurchaseOrder.paid_methods }
+    col :pomethodpaid,    visible: false, search: { as: :select, collection: PurchaseOrder.paid_methods }
     col :popaymentno,     visible: false, search: false
     col :poamountpaid,    visible: true,  search: false, as: :currency
     col :ponotes,         visible: false, search: false
