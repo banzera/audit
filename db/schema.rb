@@ -36,7 +36,8 @@ ActiveRecord::Schema.define(version: 2021_12_29_221118) do
     t.string "dc_loc"
     t.datetime "scanned_at"
     t.datetime "received_at"
-    t.jsonb "properties"
+    t.jsonb "payload"
+    t.jsonb "request"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
