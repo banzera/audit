@@ -96,5 +96,7 @@ Rails.application.routes.draw do
     get 'by_po',  to: 'receiving#receive'
   end
 
+  post 'scan', to: 'scans#post'
+
   root to: 'dashboard#home'
 end

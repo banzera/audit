@@ -1,0 +1,10 @@
+!!! XML
+%xml
+  %message
+    - if @scan.errors.blank?
+      %status 1
+      %text Thank you for scanning with codeREADr
+    - else
+      %status 0
+      %text
+        =@scan.errors.full_messages

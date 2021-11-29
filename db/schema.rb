@@ -30,6 +30,17 @@ ActiveRecord::Schema.define(version: 2021_12_29_221118) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "inventory_scan_operations", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "sku_id"
+    t.string "dc_loc"
+    t.datetime "scanned_at"
+    t.datetime "received_at"
+    t.jsonb "properties"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "tblanalysis", primary_key: "analysisid", id: :integer, default: -> { "nextval('tblanalysis_id_seq'::regclass)" }, force: :cascade do |t|
     t.integer "customerid"
     t.datetime "analysisdate"
