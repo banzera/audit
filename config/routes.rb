@@ -97,6 +97,7 @@ Rails.application.routes.draw do
   end
 
   post 'scan', to: 'scans#post'
+  resources :inventory_scan_operations, only: [:index, :show]
 
   root to: 'dashboard#home'
 end

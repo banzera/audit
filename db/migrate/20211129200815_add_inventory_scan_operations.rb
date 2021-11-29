@@ -7,7 +7,8 @@ class AddInventoryScanOperations < ActiveRecord::Migration[6.1]
       t.string   :dc_loc
       t.datetime :scanned_at
       t.datetime :received_at
-      t.jsonb    :properties
+      t.jsonb    :payload
+      t.jsonb    :request
 
       t.timestamps
     end
