@@ -10,7 +10,7 @@
                 %i.fas.fa-minus
           .card-body
             %p.card-text
-              - @resource.attributes.keys.excluding(@resource.class.primary_key).each do |a|
+              - @resource.default_attributes.keys.each do |a|
                 = f.input a
 
     - unless local_assigns[:readonly]
