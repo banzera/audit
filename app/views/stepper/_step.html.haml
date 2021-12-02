@@ -1,0 +1,9 @@
+- key   = item[:key]
+- icon  = item[:icon]
+- label = item[:label]
+
+.step{"data-target" => "##{key}-part"}
+  %button.step-trigger{:id => "#{key}-part-trigger", "aria-controls" => "#{key}-part", :role => "tab", :type => "button"}
+    %span.bs-stepper-circle
+      = fa_icon icon
+    %span.bs-stepper-label=label

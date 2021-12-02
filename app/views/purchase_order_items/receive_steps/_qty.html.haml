@@ -1,0 +1,38 @@
+#qty-part.content{"aria-labelledby" => "qty-part-trigger", :role => "tabpanel"}
+  .row
+    .col-12.offset-3
+      %h3 Expecting #{@purchase_order_item.poorderquant} items
+
+      .row
+        .col-4
+          Was the correct number received?
+      .row
+        .col-2
+          %button.btn.btn-app.bg-success#yes
+            %i.fa.fa-check
+            Yes
+        .col-2
+          %button.btn.btn-app.bg-danger#no
+            %i.fa.fa-ban
+            No
+      .row.qty-input
+        .col-4
+          = f.input :poorderrcvdquant, label: 'Quantity Received:'
+      .row.qty-input
+        .col-4
+          = next_step_button
+
+- content_for :scripts do
+  :coffee
+    $(document).ready ->
+      $('.qty-input').hide()
+
+      $('#yes').click (e) ->
+        e.preventDefault()
+        $('#purchase_order_item_poorderrcvdquant').val(#{@purchase_order_item.poorderquant})
+        stepper.next()
+
+      $('#no').click (e) ->
+        e.preventDefault()
+        $('.qty-input').show()
+        $('#purchase_order_item_poorderrcvdquant')

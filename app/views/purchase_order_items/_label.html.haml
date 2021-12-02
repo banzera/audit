@@ -1,0 +1,42 @@
+%table(width='100%')
+  %tr
+    %td
+      MANF: #{@sku.manf}
+      %br
+      ITEM: #{@sku.itemno}
+    %td
+      %img{:height => '20px', :alt => "AUDIT Logo", :src => "/img/logo.png", :style => ""}
+    %td
+      %h4.float-right
+        Accelerate
+        %br
+        United
+  %tr
+    %td(colspan=2)
+      %span.strong
+        =@sku.skudesc
+    %td
+      %span.float-right
+        Max: #{@sku.skumaxtemp}
+        %br
+        Min: #{@sku.skumintemp}
+  %tr
+    %td
+      = Barby::Code39.new(@sku.skuid.to_s).to_svg(margin: 0, height: 60, xdim: 3).html_safe
+    %td
+      %h2=@sku.skuid
+    %td
+      %span.float-right
+        SKU:
+        %br/
+        =@sku.sku
+  %tr
+    %td
+      BATCH:
+      %br/
+      =@purchase_order.pobatch
+    %td
+      = @purchase_order.poid
+    %td
+      %span.float-right
+        = Barby::Code39.new(@purchase_order.poid.to_s).to_svg(margin: 0, height: 60, xdim: 3).html_safe

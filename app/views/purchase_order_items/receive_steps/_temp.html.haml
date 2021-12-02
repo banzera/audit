@@ -1,0 +1,26 @@
+#temp-part.content{"aria-labelledby" => "temp-part-trigger", :role => "tabpanel"}
+  .row
+    = f.simple_fields_for :sku do |ff|
+      .col-md-5.offset-1
+        .row
+          .col-md-12
+            = ff.input :skumintemp, label: 'Min', required: false, wrapper: :input_group, append: 'fas fa-thermometer-empty'
+        .row
+          .col-md-12
+            = ff.input :skumaxtemp, label: 'Max', required: false, wrapper: :input_group, append: 'fas fa-thermometer-full'
+      .col-md-5.offset-1
+        .row
+          %a#no-temps.btn.btn-app.bg-danger
+            %i.fas.fa-ban
+            No Temperatures
+
+  = step_nav_buttons
+
+- content_for :scripts do
+  :coffee
+    $(document).ready () ->
+      $('#no-temps').click (e) ->
+        e.preventDefault()
+        $('#purchase_order_item_sku_attributes_skumintemp').val(0)
+        $('#purchase_order_item_sku_attributes_skumaxtemp').val(0)
+        stepper.next()

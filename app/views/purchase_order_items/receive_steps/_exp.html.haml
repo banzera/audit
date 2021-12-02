@@ -1,0 +1,7 @@
+#exp-part.content{"aria-labelledby" => "exp-part-trigger", :role => "tabpanel"}
+  .row
+    .offset-3
+      %h3 Enter the expiration date (if any)
+      = f.input :poorderexpiration, label: false, wrapper: :vertical_form
+
+  = step_nav_buttons

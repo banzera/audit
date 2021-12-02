@@ -22,9 +22,12 @@ Rails.application.routes.draw do
       get :receive
     end
   end
-  resources :purchase_order_items, only: [:update] do
+  resources :purchase_order_items, only: [:index, :update] do
     member do
       get :receive
+      get :label
+      get :label_preview
+      post :print
     end
 end
 

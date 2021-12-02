@@ -1,0 +1,46 @@
+#finish-part.content{"aria-labelledby" => "finish-part-trigger", :role => "tabpanel"}
+  .row
+    .col-md-4.offset-4
+      .card.card-primary
+        .card-header
+          %h3.card-title Review Action
+        .card-body
+
+          %h3.profile-username.text-center=@sku.sku
+          %p.text-muted.text-center=@sku.skudesc
+          %ul.list-group.list-group-unbordered.mb-3
+
+          %strong
+            %i.fas.fa-grip-horizontal.mr-1
+            Quantity
+          %span#review-qty.text-muted.float-right
+          %hr/
+          %strong
+            %i.fas.fa-calendar.mr-1
+            Expiration
+          %span#review-exp.text-muted.float-right
+          %hr/
+          %strong
+            %i.fas.fa-pencil-alt.mr-1
+            Minimum Temp
+          %span#review-min-temp.text-muted.float-right
+          %hr/
+          %strong
+            %i.far.fa-file-alt.mr-1
+            Maximum Temp
+          %span#review-max-temp.text-muted.float-right
+
+  .row
+    .offset-4.col-md-4
+      %button#finish-button.btn.btn-block.btn-success.btn-lg
+        Save & Print
+
+- content_for :scripts do
+  :coffee
+    # $('#finish-button').click () ->
+
+    $('#stepper')[0].addEventListener 'show.bs-stepper', (e) ->
+      $('#review-qty').html      $('#purchase_order_item_poorderrcvdquant').val()
+      $('#review-exp').html      $('#purchase_order_item_poorderexpiration').val()
+      $('#review-max-temp').html $('#purchase_order_item_sku_attributes_skumaxtemp').val()
+      $('#review-min-temp').html $('#purchase_order_item_sku_attributes_skumintemp').val()

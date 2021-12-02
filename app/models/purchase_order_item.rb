@@ -13,9 +13,9 @@ class PurchaseOrderItem < ApplicationRecord
 
   accepts_nested_attributes_for :sku, update_only: true
 
-  # def receive!
-  #   binding.pry
-  # end
+  def diff_quant
+    self.poorderquant - self.poorderrcvdquant
+  end
 
   def to_s
     "#{sku} (#{poorderquant})"
