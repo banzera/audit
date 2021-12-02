@@ -49,6 +49,10 @@ gem 'jbuilder', '~> 2.7'
 gem 'pdfkit'
 gem 'wkhtmltopdf-heroku', group: :production
 
+# Barcodes
+gem 'has_barcode'
+gem 'rqrcode'
+
 # Logging sanity
 gem "lograge", "~> 0.11.2"
 gem "colorize", "~> 0.8.1"

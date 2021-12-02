@@ -18,4 +18,5 @@ Rails.application.config.assets.paths << Rails.root.join('vendor/admin-lte/plugi
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
 Rails.application.config.assets.precompile += %w(
   application.js
+  purchase_order_items_datatable.js
 )

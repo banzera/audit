@@ -1,0 +1,19 @@
+.card
+  .card-header
+    %h3.card-title Items on Purchase Order #{@purchase_order.pobatch}
+    .card-tools
+  .card-body
+    = render_datatable @datatable,
+      buttons: false,
+      charts: false,
+      entries: false,
+      filters: true,
+      inline: false,
+      namespace: nil,
+      pagination: false,
+      search: false,
+      simple: false,
+      sort: false
+
+- content_for :scripts do
+  = javascript_include_tag 'purchase_order_items_datatable'

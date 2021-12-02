@@ -1,5 +1,6 @@
 class Sku < ApplicationRecord
   include PgSearch::Model
+  include ::HasBarcode
 
   self.table_name  = 'tblsku'
   self.primary_key = 'skuid'
@@ -9,6 +10,11 @@ class Sku < ApplicationRecord
 
   validates_presence_of :skumaxtemp
   validates_presence_of :skumintemp
+
+  has_barcode :barcode,
+    :outputter => :svg,
+    :type => :code_39,
+    :value => Proc.new { |sku| sku.sku }
 
   pg_search_scope :search,
                   against: :everything,

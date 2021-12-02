@@ -28,6 +28,6 @@ class PurchaseOrdersDatatable < Effective::Datatable
     col :posplrorderno,   visible: true,  search: false
     col :pochecksentdate, visible: true,  search: false, as: :date
 
-    actions_col
+    actions_col only: [:show]
   end
 end
