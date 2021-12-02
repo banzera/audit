@@ -4,13 +4,18 @@ class OrdersDatatable < Effective::Datatable
     scope = Order.includes(:customer).all
   end
 
+  filters do
+    scope :all, default: true
+    scope :outstanding
+  end
+
   datatable do
     order :orderdate, :desc
 
     col :orderid, visible: false
     col :orderdate, as: :date
     col :orderbatch
-    col :customer
+    col :customer, action: :show
     col :ordertaxrate,         visible: false
     col :orderdelivereddate,   visible: false
     col :orderdeliverdfrom,    visible: false

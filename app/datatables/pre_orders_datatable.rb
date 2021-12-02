@@ -15,7 +15,7 @@ class PreOrdersDatatable < Effective::Datatable
 
     col :preorderdate, as: :date, search: false
     col :preorderbatch
-    col(:customer) {|po| po.customer.custbusinessname }
+    col :customer, action: :show
     col :vendor
     col :order
 

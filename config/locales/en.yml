@@ -118,7 +118,7 @@ en:
         orderid: ID
         orderdate: Date
         orderbatch: Batch
-        customer: Customer ID
+        customer: Customer
         ordertaxrate: Tax Rate
         orderdelivereddate: Delivered Date
         orderdeliverdfrom: Delivered From
