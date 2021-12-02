@@ -8,7 +8,7 @@ class Ability
 
     can [:read], :all
 
-    # can(:manage, :all) if user.is_admin?
+    can(:manage, :all) if user.is_admin?
 
     can [
       :update,
