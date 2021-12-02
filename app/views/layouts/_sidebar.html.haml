@@ -27,7 +27,7 @@
         =sidebar_link_to(home_path, icon: 'fa-tachometer-alt', label: 'Dashboard')
         =sidebar_dropdown('Receiving', 'fa-truck', expanded: false, active: false) do
           =sidebar_link_to(lookup_skus_path, icon: 'fa-barcode', label: 'SKU Lookup')
-          =sidebar_link_to('receive/by_po', icon: 'fa-file', label: 'PO Lookup')
+          =sidebar_link_to(PurchaseOrder, icon: 'fa-file', label: 'PO Lookup')
         =sidebar_dropdown('Meta', 'fa-th', expanded: true, active: true) do
           =sidebar_link_to(Category, icon: 'fa-bolt')
           =sidebar_link_to(Customer, icon: 'fa-certificate')

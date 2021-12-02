@@ -5,15 +5,15 @@
     %li.nav-item
       %a.nav-link{"data-widget" => "pushmenu", :href => "#", :role => "button"}
         %i.fas.fa-bars
-    %li.nav-item.d-none.d-sm-inline-block
-      %a.nav-link{:href => "#"} Top Level Link 1
-    %li.nav-item
-      %a.nav-link{:href => "#"} Top Level Link 2
+    -# %li.nav-item.d-none.d-sm-inline-block
+    -#   %a.nav-link{:href => "#"} Top Level Link 1
+    -# %li.nav-item
+    -#   %a.nav-link{:href => "#"} Top Level Link 2
 
   / Right navbar links
   %ul.navbar-nav.ml-auto
     -#= render partial: 'layouts/nav_search'
-    = render partial: 'layouts/nav_messages'
+    -#= render partial: 'layouts/nav_messages'
     -#= render partial: 'layouts/nav_notifications'
     = render partial: 'layouts/nav_user'
     %li.nav-item

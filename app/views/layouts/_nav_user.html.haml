@@ -1,14 +1,14 @@
 %li.nav-item.dropdown.user-menu
   %a.nav-link.dropdown-toggle{"data-toggle" => "dropdown", :href => "#"}
     %img.user-image.img-circle.elevation-2{:alt => "User Image", :src => "/img/blank.png"}/
-    %span.d-none.d-md-inline User Name
+    %span.d-none.d-md-inline=current_user.full_name
   %ul.dropdown-menu.dropdown-menu-lg.dropdown-menu-right
     / User image
     %li.user-header.bg-primary
       %img.img-circle.elevation-2{:alt => "User Image", :src => "/img/blank.png"}/
       %p
-        User Name
-        %small Member since Nov. 2012
+        = current_user.full_name
+        %small Member since #{current_user.created_at.to_date}
     / Menu Body
     %li.user-body
       .row
