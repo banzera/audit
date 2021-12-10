@@ -1,0 +1,7 @@
+%li.nav-item.dropdown.d-none.d-sm-inline-block
+  %a.nav-link{"data-toggle" => "dropdown", :href => "#"} Shipping
+  .dropdown-menu.dropdown-menu-lg
+    %a.dropdown-item{:href => outstanding_orders_path}
+      =fa_icon 'star'
+      Outstanding Orders
+    .dropdown-divider

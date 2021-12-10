@@ -1,0 +1,77 @@
+.content
+  %table.table.table-sm.table-borderless
+    %tr
+      %td.w-25
+      %td.w-50.text-center
+        %h1 PICK LIST
+      %td.w-25.text-right
+        = Date.today.to_s(:long)
+        %br
+        = Time.current.strftime('%l:%M:%S %p')
+    %tr
+      %td.w-25(rowspan=2)
+        = @customer.full_name
+        %br
+        = @customer.custbusinessname
+        %br
+        = @customer.custaddress
+        %br
+        = @customer.city_state_zip
+
+      %td.w-50
+        %h2.text-right Order Number:
+      %td.w-25.text-right(rowspan=2)
+        %h2.text-left
+          = @order.orderbatch
+        = Barby::Code39.new(@order.orderid.to_s).to_svg(margin: 0, height: 40, xdim: 3).html_safe
+        %br
+        =@order.orderid
+    %tr
+      %td.w-50.align-bottom
+        %h4.text-center Picker: __________________
+
+
+  %table.table.table-striped.table-sm.table-bordered
+    %thead
+      %th.border.border-dark.wpc2
+      %th.border.border-dark DC Loc
+      %th.border.border-dark SKUID
+      %th.border.border-dark POID
+      %th.border.border-dark QtyDue
+      %th.border.border-dark Cases
+      %th.border.border-dark OrdQty
+      %th.border.border-dark Dlvrd
+      %th.border.border-dark PrevDtShip
+      %th.border.border-dark UoM
+      %th.border.border-dark Manf
+      %th.border.border-dark Item #
+      %th.border.border-dark Desc
+    - @pick_list.each do |pick|
+      %tr
+        %td.border.border-dark
+        %td.border.border-dark{class: pick_list_cell_style(pick) }=pick.dcloc
+        %td.border.border-dark=pick.skuid
+        %td.border.border-dark=pick.poid
+        %td.border.border-dark{class: pick_list_cell_style(pick) }=pick.orderquantdue
+        %td.border.border-dark=number_with_precision(pick.cases)
+        %td=pick.orderquant
+        %td=pick.orderdeliveredquant
+        %td=pick.orderitemsdelivereddate
+        %td=pick.skuminunitstype
+        %td=pick.manf
+        %td=pick.itemno
+        %td=pick.skudesc
+    %tr
+      %td.border.border-dark
+      %td.border.border-dark= @pick_list.size
+      %td.border.border-dark(colspan=4) <-- SKU count
+
+- content_for :scripts do
+  :coffee
+    autoPrint = () ->
+      window.print(true);
+      window.close()
+
+    # window.setTimeout autoPrint, 500
+
+

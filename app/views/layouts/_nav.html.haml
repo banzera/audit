@@ -5,10 +5,8 @@
     %li.nav-item
       %a.nav-link{"data-widget" => "pushmenu", :href => "#", :role => "button"}
         %i.fas.fa-bars
-    -# %li.nav-item.d-none.d-sm-inline-block
-    -#   %a.nav-link{:href => "#"} Top Level Link 1
-    -# %li.nav-item
-    -#   %a.nav-link{:href => "#"} Top Level Link 2
+    = render partial: 'layouts/receiving_menu'
+    = render partial: 'layouts/shipping_menu'
 
   / Right navbar links
   %ul.navbar-nav.ml-auto

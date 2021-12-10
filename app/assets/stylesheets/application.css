@@ -53,3 +53,12 @@
 table.dataTable > thead tr th {
   vertical-align: top;
 }
+
+.wpc2  { width: 2% }
+.wpc5  { width: 5% }
+.wpc10 { width: 10% }
+.wpc15 { width: 15% }
+.wpc20 { width: 20% }
+.wpc25 { width: 25% }
+.wpc30 { width: 30% }
+.wpc50 { width: 50% }

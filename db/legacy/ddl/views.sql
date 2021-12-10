@@ -25,6 +25,9 @@
 -- for orders outstanding report
   \i db/legacy/queries/qry_order_items_outstanding.sql
 
+-- for orders pick list
+  \i db/legacy/queries/qry_order_data_pick_list.sql
+
 -- for preorder form
   -- for subform1
   \i db/legacy/queries/frm_preorder_subform1.sql

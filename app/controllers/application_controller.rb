@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include PdfHandling
 
   before_action :authenticate_user!
   protect_from_forgery with: :exception, unless: -> { request.format.json? }

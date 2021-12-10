@@ -8,7 +8,15 @@ Rails.application.routes.draw do
 
   resources :categories
   resources :customers
-  resources :orders
+  resources :orders do
+    collection do
+      get :outstanding
+    end
+    member do
+      get :pick_list
+    end
+  end
+
   resources :pre_orders
 
   resources :purchase_order_items do
