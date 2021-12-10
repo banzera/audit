@@ -152,6 +152,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.12.5-x86_64-linux)
       racc (~> 1.4)
+    pdfkit (0.8.5)
     pg (1.2.3)
     pry (0.13.1)
       coderay (~> 1.1)
@@ -260,6 +261,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    wkhtmltopdf-heroku (2.12.6.0)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.5.1)
@@ -275,8 +277,8 @@ DEPENDENCIES
   bootsnap (>= 1.4.4)
   byebug
   capybara (>= 3.26)
-  colorize (~> 0.8.1)
   coffee-rails (~> 5.0)
+  colorize (~> 0.8.1)
   delayed_job (~> 4.1)
   delayed_job_active_record (~> 4.1)
   flutie (~> 2.2)
@@ -285,6 +287,7 @@ DEPENDENCIES
   jbuilder (~> 2.7)
   listen (~> 3.3)
   lograge (~> 0.11.2)
+  pdfkit
   pg
   pry-byebug (~> 3.9)
   pry-rails (~> 0.3.9)
@@ -299,6 +302,7 @@ DEPENDENCIES
   web-console (>= 4.1.0)
   webdrivers
   webpacker (~> 5.0)
+  wkhtmltopdf-heroku
 
 RUBY VERSION
    ruby 3.0.1p64
