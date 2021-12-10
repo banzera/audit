@@ -37,6 +37,10 @@ gem 'jbuilder', '~> 2.7'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
+# PDF generation
+gem 'pdfkit'
+gem 'wkhtmltopdf-heroku', group: :production
+
 # Logging sanity
 gem "lograge", "~> 0.11.2"
 gem "colorize", "~> 0.8.1"
