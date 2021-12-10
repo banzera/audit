@@ -1,0 +1,52 @@
+.content
+#accordion
+- @customers.each do |cust_id, name|
+  - batches = batches_for_customer(cust_id)
+  .card.card-secondary.add-appropriate-style-fororderdate
+    .card-header
+      %h4.card-title.w-100
+        - expanded = @items.for_customer(cust_id).in_stock.known_location.any?
+        %a.d-block.w-100{class: expanded ? '' : 'collapsed', "aria-expanded" => expanded, "data-toggle" => "collapse", :href => "#collapse#{cust_id}"}
+          = name
+    .collapse{class: expanded ? 'show' : '', id: "collapse#{cust_id}", "data-parent" => "#accordion", :style => ""}
+      .card-body
+        - batches.pluck(:orderid, :orderbatch).each do |oid, batch|
+          .card.card-primary.card-outline
+            .card-header
+              %h2.card-title
+                = batch
+                (#{oid})
+                = link_to order_path(oid) do
+                  = fa_icon 'arrow-alt-circle-right'
+              .card-tools
+                %a.btn.btn-tool.btn-sm{href: pick_list_order_path(oid, format: :pdf), target: :blank}
+                  = fa_icon 'print'
+            .card-body.p-0
+              %table.table.table-striped
+                %thead
+                  %td Order Date
+                  %td skuid
+                  %td manf
+                  %td sku
+                  %td itemno
+                  %td skudesc
+                  %td orderquant
+                  %td orderdeliveredquant
+                  %td orderquantdue
+                  %td dccurquant
+                  %td totaldue
+                  %td dcloc
+                - @items.where(orderid: oid).order(:manf, :skudesc).each do |i|
+                  %tr{ class: order_item_row_style(i) }
+                    %td.mx-2{ class: order_date_style(i.orderdate)}=i.orderdate.to_date
+                    %td.mx-4=i.skuid
+                    %td=i.manf
+                    %td=i.sku
+                    %td=i.itemno
+                    %td=i.skudesc
+                    %td=i.orderquant
+                    %td=i.orderdeliveredquant
+                    %td=i.orderquantdue
+                    %td=i.dccurquant
+                    %td{class: i.totaldue.zero? ? 'bg-danger' : '' }=i.totaldue
+                    %td{class: i.dcloc == 'N/A' ? 'bg-danger' : '' }=i.dcloc

@@ -1,0 +1,77 @@
+CREATE OR REPLACE VIEW orders_ready_for_shipping AS
+SELECT tblCustomer.CustID,
+       tblCustomer.CustName,
+       tblCustomer.CustFIrst,
+       tblCustomer.CustLast,
+       tblCustomer.CustSal,
+       tblCustomer.CustTitle,
+       tblCustomer.CustBusinessName,
+       tblCustomer.CustAddress,
+       tblCustomer.CustCity,
+       tblCustomer.CustSt,
+       tblCustomer.CustZip,
+       tblCustomer.CustPrimaryContact1,
+       tblCustomer.CustPhone1,
+       tblCustomer.CustPhoneType1,
+       tblCustomer.CustEmail1,
+       tblCustomer.CustPrimaryContact2,
+       tblCustomer.CustPhone2,
+       tblCustomer.CustPhoneType2,
+       tblCustomer.CustEmail2,
+       tblCustomer.CustFax,
+       tblCustomer.CustTaxRate,
+       tblOrder.OrderID,
+       tblOrder.OrderDate,
+       tblOrder.OrderBatch,
+       tblOrder.CustID,
+       tblOrder.OrderTaxRate,
+       tblOrderItems.OrderID,
+       Sum(tblOrderItems.OrderDeliveryCostTotal) AS SumOfOrderDeliveryCostTotal,
+       Sum(tblOrderItems.OrderTaxTotal)          AS SumOfOrderTaxTotal,
+       Sum(tblOrderItems.OrderGrandTotal)        AS SumOfOrderGrandTotal,
+       Sum(tblOrderItems.OrderPriceTotal)        AS SumOfOrderPriceTotal,
+       Sum(([POOrderPricePer]+[POOrderShippingPer]+[POOrderFeesPer])*[OrderQuant]) AS COGS,
+           tblSKU.CategoryID,
+           tblCategory.CategoryDesc,
+           tblOrder.OrderNotes
+FROM tblSKU
+INNER JOIN tblCategory           ON tblSKU.CategoryID     = tblCategory.CategoryID
+INNER JOIN tblPurchaseOrderItems ON tblSKU.SKUID          = tblPurchaseOrderItems.SKUID
+INNER JOIN tblPurchaseOrder      ON tblPurchaseOrder.POID = tblOrderItems.POID
+                                 ON tblPurchaseOrder.POID = tblPurchaseOrderItems.POID
+INNER JOIN tblCustomer           ON tblCustomer.CustID    = tblOrder.CustID
+INNER JOIN tblOrder              ON tblOrder.OrderID      = tblOrderItems.OrderID
+INNER JOIN tblOrderItems
+AND (tblSKU.SKUID = tblOrderItems.SKUID)
+GROUP BY tblCustomer.CustID,
+         tblCustomer.CustName,
+         tblCustomer.CustFIrst,
+         tblCustomer.CustLast,
+         tblCustomer.CustSal,
+         tblCustomer.CustTitle,
+         tblCustomer.CustBusinessName,
+         tblCustomer.CustAddress,
+         tblCustomer.CustCity,
+         tblCustomer.CustSt,
+         tblCustomer.CustZip,
+         tblCustomer.CustPrimaryContact1,
+         tblCustomer.CustPhone1,
+         tblCustomer.CustPhoneType1,
+         tblCustomer.CustEmail1,
+         tblCustomer.CustPrimaryContact2,
+         tblCustomer.CustPhone2,
+         tblCustomer.CustPhoneType2,
+         tblCustomer.CustEmail2,
+         tblCustomer.CustFax,
+         tblCustomer.CustTaxRate,
+         tblOrder.OrderID,
+         tblOrder.OrderDate,
+         tblOrder.OrderBatch,
+         tblOrder.CustID,
+         tblOrder.OrderTaxRate,
+         tblOrderItems.OrderID,
+         tblSKU.CategoryID,
+         tblCategory.CategoryDesc,
+         tblOrder.OrderNotes
+;
+

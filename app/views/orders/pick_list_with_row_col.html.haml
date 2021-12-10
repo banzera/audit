@@ -1,0 +1,70 @@
+.content
+  .row
+    .col-4.offset-4
+      %h1 PICK LIST
+    .col-3.text-right
+      = Date.today.to_s(:long)
+      %br
+      = Time.current.strftime('%H:%M:%S %p')
+  .row
+    .col-3
+      = @customer.full_name
+      %br
+      = @customer.custbusinessname
+      %br
+      = @customer.custaddress
+      %br
+      = @customer.city_state_zip
+
+    .col-8
+      .row
+        .col-7.text-right
+          %h2 Order Number:
+        .col-5.text-right
+          %h2= @order.orderbatch
+      .row
+        .col-12.text-right
+          = Barby::Code39.new(@order.orderid.to_s).to_svg(margin: 0, height: 40, xdim: 3).html_safe
+          %br
+          =@order.orderid
+
+  %table.table.table-striped.table-sm.table-bordered
+    %thead
+      %td
+      %td DC Loc
+      %td SKUID
+      %td POID
+      %td QtyDue
+      %td Cases
+      %td OrdQty
+      %td Dlvrd
+      %td PrevDtShip
+      %td UoM
+      %td Manf
+      %td Item #
+      %td Desc
+    - @pick_list.each do |pick|
+      %tr
+        %td.border.border-dark
+        %td.border.border-dark{class: pick_list_cell_style(pick) }=pick.dcloc
+        %td.border.border-dark=pick.skuid
+        %td.border.border-dark=pick.poid
+        %td.______.___________{class: pick_list_cell_style(pick) }=pick.orderquantdue
+        %td.border.border-dark{class: pick_list_cell_style(pick) }=pick.orderquantdue / pick.skuminpercs
+        %td=pick.orderquant
+        %td=pick.orderdeliveredquant
+        %td=pick.orderitemsdelivereddate
+        %td=pick.skuminunitstype
+        %td=pick.manf
+        %td=pick.itemno
+        %td=pick.skudesc
+
+- content_for :scripts do
+  :coffee
+    autoPrint = () ->
+      window.print(true);
+      window.close()
+
+    # window.setTimeout autoPrint, 500
+
+
