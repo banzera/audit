@@ -57,6 +57,9 @@ gem 'rqrcode'
 gem "lograge", "~> 0.11.2"
 gem "colorize", "~> 0.8.1"
 
+# Profiling and error reporting
+gem 'rack-mini-profiler', '~> 2.0'
+
 # Better console
 gem "pry-rails", "~> 0.3.9"
 
@@ -87,7 +90,6 @@ group :development do
   # gem 'web-console', '>= 4.1.0'
   # Display performance information such as SQL time and flame graphs for each request in your browser.
   # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
-  gem 'rack-mini-profiler', '~> 2.0'
   gem 'listen', '~> 3.3'
 
   gem "better_errors", "~> 2.9"
