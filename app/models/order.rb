@@ -3,6 +3,8 @@ class Order < ApplicationRecord
   self.primary_key = 'orderid'
 
   belongs_to :customer, foreign_key: :custid
+
+  has_many :items,           class_name: 'OrderItem',         foreign_key: :orderid
   has_many :pick_list_items, class_name: 'OrderDataPickList', foreign_key: :orderid
 
   scope :awaiting_confirmation, -> { where(orderconfirmdate: nil).where.not(preordercompletedate: nil) }
