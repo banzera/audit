@@ -5,7 +5,8 @@
   .card.card-secondary.add-appropriate-style-fororderdate
     .card-header
       %h4.card-title.w-100
-        - expanded = @items.for_customer(cust_id).in_stock.known_location.any?
+        -# for now, we'll expand by default. If we run the query as below, it introduces N+1
+        - expanded = true ||@items.for_customer(cust_id).in_stock.known_location.any?
         %a.d-block.w-100{class: expanded ? '' : 'collapsed', "aria-expanded" => expanded, "data-toggle" => "collapse", :href => "#collapse#{cust_id}"}
           = name
     .collapse{class: expanded ? 'show' : '', id: "collapse#{cust_id}", "data-parent" => "#accordion", :style => ""}
@@ -24,19 +25,20 @@
             .card-body.p-0
               %table.table.table-striped
                 %thead
-                  %td Order Date
-                  %td skuid
-                  %td manf
-                  %td sku
-                  %td itemno
-                  %td skudesc
-                  %td orderquant
-                  %td orderdeliveredquant
-                  %td orderquantdue
-                  %td dccurquant
-                  %td totaldue
-                  %td dcloc
-                - @items.where(orderid: oid).order(:manf, :skudesc).each do |i|
+                  %th Order Date
+                  %th SKU ID
+                  %th Manf
+                  %th SKU
+                  %th Item No
+                  %th Desc
+                  %th Qty
+                  %th Delivered Qty
+                  %th Qty Due
+                  %th DC Current Qty
+                  %th Total Due
+                  %th DC Loc
+
+                - ordered_items_in_batch(oid).each do |i|
                   %tr{ class: order_item_row_style(i) }
                     %td.mx-2{ class: order_date_style(i.orderdate)}=i.orderdate.to_date
                     %td.mx-4=i.skuid

@@ -16,12 +16,14 @@ class OrdersController < ApplicationController
 
   def outstanding
     @datatable = OrderItemOutstandingDatatable.new
-    @items     = OrderItemOutstanding.all
+    @items     = OrderItemOutstanding.known_location
+                                     .order(:orderid, :manf, :skudesc)
+    @items_a = @items.to_a
 
-    @customers = @items.distinct(:custid)
-                       .limit(10)
-                       .order(:custname)
-                       .pluck(:custid, :custbusinessname, :custname)
+    @customers = OrderItemOutstanding.known_location.limit(100)
+                                     .distinct(:custid)
+                                     .order(:custname)
+                                     .pluck(:custid, :custbusinessname, :custname)
   end
 
   def permitted_params
