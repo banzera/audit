@@ -1,9 +1,13 @@
 module OrdersHelper
 
+  def ordered_items_in_batch(oid)
+
+    @items_a.select do |i| i.orderid == oid end
+  end
+
   def batches_for_customer(cust_id)
-    @batches = @items.where(custid: cust_id)
-                     .distinct(:orderid)
-                     .order(:orderid)
+    @items_a.select do |i| i.custid == cust_id end
+            .uniq   do |i| i.orderid end
   end
 
   def order_date_style(d)
