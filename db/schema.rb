@@ -292,22 +292,22 @@ ActiveRecord::Schema.define(version: 2021_11_01_175134) do
     t.integer "poid"
     t.integer "skuid"
     t.integer "poorderquant"
-    t.float "poorderprice"
-    t.float "poordertax"
-    t.float "poordershipping"
-    t.float "poorderfees"
-    t.float "poordertotal"
-    t.float "poorderpriceper"
-    t.float "poordertaxper"
-    t.float "poordershippingper"
-    t.float "poorderfeesper"
-    t.float "poordertotalper"
+    t.float "poorderprice", default: 0.0
+    t.float "poordertax", default: 0.0
+    t.float "poordershipping", default: 0.0
+    t.float "poorderfees", default: 0.0
+    t.float "poordertotal", default: 0.0
+    t.float "poorderpriceper", default: 0.0
+    t.float "poordertaxper", default: 0.0
+    t.float "poordershippingper", default: 0.0
+    t.float "poorderfeesper", default: 0.0
+    t.float "poordertotalper", default: 0.0
     t.datetime "poorderrcvddate"
-    t.integer "poorderrcvdquant"
+    t.integer "poorderrcvdquant", default: 0
     t.datetime "poorderexpiration"
     t.datetime "poorderrebatedeadline"
     t.datetime "poorderrebatesubmitted"
-    t.boolean "poorderrebate"
+    t.boolean "poorderrebate", default: false, null: false
     t.string "poorderrebatenotes", limit: 255
   end
 
