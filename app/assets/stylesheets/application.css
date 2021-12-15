@@ -16,6 +16,9 @@
  *= require 'fontawesome-free/css/all'
  *= require 'fa-fix'
  *
+ * pace-progress
+ *= require 'pace-progress/themes/blue/pace-theme-minimal'
+ *
  *= require effective_datatables
  *= require effective_bootstrap
  *
