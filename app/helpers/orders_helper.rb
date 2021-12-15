@@ -20,13 +20,13 @@ module OrdersHelper
 
   def order_item_row_style(item)
     if item.in_stock?
-      'bg-warning'
+      'bg-highlight'
     end
   end
 
   def pick_list_cell_style(pick)
     if pick.orderquantdue.positive?
-      'bg-warning'
+      'bg-highlight'
     elsif pick.orderquantdue.negative?
       'bg-danger'
     end
