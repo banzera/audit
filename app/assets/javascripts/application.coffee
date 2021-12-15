@@ -35,6 +35,9 @@
 # AdminLTE App
 #= require js/adminlte
 #
+# pace-progress
+#= require pace-progress/pace
+#
 # Toastr toast alerts
 #= require toastr/toastr.min
 #
