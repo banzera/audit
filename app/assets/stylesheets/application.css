@@ -65,3 +65,7 @@ table.dataTable > thead tr th {
 .wpc25 { width: 25% }
 .wpc30 { width: 30% }
 .wpc50 { width: 50% }
+
+.bg-highlight {
+  background-color: #ffff00 !important;
+}
