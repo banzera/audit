@@ -33,19 +33,19 @@
 
   %table.table.table-striped.table-sm.table-bordered
     %thead
-      %th.thead-dark.wpc2
-      %th.thead-dark DC Loc
-      %th.thead-dark SKUID
-      %th.thead-dark POID
-      %th.thead-dark QtyDue
-      %th.thead-dark Cases
-      %th.thead-dark OrdQty
-      %th.thead-dark Dlvrd
-      %th.thead-dark PrevDtShip
-      %th.thead-dark UoM
-      %th.thead-dark Manf
-      %th.thead-dark Item #
-      %th.thead-dark Desc
+      %th.border.border-dark.wpc2
+      %th.border.border-dark DC Loc
+      %th.border.border-dark SKUID
+      %th.border.border-dark POID
+      %th.border.border-dark QtyDue
+      %th.border.border-dark Cases
+      %th.border.border-dark OrdQty
+      %th.border.border-dark Dlvrd
+      %th.border.border-dark PrevDtShip
+      %th.border.border-dark UoM
+      %th.border.border-dark Manf
+      %th.border.border-dark Item #
+      %th.border.border-dark Desc
     - @pick_list.each do |pick|
       %tr
         %td.border.border-dark
@@ -61,6 +61,10 @@
         %td=pick.manf
         %td=pick.itemno
         %td=pick.skudesc
+    %tr
+      %td.border.border-dark
+      %td.border.border-dark= @pick_list.size
+      %td.border.border-dark(colspan=4) <-- SKU count
 
 - content_for :scripts do
   :coffee
