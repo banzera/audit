@@ -25,7 +25,7 @@ class PurchaseOrdersDatatable < Effective::Datatable
     col :popaymentno,     visible: false, search: false
     col :poamountpaid,    visible: true,  search: false, as: :currency
     col :ponotes,         visible: false, search: false
-    col :posplrorderno,   visible: true,  search: false
+    col :posplrorderno,   visible: true,  search: { as: :string, fuzzy: true }
     col :pochecksentdate, visible: true,  search: false, as: :date
 
     actions_col only: [:show]
