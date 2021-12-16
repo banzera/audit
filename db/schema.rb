@@ -200,6 +200,7 @@ ActiveRecord::Schema.define(version: 2021_11_01_175134) do
     t.datetime "orderitemsdelivereddate"
     t.integer "orderdeliveredquant"
     t.float "orderretailtotal"
+    t.boolean "orderitemsurgent", default: false, null: false
     t.index ["orderid"], name: "index_tblorderitems_on_orderid"
     t.index ["poid"], name: "index_tblorderitems_on_poid"
     t.index ["skuid"], name: "index_tblorderitems_on_skuid"
@@ -262,6 +263,7 @@ ActiveRecord::Schema.define(version: 2021_11_01_175134) do
     t.integer "preorderitemcode"
     t.datetime "orderdate"
     t.text "preordernotes"
+    t.boolean "preorderurgent", default: false, null: false
     t.index ["preorderitemcode"], name: "index_tblpreorderitems_on_preorderitemcode"
   end
 
@@ -309,6 +311,8 @@ ActiveRecord::Schema.define(version: 2021_11_01_175134) do
     t.datetime "poorderrebatesubmitted"
     t.boolean "poorderrebate", default: false, null: false
     t.string "poorderrebatenotes", limit: 255
+    t.boolean "poordersplit", default: false, null: false
+    t.boolean "poorderissue", default: false, null: false
   end
 
   create_table "tblpurchasetype", primary_key: "purchasetypeid", id: :integer, default: -> { "nextval('tblpurchasetype_id_seq'::regclass)" }, force: :cascade do |t|

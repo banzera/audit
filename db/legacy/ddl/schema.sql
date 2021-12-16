@@ -459,7 +459,8 @@ CREATE TABLE "tblPreOrderItems"
 	"OrderAUPricePer"			NUMERIC(15,2) DEFAULT 0, 
 	"PreOrderItemCode"			INTEGER DEFAULT 0, 
 	"OrderDate"			TIMESTAMP WITHOUT TIME ZONE, 
-	"PreOrderNotes"			TEXT
+	"PreOrderNotes"			TEXT, 
+	"PreOrderUrgent"			BOOL NOT NULL DEFAULT FALSE
 );
 
 -- CREATE INDEXES ...
@@ -488,7 +489,9 @@ CREATE TABLE "tblPurchaseOrderItems"
 	"POOrderRebateDeadline"			TIMESTAMP WITHOUT TIME ZONE, 
 	"POOrderRebateSubmitted"			TIMESTAMP WITHOUT TIME ZONE, 
 	"POOrderRebate"			BOOL NOT NULL DEFAULT FALSE, 
-	"POOrderRebateNotes"			VARCHAR (255)
+	"POOrderRebateNotes"			VARCHAR (255), 
+	"POOrderSplit"			BOOL NOT NULL DEFAULT FALSE, 
+	"POOrderIssue"			BOOL NOT NULL DEFAULT FALSE
 );
 
 -- CREATE INDEXES ...
@@ -646,13 +649,9 @@ CREATE TABLE "tblVendor"
 ALTER TABLE "tblVendor" ADD CONSTRAINT "tblVendor_pkey" PRIMARY KEY ("VendorID");
 CREATE UNIQUE INDEX "tblVendor_VendorAbbr_idx" ON "tblVendor" ("VendorAbbr");
 
-CREATE TABLE "DCLocUpdate"
+CREATE TABLE "tblUpdateNA"
  (
-	"User Name"			VARCHAR (255), 
-	"Scan Value"			DOUBLE PRECISION, 
-	"Timestamp (Scanned)"			VARCHAR (255), 
-	"Timestamp (Received)"			VARCHAR (255), 
-	"DC Location"			VARCHAR (255)
+	"SKUID"			SERIAL
 );
 
 -- CREATE INDEXES ...
@@ -693,7 +692,8 @@ CREATE TABLE "tblOrderItems"
 	"OrderGrandTotal"			NUMERIC(15,2) DEFAULT 0, 
 	"OrderItemsDeliveredDate"			TIMESTAMP WITHOUT TIME ZONE, 
 	"OrderDeliveredQuant"			INTEGER DEFAULT 0, 
-	"OrderRetailTotal"			NUMERIC(15,2) DEFAULT 0
+	"OrderRetailTotal"			NUMERIC(15,2) DEFAULT 0, 
+	"OrderItemsUrgent"			BOOL NOT NULL DEFAULT FALSE
 );
 
 -- CREATE INDEXES ...
@@ -784,13 +784,6 @@ CREATE TABLE "AUCCImport201024"
 CREATE INDEX "AUCCImport201024_OrderDatePaid_idx" ON "AUCCImport201024" ("OrderDatePaid");
 CREATE INDEX "AUCCImport201024_OrderID_idx" ON "AUCCImport201024" ("OrderID");
 
-CREATE TABLE "tblUpdateNA"
- (
-	"SKUID"			SERIAL
-);
-
--- CREATE INDEXES ...
-
 CREATE TABLE "PreImport"
  (
 	"PreOrderID"			DOUBLE PRECISION, 
@@ -802,6 +795,17 @@ CREATE TABLE "PreImport"
 
 -- CREATE INDEXES ...
 CREATE INDEX "PreImport_PreOrderID_idx" ON "PreImport" ("PreOrderID");
+
+CREATE TABLE "DCLocUpdate"
+ (
+	"User Name"			VARCHAR (255), 
+	"Scan Value"			DOUBLE PRECISION, 
+	"Timestamp (Scanned)"			VARCHAR (255), 
+	"Timestamp (Received)"			VARCHAR (255), 
+	"DC Location"			VARCHAR (255)
+);
+
+-- CREATE INDEXES ...
 
 
 -- CREATE Relationships ...

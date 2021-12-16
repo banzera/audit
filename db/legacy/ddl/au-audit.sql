@@ -220,7 +220,8 @@ CREATE TABLE public.tblOrderItems (
     OrderGrandTotal double precision,
     OrderItemsDeliveredDate timestamp with time zone,
     OrderDeliveredQuant integer,
-    OrderRetailTotal double precision
+    OrderRetailTotal double precision,
+    OrderItemsUrgent boolean not null default false
 );
 
 --
@@ -302,7 +303,8 @@ CREATE TABLE public.tblPreOrderItems (
     OrderAUPricePer double precision,
     PreOrderItemCode integer,
     OrderDate timestamp with time zone,
-    PreOrderNotes text
+    PreOrderNotes text,
+    PreOrderUrgent boolean not null default false
 );
 
 --
@@ -353,7 +355,9 @@ CREATE TABLE public.tblPurchaseOrderItems (
     POOrderRebateDeadline timestamp with time zone,
     POOrderRebateSubmitted timestamp with time zone,
     POOrderRebate boolean not null default false,
-    POOrderRebateNotes character varying(255)
+    POOrderRebateNotes character varying(255),
+    POOrderSplit boolean not null default false,
+    POOrderIssue boolean not null default false
 );
 
 --
