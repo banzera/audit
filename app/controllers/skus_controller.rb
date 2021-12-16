@@ -6,6 +6,8 @@ class SkusController < ApplicationController
 
   submit :receive, 'Receive Items', only: :show, redirect: -> { receive_skus_path(skuid: resource.id) }
 
+  page_title(only: [:index]) { resource_klass.model_name.human(count: 2) }
+
   def index
     respond_to do |format|
       format.html { super }
