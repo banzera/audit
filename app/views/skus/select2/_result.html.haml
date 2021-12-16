@@ -1,0 +1,9 @@
+.row
+  .col-9
+    %span=sku.manf
+    %br
+    %span=sku.skudesc
+  .col-3
+    .text-right
+      %a.btn.btn-blocka.btn-sm.btn-secondary{:href => sku_path(sku), :target => "_sku"}
+        =fa_icon 'external-link-square-alt', text: sku.id, right: true

@@ -1,9 +1,20 @@
 class SkusController < ApplicationController
   include DefaultCrudController
+  include Select2Searchable
 
   load_and_authorize_resource
 
   submit :receive, 'Receive Items', only: :show, redirect: -> { receive_skus_path(skuid: resource.id) }
+
+  def index
+    respond_to do |format|
+      format.html { super }
+      format.json {
+        @skus = @skus.search(select2_search_term) if select2_search_term?
+        @skus = @skus.limit(10)
+      }
+    end
+  end
 
   def receive
     @po_items        = PurchaseOrderItem.where(skuid: @sku) #.unfulfilled
@@ -16,14 +27,12 @@ class SkusController < ApplicationController
   end
 
   def search
-    @query = search_params[:search]
+    @query = search_params[:q]
     @datatable = SkuLookupDatatable.new(search: @query)
     render :lookup
   end
 
-  def search_params
-    params.require(:sku).permit(:search)
-  end
+  private
 
   def sku_params
     params.require(:sku).permit([
