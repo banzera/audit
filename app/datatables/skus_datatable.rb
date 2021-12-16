@@ -23,11 +23,11 @@ class SkusDatatable < Effective::Datatable
     col :skuhighprice,     visible: false, as: :currency
     col :skuhighpricevno,  visible: false
     col :skuhighpricedate, visible: false
-    col :skuclassid,       visible: false
+    col :sku_class
     col :skumaxtemp,       visible: false
     col :skumintemp,       visible: false
     col :skunotes,         visible: false
 
-    actions_col
+    actions_col except: [:receive]
   end
 end

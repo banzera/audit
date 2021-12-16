@@ -6,6 +6,7 @@ class Sku < ApplicationRecord
   self.primary_key = 'skuid'
 
   belongs_to :category, foreign_key: :categoryid
+  belongs_to :sku_class, foreign_key: :skuclassid
   belongs_to :high_price_vendor, class_name: 'Vendor', foreign_key: :skuhighpricevno, optional: true
 
   validates_presence_of :skumaxtemp
