@@ -1,5 +1,13 @@
 module ApplicationHelper
 
+  def default_resource_form(read_only: false)
+    simple_form_for @resource,
+      defaults: { disabled: read_only }, wrapper: :horizontal_form do |f|
+        yield f if block_given?
+      end
+
+  end
+
   def flash_to_css_class_mapping(flash_key)
     return 'primary' if flash_key.in? %w(notice)
     return 'danger'  if flash_key.in? %w(alert)
