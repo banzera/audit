@@ -37,7 +37,7 @@
                       - po.items.where(skuid: @sku.skuid).each do |item|
                         %tr
                           %td
-                            %a.btn.btn-small.btn-primary{href: receive_purchase_order_item_path(item)} Receive
+                            %a.btn.btn-small.btn-primary{href: receive_purchase_order_purchase_order_item_path(item.purchase_order, item)} Receive
                           %td= item.sku.to_s
                           %td= item.poorderquant
                           %td= number_to_currency(item.poordertotal)

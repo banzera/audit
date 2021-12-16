@@ -1,0 +1,56 @@
+= simple_form_for [@purchase_order, @purchase_order_item],
+    defaults: { disabled: local_assigns[:readonly] },
+    wrapper: :vertical_form do |f|
+
+  .row.post
+    .col-6
+      = f.association :sku, as: :sku_selection
+    .col-6
+      = f.input :poorderquant
+  .row.post
+    .col-6
+      = f.input :poorderprice,    as: :currency
+      = f.input :poordertax,      as: :currency
+      = f.input :poordershipping, as: :currency
+      = f.input :poorderfees,     as: :currency
+      = f.input :poordertotal,    as: :currency
+    .col-6
+      = f.input :poorderpriceper,     readonly: true
+      = f.input :poordertaxper,       readonly: true
+      = f.input :poordershippingper,  readonly: true
+      = f.input :poorderfeesper,      readonly: true
+      = f.input :poordertotalper,     readonly: true
+  .row
+    .col-3
+      = f.input :poorderrebate
+    .col-9
+      = f.input :poorderrebatenotes
+  - unless local_assigns[:readonly]
+    .row
+      = simple_form_submit(f)
+
+= content_for :scripts do
+  :coffee
+    FIELDS = [
+      'poorderprice'
+      'poordertax'
+      'poordershipping'
+      'poorderfees'
+      'poordertotal'
+    ]
+
+    FIELD_PREFIX = '#purchase_order_item_'
+
+    add_change_listener = (f) -> $(FIELD_PREFIX + f).change updateFields
+
+    update_field_value = (f) ->
+      qty = $('#purchase_order_item_poorderquant').val()
+      vv = $(FIELD_PREFIX + f).val() * 1.0 / qty
+      $("#purchase_order_item_" + f + "per").val(vv)
+
+    updateFields = (e) -> update_field_value(f) for f in FIELDS
+
+    $(document).ready ->
+      add_change_listener('#purchase_order_item_poorderquant')
+      add_change_listener(f) for f in FIELDS
+

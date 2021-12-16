@@ -136,6 +136,26 @@ en:
         orderccdate: CC Date
         preordercompletedate: Pre-Order Completed Date
         orderconfirmdate: Confirmed Date
+      order_deposit:
+        odepositid: ID
+        odepositdate: Date
+        odepositbatch: Batch
+      order_item:
+        orderitemsid: ID
+        skuid: SKU
+        poid: PO
+        orderid: Order
+        orderquant: Quantity
+        orderpriceper: Price Per
+        orderpricetotal: Price Total
+        ordertaxrate: Tax Rate
+        ordertaxtotal: Tax Total
+        orderdeliverycosttotal: Delivery Cost Total
+        orderfeestotal: Fees Total
+        ordergrandtotal: Grand Total
+        orderitemsdelivereddate: Items Delivered Date
+        orderdeliveredquant: Delivered Qty
+        orderretailtotal: Retail Total
       pre_order:
         preorderdate: Date
         preorderbatch: Batch

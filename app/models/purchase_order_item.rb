@@ -7,6 +7,8 @@ class PurchaseOrderItem < ApplicationRecord
 
   scope :unfulfilled, -> { where('poorderquant != poorderrcvdquant') }
 
+  validates_presence_of :poorderquant, :poorderrcvdquant
+
   def unfulfilled?
     poorderquant != poorderrcvdquant
   end

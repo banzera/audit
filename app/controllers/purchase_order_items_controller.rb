@@ -1,11 +1,26 @@
 class PurchaseOrderItemsController < ApplicationController
   include DefaultCrudController
 
-  load_and_authorize_resource
-  before_action :load_resources, except: [:index]
+  load_and_authorize_resource :purchase_order
+  load_and_authorize_resource :purchase_order_item, through: :purchase_order, through_association: :items, shallow: true
+
+  before_action :load_resources, except: [:index, :new]
+
+  page_title only: :new do
+    "New #{resource_name.titleize}(s) for PO #{@purchase_order}"
+  end
 
   button :label, false
   button :receive, 'Receive', redirect: -> { receive_purchase_order_item_path(skuid: resource.id) }
+  on     :create, redirect: -> { purchase_order_path(resource.purchase_order) }
+
+  def show
+    @parent = @purchase_order_item.purchase_order
+  end
+
+  def index
+    @datatable = PurchaseOrderItemsDatatable.new(po: @purchase_order)
+  end
 
   def label
     @page_title = "Bin Label for #{@sku.sku} / #{@purchase_order.pobatch}"
@@ -33,21 +48,21 @@ class PurchaseOrderItemsController < ApplicationController
   end
 
   def update
-    resource.update permitted_params
-    respond_to do |format|
-      format.html { redirect_to receive_purchase_order_path(resource.purchase_order) }
-      format.js { render 'receive' }
-    end
+    # resource.update permitted_params
+    # respond_to do |format|
+    #   format.html { redirect_to receive_purchase_order_path(resource.purchase_order) }
+    #   format.js { render 'receive' }
+    # end
+    super
   end
 
   private
 
   def load_resources
-    @purchase_order = @purchase_order_item.purchase_order
-    @sku            = @purchase_order_item.sku
+    @sku = @purchase_order_item.sku
   end
 
-  def permitted_params
+  def purchase_order_item_params
     params.require(:purchase_order_item).permit([
       :poid,
       :skuid,
@@ -74,9 +89,6 @@ class PurchaseOrderItemsController < ApplicationController
         :skumaxtemp,
         :skumintemp,
       ]
-
-
     ])
   end
-
 end
