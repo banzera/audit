@@ -1,3 +1,6 @@
+# Lodash (_)
+#= require lodash/lodash
+#
 # jQuery
 #= require jquery/jquery
 #

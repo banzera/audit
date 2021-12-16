@@ -3,7 +3,7 @@
   .col-md-8.offset-md-2
     = simple_form_for :sku, url: search_skus_path do |f|
       .input-group
-        %input.form-control.form-control-lg#search{:name => 'sku[search]', :placeholder => "Type your keywords here", :type => "search", value: @query}
+        %input.form-control.form-control-lg#search{:name => 'search[q]', :placeholder => "Type your keywords here", :type => "search", value: @query}
         .input-group-append
           %button.btn.btn-lg.btn-default{:type => "submit", data: { controller: 'receive', action: 'click->receive#search'}}
             %i.fa.fa-search
