@@ -11,7 +11,7 @@
         .card-header
           %h3.card-title=@page_title
           .card-tools
-            = render_resource_buttons(@resource, show: false)
+            = render_resource_buttons(@resource, (action ||= :edit) => false, show: false)
 
         .card-body
-          = render_resource_form(@resource)
+          = render_resource_form(@resource, action: action_name)
