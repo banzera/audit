@@ -1,0 +1,47 @@
+#actions.row
+  .col-lg-6
+    .btn-group.w-100
+      %span.btn.btn-success.col.fileinput-button.dz-clickable
+        %i.fas.fa-plus
+        %span Add files
+      -#%button.btn.btn-primary.col.start{:type => "submit"}
+      -#  %i.fas.fa-upload
+      -#  %span Start upload
+      -#%button.btn.btn-warning.col.cancel{:type => "reset"}
+      -#  %i.fas.fa-times-circle
+      -#  %span Cancel upload
+  .col-lg-6.d-flex.align-items-center
+    .fileupload-process.w-100
+      #total-progress.progress.progress-striped.active{"aria-valuemax" => "100", "aria-valuemin" => "0", "aria-valuenow" => "0", :role => "progressbar", :style => "opacity: 0;"}
+        .progress-bar.progress-bar-success{"data-dz-uploadprogress" => "", :style => "width: 100%;"}
+
+#previews.table.table-striped.files
+  #template.row.mt-2
+    .col-auto
+      %span.preview
+        %img{:alt => "", "data-dz-thumbnail" => "", :src => "data:,"}/
+    .col.d-flex.align-items-center.file-info
+      %p.mb-0
+        %span.lead{"data-dz-name" => ""}
+        = surround '(', ')' do
+          %span{"data-dz-size" => ""}
+      %strong.error.text-danger{"data-dz-errormessage" => ""}
+      %strong.message{style: 'display: none'}
+    .col-4.d-flex.align-items-center
+      .progress.progress-striped.active.w-100{"aria-valuemax" => "100", "aria-valuemin" => "0", "aria-valuenow" => "0", :role => "progressbar"}
+        .progress-bar.progress-bar-success{"data-dz-uploadprogress" => "", :style => "width:0%;"}
+
+    .col-auto.d-flex.align-items-center
+      .btn-group
+        %button.btn.btn-primary.start
+          %i.fas.fa-upload
+          %span Start
+        %button.btn.btn-warning.cancel{"data-dz-remove" => ""}
+          %i.fas.fa-times-circle
+          %span Cancel
+
+      %a.btn.btn-success.continue{style: 'display: none'}
+        %i.fas.fa-arrow-circle-right
+        %span Continue
+
+= javascript_include_tag 'drop_zone'
