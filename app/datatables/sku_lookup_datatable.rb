@@ -15,6 +15,7 @@ class SkuLookupDatatable < Effective::Datatable
     col :skudesc
     col :unitweight,       visible: false
     col :category
+    col :sku_class
     col :skuminunits,      visible: false
     col :skuminunitstype,  visible: false, search: { as: :select, collection: Sku.select(:skuminunitstype).distinct.pluck(:skuminunitstype) }
     col :dcloc,            visible: false

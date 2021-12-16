@@ -50,6 +50,9 @@ en:
       sku:
         one: SKU
         other: SKUs
+      sku_class:
+        one: Class
+        other: Classes
       supplier:
         one: Supplier
         other: Suppliers
@@ -232,6 +235,8 @@ en:
         skumintemp: Minimum Temperature
         skunotes: Notes
         tsv: Text Search Vector (meta)
+      sku_class:
+        skuclassdesc: Description
       supplier:
         splrname: Code
         splrfirst: First Name
