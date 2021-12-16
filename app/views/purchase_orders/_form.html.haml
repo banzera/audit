@@ -13,8 +13,6 @@
                 %a#payment-tab.nav-link{"aria-controls" => "payment", "aria-selected" => "false", "data-toggle" => "pill", :href => "#payment", :role => "tab"} Payment
               %li.nav-item
                 %a#notes-tab.nav-link{"aria-controls" => "payment", "aria-selected" => "false", "data-toggle" => "pill", :href => "#notes", :role => "tab"} Notes
-              %li.nav-item
-                %a#items-tab.nav-link{"aria-controls" => "payment", "aria-selected" => "false", "data-toggle" => "pill", :href => "#items", :role => "tab"} Items
           .card-body
             #tabContent.tab-content
               #general.tab-pane.fade.active.show{"aria-labelledby" => "general-tab", :role => "tabpanel"}
@@ -47,18 +45,28 @@
                     = f.input :poamountpaid, wrapper: :input_group, prepend: 'fas fa-dollar-sign'
               #notes.tab-pane.fade{"aria-labelledby" => "notes-tab", :role => "tabpanel"}
                 = f.input :ponotes, wrapper: :vertical_form
-              #items.tab-pane.fade{"aria-labelledby" => "items-tab", :role => "tabpanel"}
-                = render_datatable PurchaseOrderItemsDatatable.new(po: @purchase_order),
-                  buttons: false,
-                  charts: false,
-                  entries: false,
-                  filters: true,
-                  inline: false,
-                  namespace: nil,
-                  pagination: false,
-                  search: false,
-                  simple: false,
-                  sort: false
+
+        - if action_name == 'show'
+          .card.card-primary-card-outline
+            .card-header
+              %h2.card-title PO Items
+              .card-tools
+                %a.btn.btn-tool{href: new_purchase_order_purchase_order_item_path(@purchase_order)}
+                  = fa_icon 'plus'
+                  Add Item
+
+            .card.body
+              = render_datatable PurchaseOrderItemsDatatable.new(po: @purchase_order),
+                buttons:    false,
+                charts:     false,
+                entries:    false,
+                filters:    false,
+                inline:     false,
+                namespace:  nil,
+                pagination: false,
+                search:     false,
+                simple:     false,
+                sort:       false
 
     - unless local_assigns[:readonly]
       .row

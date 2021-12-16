@@ -49,6 +49,11 @@ gem 'jbuilder', '~> 2.7'
 gem 'pdfkit'
 gem 'wkhtmltopdf-heroku', group: :production
 
+# XLSX parsing/generating libraries
+gem 'roo'
+gem 'caxlsx'
+gem 'caxlsx_rails'
+
 # Barcodes
 gem 'has_barcode'
 gem 'rqrcode'

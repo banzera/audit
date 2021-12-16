@@ -37,6 +37,6 @@ class PurchaseOrderItemsDatatable < Effective::Datatable
     # col :poorderrebatenotes, search: false
 
     # TODO: no actions when viewing through a PO
-    actions_col only: [:receive]
+    actions_col only: [:receive, :show, :edit]
   end
 end

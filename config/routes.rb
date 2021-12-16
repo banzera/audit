@@ -19,25 +19,30 @@ Rails.application.routes.draw do
 
   resources :pre_orders
 
-  resources :purchase_order_items do
+  resources :purchase_orders do
+    collection do
+    end
+
     member do
+      post :upload
+      get :new_items
       get :receive
+    end
+
+    resources :purchase_order_items, only: [:index, :new, :create], path: :items do
+      member do
+        get :receive
+      end
     end
   end
 
-  resources :purchase_orders do
+  resources :purchase_order_items, only: [:update, :edit, :show] do
     member do
-      get :receive
-    end
-  end
-  resources :purchase_order_items, only: [:index, :update] do
-    member do
-      get :receive
       get :label
       get :label_preview
       post :print
     end
-end
+  end
 
   resources :suppliers
   resources :skus do
