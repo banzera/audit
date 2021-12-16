@@ -1,5 +1,5 @@
 class PreOrdersController < ApplicationController
-  include Effective::CrudController
+  include DefaultCrudController
 
   def permitted_params
     params.require(:pre_order).permit([

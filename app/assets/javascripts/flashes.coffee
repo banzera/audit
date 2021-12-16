@@ -35,8 +35,8 @@ window.flashToast = (flashes) ->
     msg  = flash[1]
 
     try
-      toastr[type](msg, '', opts)
+      toastr[type](msg, '', opts) if msg
     catch e
-      toastr.info(msg, '', opts)
+      toastr.info(msg, '', opts) if msg
 
   show flash for flash in flashes

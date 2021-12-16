@@ -1,5 +1,5 @@
 class PurchaseOrderItemsController < ApplicationController
-  include Effective::CrudController
+  include DefaultCrudController
 
   load_and_authorize_resource
   before_action :load_resources, except: [:index]

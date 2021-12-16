@@ -1,5 +1,5 @@
 class SuppliersController < ApplicationController
-  include Effective::CrudController
+  include DefaultCrudController
 
   def suppliers_params
     params.require(:supplier).permit([
