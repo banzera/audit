@@ -1,5 +1,5 @@
 class CategoriesController < ApplicationController
-  include Effective::CrudController
+  include DefaultCrudController
 
   def permitted_params
     params.require(:category).permit([

@@ -1,5 +1,5 @@
 class PurchaseOrdersController < ApplicationController
-  include Effective::CrudController
+  include DefaultCrudController
 
   load_and_authorize_resource
 

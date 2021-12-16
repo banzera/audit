@@ -1,5 +1,5 @@
 class VendorsController < ApplicationController
-  include Effective::CrudController
+  include DefaultCrudController
 
   def vendor_params
     params.require(:vendor).permit([

@@ -1,5 +1,5 @@
 class CustomersController < ApplicationController
-  include Effective::CrudController
+  include DefaultCrudController
 
   def permitted_params
     params.require(:customer).permit([
