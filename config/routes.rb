@@ -15,6 +15,15 @@ Rails.application.routes.draw do
     member do
       get :pick_list
     end
+
+    resources :order_items, only: [:index, :new, :create], path: :items do
+    end
+  end
+
+  resources :order_items, only: [:update, :edit, :show] do
+    member do
+      get :split
+    end
   end
 
   resources :pre_orders
