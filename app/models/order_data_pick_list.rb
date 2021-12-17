@@ -3,4 +3,9 @@ class OrderDataPickList < ApplicationRecord
   self.primary_key = 'orderid'
 
   belongs_to :order, foreign_key: :orderid
+
+  def cases
+    1.0 * orderquantdue / skuminpercs
+  end
+
 end

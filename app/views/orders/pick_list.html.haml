@@ -53,7 +53,7 @@
         %td.border.border-dark=pick.skuid
         %td.border.border-dark=pick.poid
         %td.border.border-dark{class: pick_list_cell_style(pick) }=pick.orderquantdue
-        %td.border.border-dark=1.0 * pick.orderquantdue / pick.skuminpercs
+        %td.border.border-dark=number_with_precision(pick.cases)
         %td=pick.orderquant
         %td=pick.orderdeliveredquant
         %td=pick.orderitemsdelivereddate
