@@ -10,12 +10,12 @@ class SkusDatatable < Effective::Datatable
 
   datatable do
     col :skuid
-    col :sku
+    col :sku,              visible: false
     col :manf
     col :itemno
-    col :skudesc,          visible: false
+    col :skudesc,          search: { as: :string, fuzzy: true }
     col :unitweight,       visible: false
-    col :category
+    col :category,         visible: false
     col :skuminunits,      visible: false
     col :skuminunitstype,  visible: false, search: { as: :select, collection: Sku.select(:skuminunitstype).distinct.pluck(:skuminunitstype) }
     col :dcloc,            visible: false
