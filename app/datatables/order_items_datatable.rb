@@ -12,22 +12,21 @@ class OrderItemsDatatable < Effective::Datatable
   datatable do
     order :orderitemsid, :desc
 
-    col :orderitemsid
-    col :sku
-    col :poid
-    col :orderid
+    col :orderitemsid, search: false, visible: false
+    col :sku, search: false
+    col :purchase_order
     col :orderquant
-    col :orderpriceper
-    col :orderpricetotal
-    col :ordertaxrate
-    col :ordertaxtotal
-    col :orderdeliverycosttotal
-    col :orderfeestotal
-    col :ordergrandtotal
-    col :orderitemsdelivereddate
+    col :orderpriceper, visible: false
+    col :orderpricetotal, visible: false
+    col :ordertaxrate, visible: false
+    col :ordertaxtotal, visible: false
+    col :orderdeliverycosttotal, visible: false
+    col :orderfeestotal, visible: false
+    col :ordergrandtotal, visible: false
+    col :orderitemsdelivereddate, visible: false
     col :orderdeliveredquant
-    col :orderretailtotal
+    # col :orderretailtotal
 
-    actions_col only: [:split]
+    actions_col
   end
 end
