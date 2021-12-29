@@ -17,19 +17,19 @@ class OrdersDatatable < Effective::Datatable
     col :orderbatch
     col :customer, action: :show
     col :ordertaxrate,         visible: false
-    col :orderdelivereddate,   visible: false
+    col :orderdelivereddate,   visible: false, as: :date
     col :orderdeliverdfrom,    visible: false
     col :orderdeliveredto,     visible: false
     col :ordershipmethod,      visible: false
     col :orderreceipthl,       visible: false
-    col :orderdateinvoiced,    visible: false
-    col :orderdatepaid,        visible: false
+    col :orderdateinvoiced,    visible: false, as: :date
+    col :orderdatepaid,        visible: false, as: :date
     col :orderpaymentmethod,   visible: false
     col :orderpaymentamount,   visible: false
     col :ordernotes,           visible: false
-    col :orderccdate,          visible: false
-    col :preordercompletedate, visible: false
-    col :orderconfirmdate,     visible: false
+    col :orderccdate,          visible: false, as: :date
+    col :preordercompletedate, visible: false, as: :date
+    col :orderconfirmdate,     visible: false, as: :date
 
     actions_col
   end
