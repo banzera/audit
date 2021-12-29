@@ -1,0 +1,27 @@
+- content_for :page_title do
+  =@page_title
+
+.content
+  .row
+    .col-10.offset-1
+      .card.card-primary.card-outline.shadow
+        .card-header
+          %h3.card-title
+            = link_to :back, class: 'btn btn-sm btn-secondary' do
+              = fa_icon 'backward', text: 'Back'
+            = fa_icon 'print', text: "Preview For: #{@order}"
+          .card-tools
+            %button.btn.btn-secondary#print-button
+              = fa_icon 'print', text: 'Print'
+            = render_resource_buttons(@order, btn_class: 'btn', only: [:mark_as_billed]) #show: false, destroy: false)
+  .row
+    .col-10.offset-1
+      .card.card-primary.card-outline.shadow
+        .card-body
+          =render partial: 'invoice'
+
+- content_for :scripts do
+  :coffee
+    $(document).ready () ->
+      $('#print-button').click (e) ->
+        window.open('#{invoice_order_path(format: :pdf)}', '_invoice')
