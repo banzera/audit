@@ -9,6 +9,8 @@ gem 'rails', '~> 6.1.4', '>= 6.1.4.1'
 # Database
 gem 'pg'
 gem "pg_search", "~> 2.3"
+gem "fx", "~> 0.6.2"
+gem "scenic", "~> 1.5"
 
 # Web Server
 gem 'puma', '~> 5.0'
