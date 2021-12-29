@@ -22,6 +22,9 @@
  *= require effective_datatables
  *= require effective_bootstrap
  *
+ * Sweet Alert 2
+ *= require sweetalert2/sweetalert2
+ *
  * Toastr toast alerts
  *= require 'toastr/toastr'
  *

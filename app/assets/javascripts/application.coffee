@@ -41,6 +41,9 @@
 # pace-progress
 #= require pace-progress/pace
 #
+# Sweet Alert 2
+#= require sweetalert2/sweetalert2
+#
 # Toastr toast alerts
 #= require toastr/toastr.min
 #
