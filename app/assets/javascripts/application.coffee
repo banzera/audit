@@ -39,7 +39,8 @@
 #= require js/adminlte
 #
 # pace-progress
-#= require pace-progress/pace
+# BUG: Interferes with RailsUJS Ajax XMLHttpRequest
+# require pace-progress/pace
 #
 # Sweet Alert 2
 #= require sweetalert2/sweetalert2
@@ -48,6 +49,10 @@
 #= require toastr/toastr.min
 #
 #= require effective_datatables
+#
+# NB Enabling effective_bootstrap breaks the Terminus datetimepicker!
+# TODO figure out how to make them work together as the following
+# contains the effective_form JS used by effectivedatatables inline AJAX submits
 # require effective_bootstrap
 #
 #= require chartkick
