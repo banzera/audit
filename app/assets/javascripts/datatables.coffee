@@ -21,5 +21,16 @@ fixUpDatatable = ->
   # make the select fields in the column headers use select2
   $('.effective-datatable thead select').select2()
 
-$(document).ready (e) -> destroySelect2s()
+logEvent = (e) -> console.log(e)
+
+$(document).ready (e) ->
+  logEvent 'document:ready'
+  # destroySelect2s()
+
 $(document).on 'effective-bootstrap:initialize', (e) -> fixUpDatatable()
+
+$(document).on 'turbolinks:before-cache', (e) -> logEvent e.type
+$(document).on 'turbolinks:render', (e) -> logEvent e.type
+$(document).on 'turbolinks:load',   (e) ->
+  logEvent e.type
+  destroySelect2s()
