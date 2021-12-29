@@ -8,7 +8,11 @@ class PurchaseOrder < ApplicationRecord
   has_many :items, class_name: 'PurchaseOrderItem', foreign_key: :poid
 
   scope :outstanding, -> { where(poid: PurchaseOrderItem.unfulfilled.pluck(:poid)) }
-  # scope :outstanding, -> { items.where(poitemsid: PurchaseOrderItem.unfulfilled.pluck(:poitemsid) }
+
+  validates_presence_of :supplier1,
+                        :supplier2,
+                        :posplrorderno,
+                        :podate
 
   before_create :set_pobatch!
 

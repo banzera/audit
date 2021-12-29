@@ -1,5 +1,5 @@
 .content
-  = simple_form_for @purchase_order, defaults: { disabled: local_assigns[:readonly] }, wrapper: :vertical_form do |f|
+  = simple_form_for @purchase_order, html: {novalidate: true}, defaults: { disabled: local_assigns[:readonly], wrapper: :vertical_form } do |f|
     .row
       .col-12
         .card.card-primary.card-outline.card-tabs
@@ -12,13 +12,13 @@
               #general.tab-pane.fade.active.show{"aria-labelledby" => "general-tab", :role => "tabpanel"}
                 .row
                   .col-4
-                    = f.input :pobatch, wrapper: :vertical_form, disabled: true
-                    = f.input :podate, wrapper: :vertical_form
+                    = f.input :pobatch, disabled: true
+                    = f.input :podate
                   .col-4
-                    = f.association :supplier1, wrapper: :vertical_form
-                    = f.association :supplier2, wrapper: :vertical_form
+                    = f.association :supplier1
+                    = f.association :supplier2
                   .col-4
-                    = f.input :posplrorderno, wrapper: :vertical_form
+                    = f.input :posplrorderno
 
     - unless local_assigns[:readonly]
       .row
