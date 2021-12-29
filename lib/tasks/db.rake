@@ -189,7 +189,7 @@ CLEAN.include 'db/legacy/dumps/*.csv'
 
 rule ".clean-csv" => ".csv" do |t|
   puts "Cleaning #{t.source}"
-  `sed -E -e 's/\"1900-01-00 00:00:00\"//g' #{t.source} > #{t.name}`
+  `sed -E -e 's/\"1900-01-00 00:00:00\"/\"1900-01-01 00:00:00\"/g' #{t.source} > #{t.name}`
 end
 CLEAN.include 'db/legacy/dumps/*.clean-csv'
 
