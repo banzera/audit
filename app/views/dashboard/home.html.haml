@@ -79,8 +79,8 @@
       .col-lg-6
         .card
           .card-body
-            %h5.card-title Or Monthly Volume Combined
-            = line_chart @combined_data
+            %h5.card-title Credit Card Billing Volume (Prev 30 days)
+            = line_chart Order.where("orderccdate > ?", 30.days.ago).group_by_day(:orderccdate).count
 
       .col-lg-6
         .card

@@ -12,7 +12,7 @@
 
       .card-body
         - if @datatable
-          = render_datatable(@datatable)
+          = render_datatable(@datatable, **(@dt_opts|| {}))
 
         - elsif instance_variable_get('@' + resource.plural_name).respond_to?(:to_partial_path)
           = render instance_variable_get('@' + resource.plural_name)

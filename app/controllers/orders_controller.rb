@@ -2,9 +2,30 @@ class OrdersController < ApplicationController
   include DefaultCrudController
 
   load_and_authorize_resource
+  before_action :load_customer, only: [:invoice, :invoice_preview, :pick_list]
+
+  button :invoice, false
+  on     :mark_as_billed, redirect: -> { billing_due_path }
+  button :mark_as_billed, 'Bill Credit Card', unless: -> { resource.billed? },
+                                              class: 'btn btn-primary',
+                                              data: {
+                                                method: :post,
+                                                confirm: "Really mark @resource as billed?"
+                                              }
+
+  def invoice
+    @pdf_options['orientation']  = 'Landscape'
+    @pdf_options['margin-left']  = '0.25in'
+    @pdf_options['margin-right'] = '0.25in'
+
+    @page_title = "Invoice: #{@order}"
+  end
+
+  def invoice_preview
+    @page_title = "Invoice Preview: #{@order}"
+  end
 
   def pick_list
-    @customer  = @order.customer
     @pick_list = @order.pick_list_items.order(:orderitemsid)
 
     @pdf_options['orientation']  = 'Landscape'
@@ -24,6 +45,12 @@ class OrdersController < ApplicationController
                                      .distinct(:custid)
                                      .order(:custname)
                                      .pluck(:custid, :custbusinessname, :custname)
+  end
+
+  private
+
+  def load_customer
+    @customer  = @order.customer
   end
 
   def permitted_params

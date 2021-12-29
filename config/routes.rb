@@ -4,7 +4,8 @@ Rails.application.routes.draw do
     sessions: 'users/sessions'
   }
 
-  get 'home',   to: 'dashboard#home'
+  get 'home',        to: 'dashboard#home'
+  get 'billing/due', to: 'billing#due'
 
   resources :categories
   resources :customers
@@ -14,6 +15,10 @@ Rails.application.routes.draw do
     end
     member do
       get :pick_list
+      get :invoice
+      get :invoice_preview
+
+      post :mark_as_billed
     end
 
     resources :order_items, only: [:index, :new, :create], path: :items do

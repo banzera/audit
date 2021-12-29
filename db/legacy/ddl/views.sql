@@ -1,5 +1,9 @@
 -- Create views
 
+-- for billing cc due
+  \i db/legacy/queries/qryOrderCCBillDue.sql
+  \i db/legacy/queries/qryOrderDataShippingList2.sql
+
 -- for sku form
   \i db/legacy/queries/qryInventoryCounts.sql
   \i db/legacy/queries/qryInventoryCountsFilter.sql
