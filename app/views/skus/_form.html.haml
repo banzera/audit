@@ -38,15 +38,37 @@
               =f.association :high_price_vendor
               =f.input :skuhighpricedate
 
-        .card.card-primary.card-outline
+        .card.card-danger.card-outline
           .card-header
-            %h3.card-title Meta
+            %h3.card-title SKU Customer Never
             .card-tools
               .button.btn.btn-tool{type: :button, 'data-card-widget': :collapse, title: :collapse}
                 %i.fas.fa-minus
           .card-body
             %p.card-text
-              =f.input :tsv, as: :text
+              %table.table.table-compact
+                - SkuCustInfo.never_for(@sku).each do |ci|
+                  %tr
+                    %th=ci.customer.custname
+                    %td=ci.customer.custlast
+                    %td=ci.customer.custbusinessname
+                    %td=ci.skuneverdate
+        .card.card-success.card-outline
+          .card-header
+            %h3.card-title SKU Customer Only
+            .card-tools
+              .button.btn.btn-tool{type: :button, 'data-card-widget': :collapse, title: :collapse}
+                %i.fas.fa-minus
+          .card-body
+            %p.card-text
+              %table.table.table-compact
+                - SkuCustInfo.only_for(@sku).each do |ci|
+                  %tr
+                    %th=ci.customer.custname
+                    %td=ci.customer.custlast
+                    %td=ci.customer.custbusinessname
+                    %td=ci.skualwaysdate
+
         .card
           .card-header
             %h5.m-0 Vendor Info

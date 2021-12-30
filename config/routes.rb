@@ -76,6 +76,7 @@ Rails.application.routes.draw do
       put  :search
       post :search
     end
+    resources :sku_cust_infos, shallow: true
   end
   resources :vendors
 

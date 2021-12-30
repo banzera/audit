@@ -1,15 +1,13 @@
-class Sku < ApplicationRecord
+class SkuBasic < Sku
   include PgSearch::Model
   include ::HasBarcode
 
-  self.table_name  = 'tblsku'
+  self.table_name  = 'vw_sku_basic'
   self.primary_key = 'skuid'
 
   belongs_to :category, foreign_key: :categoryid
   belongs_to :sku_class, foreign_key: :skuclassid
   belongs_to :high_price_vendor, class_name: 'Vendor', foreign_key: :skuhighpricevno, optional: true
-
-  has_many :cust_info, class_name: SkuCustInfo.name, foreign_key: :skuid
 
   validates_presence_of :skumaxtemp
   validates_presence_of :skumintemp
