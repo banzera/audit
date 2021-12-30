@@ -347,6 +347,8 @@ GEM
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.5.1)
+    zippy (0.2.3)
+      rubyzip (>= 1.0.0)
 
 PLATFORMS
   x86_64-darwin-20
@@ -398,6 +400,7 @@ DEPENDENCIES
   webdrivers
   webpacker (~> 5.0)
   wkhtmltopdf-heroku
+  zippy (~> 0.2.3)
 
 RUBY VERSION
    ruby 3.0.1p64
