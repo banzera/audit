@@ -15,6 +15,16 @@
     -#= render partial: 'layouts/nav_messages'
     -#= render partial: 'layouts/nav_notifications'
     = render partial: 'layouts/nav_user'
+    %li.nav-item.dropdown.d-none.d-sm-inline-block
+      %a.nav-link{"data-toggle" => "dropdown", :href => "#"}
+        %i.fas.fa-cog
+
+      .dropdown-menu.dropdown-menu-lg
+        %a.dropdown-item{href: export_dashboard_index_path, data: { remote: true, method: :post, confirm: 'Really export the tables?'} }
+          =fa_icon 'database', text: 'Export Tables'
+        .dropdown-divider
+
+
     %li.nav-item
       %a.nav-link{"data-widget" => "fullscreen", :href => "#", :role => "button"}
         %i.fas.fa-expand-arrows-alt

@@ -5,7 +5,14 @@ Rails.application.routes.draw do
   }
 
   get 'home',        to: 'dashboard#home'
+  get 'export',      to: 'dashboard#export'
   get 'billing/due', to: 'billing#due'
+
+  resources :dashboard, only: [] do
+    collection do
+      post :export
+    end
+  end
 
   resources :categories
   resources :customers
