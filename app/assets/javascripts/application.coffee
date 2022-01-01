@@ -1,6 +1,8 @@
 # Lodash (_)
 #= require lodash/lodash
 #
+#= require currency.js/dist/currency.umd
+#
 # jQuery
 #= require jquery/jquery
 #

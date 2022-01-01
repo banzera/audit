@@ -1,0 +1,42 @@
+= simple_form_for [@purchase_order, @purchase_order_item],
+    defaults: { disabled: local_assigns[:readonly], stimulus: {controller: 'price'} },
+    wrapper: :vertical_form do |f|
+
+  .row.post
+    .col-6
+      = f.association :sku, as: :sku_selection
+    .col-6
+      = f.input :poorderquant, stimulus: {target: :qty, action: 'change->price#updateQty'}
+    .row
+      = invoice_field(local_assigns) do |ff|
+        .col-2.offset-1= ff.input :invoice_nontax, calculated: true, stimulus: { action: 'price#updateCalculatedFields', target: 'invoiceNontax' }, as: :decimal
+      .col-2.offset-1= f.input :poorderprice,    stimulus: { action: 'price#updatePrice', target: :price },    linked_to: :poorderpriceper, error: 'bad'
+      .col-2.offset-1= f.input :poorderpriceper, stimulus: { action: 'price#updatePrice', target: :pricePer }, linked_to: :poorderprice
+    .row
+      = invoice_field(local_assigns) do |ff|
+        .col-2.offset-1= ff.input :invoice_tax, calculated: true, stimulus: { target: :invoiceTax, action: 'price#updateCalculatedFields' }, as: :decimal
+      .col-2.offset-1= f.input :poordertax,    stimulus: { target: :tax }
+      .col-2.offset-1= f.input :poordertaxper, stimulus: { target: :taxPer }
+    .row
+      = invoice_field(local_assigns) do |ff|
+        .col-2.offset-1= ff.input :invoice_sh, calculated: true, stimulus: { target: :invoiceSh, action: 'price#updateCalculatedFields' }, as: :decimal
+      .col-2.offset-1= f.input :poordershipping,    stimulus: { target: :sh }
+      .col-2.offset-1= f.input :poordershippingper, stimulus: { target: :shPer }
+    .row
+      = invoice_field(local_assigns) do |ff|
+        .col-2.offset-1= ff.input :invoice_fees, calculated: true, stimulus: { target: :invoiceFees, action: 'price#updateCalculatedFields' }, as: :decimal
+      .col-2.offset-1= f.input :poorderfees,    stimulus: { target: :fees }
+      .col-2.offset-1= f.input :poorderfeesper, stimulus: { target: :feesPer }
+    .row
+      = invoice_field(local_assigns) do |ff|
+        .col-2.offset-1= ff.input :invoice_total, calculated: true, stimulus: { target: :invoiceTotal, action: 'price#updateCalculatedFields' }, calculated: true
+      .col-2.offset-1= f.input :poordertotal,    stimulus: { target: :total }
+      .col-2.offset-1= f.input :poordertotalper, stimulus: { target: :totalPer }
+  .row
+    .col-3
+      = f.input :poorderrebate
+    .col-9
+      = f.input :poorderrebatenotes, as: :text
+  - unless local_assigns[:readonly]
+    .row
+      = simple_form_submit(f)

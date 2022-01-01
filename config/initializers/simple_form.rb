@@ -10,7 +10,7 @@
 # components.
 # See https://github.com/heartcombo/simple_form#custom-components
 # to know more about custom components.
-# Dir[Rails.root.join('lib/components/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('lib/components/**/*.rb')].each { |f| require f }
 
 # Use this setup block to configure all options available in SimpleForm.
 SimpleForm.setup do |config|
@@ -57,6 +57,10 @@ SimpleForm.setup do |config|
     b.optional :pattern
     b.optional :min_max
     b.optional :readonly
+    b.optional :linked_to
+    b.optional :stimulus
+    b.optional :calculated
+    b.optional :data_attributes
     b.use :label
     b.use :input, class: 'form-control', error_class: 'is-invalid', valid_class: 'is-valid'
     b.use :full_error, wrap_with: { tag: 'div', class: 'invalid-feedback' }

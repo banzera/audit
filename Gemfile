@@ -118,3 +118,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem "down", "~> 5.2"
 gem "zippy", "~> 0.2.3"
+
+gem "stimulus-rails", "~> 1.0"
