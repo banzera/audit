@@ -9,6 +9,11 @@ class PurchaseOrderItem < ApplicationRecord
 
   validates_presence_of :poorderquant, :poorderrcvdquant
 
+  attr_accessor :invoice_subtotal, :invoice_total,
+                :invoice_tax, :invoice_nontax,
+                :invoice_sh, :invoice_fees
+
+
   def unfulfilled?
     poorderquant != poorderrcvdquant
   end
