@@ -1,0 +1,27 @@
+- focus_upload = params[:upload].present?
+.content
+  .row
+    .col-12
+      .card.card-primary.card-outline.card-tabs
+        .card-header.p-0.pt-1.border-botton-0
+          %ul#tab.nav.nav-tabs{:role => "tablist"}
+            %li.nav-item
+              %a#single-tab.nav-link{"aria-controls" => "single", "aria-selected" => "true", "data-toggle" => "pill", :href => "#single", :role => "tab"} Single
+            %li.nav-item
+              %a#upload-tab.nav-link{"aria-controls" => "upload", "aria-selected" => "false", "data-toggle" => "pill", :href => "#upload", :role => "tab"} From Upload
+        .card-body
+          #tabContent.tab-content
+            #single.tab-pane.fade{"aria-labelledby" => "single-tab", :role => "tabpanel"}
+              = render partial: 'form'
+            #upload.tab-pane.fade{"aria-labelledby" => "upload-tab", :role => "tabpanel"}
+              = render partial: 'drop_zone'
+
+- content_for :scripts do
+  :coffee
+    $(document).ready () ->
+      if #{focus_upload}
+        $('#upload-tab').tab('show')
+      else
+        $('#single-tab').tab('show')
+
+      new DropZone '#{upload_pre_order_path(@pre_order)}'

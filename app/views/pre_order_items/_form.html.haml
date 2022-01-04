@@ -1,0 +1,35 @@
+= simple_form_for [@pre_order, @pre_order_item],
+    defaults: { disabled: local_assigns[:readonly], stimulus: {controller: 'price'} },
+    wrapper: :vertical_form do |f|
+
+  .row.post
+    .col-3
+      = f.association :sku1, as: :sku_selection, source_url: '/skus'
+      = f.association :sku2, as: :sku_selection, source_url: '/skus', required: !creating_resource?
+    .col-3
+      = f.input :orderquant1
+      = f.input :orderquant2
+    .col-3
+      = f.input :orderpriceper1
+      = f.input :orderpriceper2
+    .col-3
+      = f.input :orderpricetotal1
+      = f.input :orderpricetotal2
+  .row.post
+    .col-3
+      = f.association :purchase_order, required: false
+    .col-3
+      = f.input :orderaupriceper
+    .col-3
+      = f.input :orderdate, as: :date, wrapper: :vertical_form
+  .row
+    .col-1
+      = f.input :preorderurgent, wrapper: :vertical_form
+    .col-1
+      = f.association :code, required: !creating_resource?
+    .col-10
+      = f.input :notes
+
+  - unless local_assigns[:readonly]
+    .row
+      = simple_form_submit(f)

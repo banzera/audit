@@ -1,0 +1,6 @@
+- value = resource.send(column[:name])
+
+- if value
+  %span.badge.bg-danger=t("effective_datatables.boolean_#{value}")
+- else
+  %span.badge.bg-success=t("effective_datatables.boolean_#{value}")
