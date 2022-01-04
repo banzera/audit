@@ -21,22 +21,27 @@
               =f.input :dcloc
               =f.input :skuminpercs
 
-              =f.input :skuclassid
+              =f.association :sku_class
               =f.input :skumaxtemp
               =f.input :skumintemp
               =f.input :skunotes
       .col-lg-6
-        .card.card-primary.card-outline
+        .card.card-outline.card-secondary
           .card-header
-            %h3.card-title Pricing
+            %h5.card-title.m-0 Vendor Info
             .card-tools
-              .button.btn.btn-tool{type: :button, 'data-card-widget': :collapse, title: :collapse}
-                %i.fas.fa-minus
-          .card-body
-            %p.card-text
-              =f.input :skuhighprice, as: :currency
-              =f.association :high_price_vendor
-              =f.input :skuhighpricedate
+              #open_all.button.btn.btn-tool{type: :button}
+                =fa_icon 'external-link-alt', text: 'Open All'
+
+          .card-body.p-0
+            %table.table.table-sm
+              - @sku.vendors.each do |v|
+                %tr
+                  %th=v.name
+                  %td=v.sku
+                  %td
+                    -if v.url.present?
+                      =link_to v.url, v.url, class: 'sku-link', target: v.abbr
 
         .card.card-danger.card-outline
           .card-header
@@ -69,29 +74,15 @@
                     %td=ci.customer.custbusinessname
                     %td=ci.skualwaysdate
 
-        .card
-          .card-header
-            %h5.m-0 Vendor Info
-          .card-body
-            .row
-              .col-5.col-sm-3
-                #vert-tabs-tab.nav.flex-column.nav-tabs.h-100{"aria-orientation" => "vertical", :role => "tablist"}
-                  - @sku.vendors.each do |v|
-                    %a.nav-link[v, 'vert-tabs-tab']{:href => "#",
-                      "aria-controls" => "vert-tabs-home",
-                      "aria-selected" => "true",
-                      "data-toggle" => "pill",
-                      "role" => "tab"}
-                      =v.name
-              .col-7.col-sm-9
-                #vert-tabs-tabContent.tab-content
-                  - @sku.vendors.each do |v|
-                    .tab-pane.text-left.fade.show[v, 'vert-tabs']{"aria-labelledby" => "vert-tabs-home-tab", :role => "tabpanel"}
-                      %p=v.id
-                      %p=v.name
-                      %p=v.abbr
-                      %p=v.sku
-                      %p=v.url
     - unless local_assigns[:readonly]
       .row
         = simple_form_submit(f)
+
+- content_for :scripts do
+  :coffee
+    $(document).ready ->
+      $('#open_all').click (e) ->
+        $('.sku-link').each (i, el) ->
+          console.log el.target, el.href
+          window.open(el.href, el.target)
+
