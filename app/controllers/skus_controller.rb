@@ -5,12 +5,14 @@ class SkusController < ApplicationController
   load_and_authorize_resource
 
   submit :receive, 'Receive Items', only: :show, redirect: -> { receive_skus_path(skuid: resource.id) }
+  button :export, "Export CSV", path: '/skus.csv'
 
   page_title(only: [:index]) { resource_klass.model_name.human(count: 2) }
 
   def index
     respond_to do |format|
       format.html { super }
+      format.csv  { send_data SkuExport.to_csv, filename: "skus-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"}
       format.json {
         @skus = @skus.search(select2_search_term) if select2_search_term?
         @skus = @skus.limit(10)
