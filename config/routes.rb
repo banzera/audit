@@ -72,6 +72,7 @@ Rails.application.routes.draw do
     end
 
     collection do
+      get  :export
       get  :lookup
       put  :search
       post :search
