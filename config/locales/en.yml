@@ -44,6 +44,12 @@ en:
       pre_order:
         one: Pre-Order
         other: Pre-Orders
+      pre_order_code:
+        one: Pre-Order Code
+        other: Pre-Order Codes
+      pre_order_item:
+        one: Pre-Order Item
+        other: Pre-Order Items
       purchase_order:
         one: PO
         other: POs
@@ -169,6 +175,27 @@ en:
         preorderanalysisdate: Analysis Date
         confirmationdate: Confirmation Date
         preordercheck: Check Date
+      pre_order_code:
+        preordercodeid: ID
+        preordercode: Code
+        preordercodedesc: Description
+      pre_order_item:
+        preorderitemsid: ID
+        preorderid: Pre-Order
+        poid: PO
+        skuid1: Requested SKU
+        skuid2: Proposed SKU
+        orderquant1: Requested Qty
+        orderquant2: Proposed Qty
+        orderpriceper1: Requested Price/Per
+        orderpriceper2: Proposed Price/Per
+        orderpricetotal1: Requested Total
+        orderpricetotal2: Proposed Total
+        orderaupriceper: AU Price/Per
+        preorderitemcode: Item Code
+        orderdate: Order Date
+        preordernotes: Notes
+        preorderurgent: Urgent
       purchase_order:
         poid: ID
         podate: Date

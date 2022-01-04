@@ -38,7 +38,17 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :pre_orders
+  resources :pre_orders do
+    resources :pre_order_items, only: [:index, :new, :create, :update, :edit, :show], path: :items
+
+    member do
+      post :upload
+      get :new_items
+    end
+  end
+
+  resources :pre_order_codes
+  resources :pre_order_items, only: [:destroy]
 
   resources :purchase_orders do
     collection do

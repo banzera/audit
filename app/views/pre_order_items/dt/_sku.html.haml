@@ -1,0 +1,8 @@
+- skuid  = resource.send(column[:name]) || 0
+- skuid1 = resource.send(:skuid1) || 0
+- skuid2 = resource.send(:skuid2) || 0
+
+- btn_class = skuid1 == skuid2 ? 'bg-success' : 'bg-lightblue'
+
+- if skuid&.positive?
+  = link_to skuid, sku_path(skuid), title: 'Show', class: 'btn btn-sm btn-outline-secondary ' + btn_class

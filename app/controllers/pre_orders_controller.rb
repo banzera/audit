@@ -1,7 +1,9 @@
 class PreOrdersController < ApplicationController
   include DefaultCrudController
 
-  def permitted_params
+  load_and_authorize_resource
+
+  def pre_order_params
     params.require(:pre_order).permit([
       :preorderdate,
       :preorderbatch,
@@ -15,6 +17,7 @@ class PreOrdersController < ApplicationController
       :preorderanalysisdate,
       :confirmationdate,
       :preordercheck,
+      :notes,
     ])
   end
 

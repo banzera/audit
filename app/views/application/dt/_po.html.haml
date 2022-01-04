@@ -1,0 +1,6 @@
+-# poid could be nil or 0, so use the boolean serializer to get a consistent truthy value
+-# where we can just call `present?`
+- poid = ActiveModel::Type::Boolean.new.serialize(resource.poid)
+- if poid.present?
+  = link_to resource.purchase_order.id, purchase_order_path(resource.poid), title: 'Show', class: 'btn btn-sm btn-outline-secondary'
+
