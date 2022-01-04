@@ -1,4 +1,5 @@
 class PurchaseOrder < ApplicationRecord
+  include HasBatch
   self.table_name  = 'tblpurchaseorder'
   self.primary_key = 'poid'
 
@@ -14,7 +15,12 @@ class PurchaseOrder < ApplicationRecord
                         :posplrorderno,
                         :podate
 
-  before_create :set_pobatch!
+  has_batch_number :pobatch, date: :podate, attrs: 'supplier1.splrname' do |po|
+    PurchaseOrder
+      .where("DATE(podate) = ?", self.podate)
+      .where(supplier1: self.supplier1)
+      .count || 0
+  end
 
   def self.ship_types
     select(:poshiptype).distinct.pluck(:poshiptype).compact
@@ -28,32 +34,6 @@ class PurchaseOrder < ApplicationRecord
     items.unfulfilled.any?
   end
 
-  def to_s
-    pobatch
-  end
-
-  BATCH_SERIAL_NUMBER_FORMAT = '%02d'.freeze
-
-  def supplier_date_serial_number
-    x = PurchaseOrder
-          .where("DATE(podate) = ?", self.podate)
-          .where(supplier1: self.supplier1)
-          .count || 0
-
-    BATCH_SERIAL_NUMBER_FORMAT % (x+1)
-  end
-
   private
 
-  def calculate_batch_string
-    batch_string = [
-      supplier1.splrname,
-      podate.to_s(:yymmdd),
-      supplier_date_serial_number,
-    ].join('X')
-  end
-
-  def set_pobatch!
-    self.pobatch = calculate_batch_string
-  end
 end

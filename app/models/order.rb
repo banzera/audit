@@ -1,4 +1,5 @@
 class Order < ApplicationRecord
+  include HasBatch
   self.table_name  = 'tblorder'
   self.primary_key = 'orderid'
 
@@ -21,8 +22,12 @@ class Order < ApplicationRecord
     .where(orderccdate: nil)
     .where('tblcustomer.custccauth': true)
   }
-  def to_s
-    orderbatch
+
+  has_batch_number :orderbatch, attrs: 'customer.custname' do
+    Order
+      .where("DATE(orderdate) = ?", self.orderdate)
+      .where(custid: self.custid)
+      .count || 0
   end
 
   def mark_as_billed!
