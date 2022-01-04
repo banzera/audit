@@ -1,0 +1,43 @@
+.content
+  = default_resource_form(read_only: local_assigns[:readonly]) do |f|
+    .row
+      .col-lg-6
+        .card.card-primary.card-outline
+          .card-header
+            %h3.card-title General
+            .card-tools
+              .button.btn.btn-tool{type: :button, 'data-card-widget': :collapse, title: :collapse}
+                %i.fas.fa-minus
+          .card-body
+            %p.card-text
+              =f.input :sku
+              =f.input :manf
+              =f.input :itemno
+              =f.input :skudesc
+              =f.input :unitweight
+              =f.association :category
+              =f.input :skuminunits
+              =f.input :skuminunitstype
+              =f.input :dcloc
+              =f.input :skuminpercs
+
+              =f.association :sku_class
+              =f.input :skumaxtemp
+              =f.input :skumintemp
+              =f.input :skunotes
+      .col-lg-6
+        .card.card-secondary.card-outline
+          .card-header
+            %h5.m-0 Vendor Info
+          .card-body
+            - v_rows = @sku.vendors.size + 2
+            - (1..v_rows).map {|i| '%02d' % i }.each do |i|
+              .row.post
+                =f.input "vno#{i}", label: 'Vendor', collection: Vendor.all
+                =f.input "vsku#{i}"
+                =f.input "vhl#{i}", as: :url
+
+
+    - unless local_assigns[:readonly]
+      .row
+        = simple_form_submit(f)
