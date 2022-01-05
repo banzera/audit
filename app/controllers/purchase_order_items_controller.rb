@@ -13,6 +13,12 @@ class PurchaseOrderItemsController < ApplicationController
   button :label, false
   button :receive, 'Receive', redirect: -> { receive_purchase_order_item_path(skuid: resource.id) }
   on     :create, redirect: -> { purchase_order_path(resource.purchase_order) }
+  on     :save,   redirect: -> { purchase_order_path(resource.purchase_order) }
+
+  def edit
+    @parent = @purchase_order_item.purchase_order
+    redirect_to edit_purchase_order_purchase_order_item_path(@parent, @purchase_order_item) unless @purchase_order.present?
+  end
 
   def show
     @parent = @purchase_order_item.purchase_order

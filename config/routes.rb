@@ -60,7 +60,7 @@ Rails.application.routes.draw do
       get :receive
     end
 
-    resources :purchase_order_items, only: [:index, :new, :create], path: :items do
+    resources :purchase_order_items, only: [:index, :new, :create, :update, :edit, :show], path: :items do
       member do
         get :receive
       end

@@ -19,23 +19,31 @@
     .col-6
       = f.input :poorderquant, stimulus: {target: :qty, action: 'change->price#updateQty'}
     .row
-      .col-2.offset-1= f.input :invoice_nontax,  stimulus: { action: 'price#updateCalculatedFields', target: 'invoiceNontax' }, as: :decimal
+      = invoice_field(local_assigns) do |ff|
+        .col-1.offset-1= ff.input :invoice_nontax, calculated: true, stimulus: { action: 'price#updateCalculatedFields', target: 'invoiceNontax' }, as: :decimal
+        .col-1
+          = link_to edit_purchase_order_path(@purchase_order), class: 'btn btn-sm btn-outline-secondary' do
+            =fa_icon 'edit', text: 'edit'
       .col-2.offset-1= f.input :poorderprice,    stimulus: { action: 'price#updatePrice', target: :price },    linked_to: :poorderpriceper, error: 'bad'
       .col-2.offset-1= f.input :poorderpriceper, stimulus: { action: 'price#updatePrice', target: :pricePer }, linked_to: :poorderprice
     .row
-      .col-2.offset-1= f.input :invoice_tax,   stimulus: { target: :invoiceTax, action: 'price#updateCalculatedFields' }, as: :decimal
+      = invoice_field(local_assigns) do |ff|
+        .col-2.offset-1= ff.input :invoice_tax, calculated: true, stimulus: { target: :invoiceTax, action: 'price#updateCalculatedFields' }, as: :decimal
       .col-2.offset-1= f.input :poordertax,    calculated: true, stimulus: { target: :tax }
       .col-2.offset-1= f.input :poordertaxper, calculated: true, stimulus: { target: :taxPer }
     .row
-      .col-2.offset-1= f.input :invoice_sh,         stimulus: { target: :invoiceSh, action: 'price#updateCalculatedFields' }, as: :decimal
+      = invoice_field(local_assigns) do |ff|
+        .col-2.offset-1= ff.input :invoice_sh, calculated: true, stimulus: { target: :invoiceSh, action: 'price#updateCalculatedFields' }, as: :decimal
       .col-2.offset-1= f.input :poordershipping,    calculated: true, stimulus: { target: :sh }
       .col-2.offset-1= f.input :poordershippingper, calculated: true, stimulus: { target: :shPer }
     .row
-      .col-2.offset-1= f.input :invoice_fees,   stimulus: { target: :invoiceFees, action: 'price#updateCalculatedFields' }, as: :decimal
+      = invoice_field(local_assigns) do |ff|
+        .col-2.offset-1= ff.input :invoice_fees, calculated: true, stimulus: { target: :invoiceFees, action: 'price#updateCalculatedFields' }, as: :decimal
       .col-2.offset-1= f.input :poorderfees,    calculated: true, stimulus: { target: :fees }
       .col-2.offset-1= f.input :poorderfeesper, calculated: true, stimulus: { target: :feesPer }
     .row
-      .col-2.offset-1= f.input :invoice_total,   calculated: true, stimulus: { target: :invoiceTotal, action: 'price#updateCalculatedFields' }
+      = invoice_field(local_assigns) do |ff|
+        .col-2.offset-1= ff.input :invoice_total, calculated: true, stimulus: { target: :invoiceTotal, action: 'price#updateCalculatedFields' }, as: :decimal
       .col-2.offset-1= f.input :poordertotal,    calculated: true, stimulus: { target: :total }
       .col-2.offset-1= f.input :poordertotalper, calculated: true, stimulus: { target: :totalPer }
   .row
