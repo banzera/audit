@@ -48,6 +48,12 @@ class PurchaseOrdersController < ApplicationController
       :ponotes,
       :posplrorderno,
       :pochecksentdate,
+      :invoice_nontax,
+      :invoice_tax,
+      :invoice_fees,
+      :invoice_sh,
+      :invoice_subtotal,
+      :invoice_total,
     ])
   end
 

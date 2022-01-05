@@ -16,7 +16,7 @@
           .card-body
             #tabContent.tab-content
               #general.tab-pane.fade.active.show{"aria-labelledby" => "general-tab", :role => "tabpanel"}
-                .row
+                .row.post
                   .col-4
                     = f.input :pobatch, wrapper: :vertical_form, disabled: true
                     = f.input :podate, wrapper: :vertical_form
@@ -25,6 +25,15 @@
                     = f.association :supplier2, wrapper: :vertical_form
                   .col-4
                     = f.input :posplrorderno, wrapper: :vertical_form
+                .row
+                  .col-6
+                    = f.input :invoice_nontax
+                    = f.input :invoice_sh
+                    = f.input :invoice_fees
+                  .col-6
+                    = f.input :invoice_subtotal
+                    = f.input :invoice_tax
+                    = f.input :invoice_total
               #shipping.tab-pane.fade{"aria-labelledby" => "shipping-tab", :role => "tabpanel"}
                 .row
                   .col-4
