@@ -10,8 +10,8 @@ class ScansController < ActionController::Base
     # @scan.user_id = lookup_scan_user
     @scan.dc_loc      = dc_loc
     @scan.sku_id      = scan_params[:tid]
-    @scan.scanned_at  = scan_params[:scanned_at_utc]
-    @scan.received_at = scan_params[:received_at_utc]
+    @scan.scanned_at  = scan_params[:scanned_at_utc].to_datetime
+    @scan.received_at = scan_params[:received_at_utc].to_datetime
     @scan.payload     = scan_params
     @scan.request     = request_params
 
