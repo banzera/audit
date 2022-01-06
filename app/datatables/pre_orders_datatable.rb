@@ -5,6 +5,8 @@ class PreOrdersDatatable < Effective::Datatable
   end
 
   filters do
+    scope :all, default: true
+
     scope :analyzed
     scope :confirmed
     scope :checked
