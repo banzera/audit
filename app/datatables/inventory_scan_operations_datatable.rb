@@ -1,4 +1,4 @@
-class ScansDatatable < Effective::Datatable
+class InventoryScanOperationsDatatable < Effective::Datatable
 
   collection do
     scope = InventoryScanOperation.all
@@ -7,7 +7,7 @@ class ScansDatatable < Effective::Datatable
   datatable do
     col :id
     col :user_id
-    col :sku_id
+    col :sku
     col :dc_loc
     col :scanned_at
     col :received_at
