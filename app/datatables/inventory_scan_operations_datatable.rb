@@ -5,8 +5,12 @@ class InventoryScanOperationsDatatable < Effective::Datatable
   end
 
   datatable do
+    order :id, :desc
+
+    length 50
+
     col :id
-    col :user_id
+    col :user_id, visible: false
     col :sku
     col :dc_loc
     col :scanned_at
