@@ -1,0 +1,25 @@
+- content_for :page_title do
+  = @page_title
+
+- resource = (@_effective_resource || Effective::Resource.new(controller_path))
+- @resource = instance_variable_get('@' + resource.name) if resource.name
+
+- if @resource
+  .row
+    .col-12
+      .card
+        .card-header
+          -if @parent.present?
+            = link_to url_for(@parent), class: 'btn btn-primary' do
+              = fa_icon 'backward'
+              Back to #{@parent}
+          -else
+            = link_to (resource.action_path(:index) || root_path), class: 'btn btn-primary' do
+              = fa_icon 'table'
+              Back to #{resource.klass.model_name.human} Listing
+
+          .card-tools
+            = render_resource_buttons(@resource, show: false, destroy: false)
+
+        .card-body
+          = render_datatable(@resource.log_changes_datatable)

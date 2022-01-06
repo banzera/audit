@@ -9,6 +9,8 @@ module DefaultCrudController extend ActiveSupport::Concern
     submit :cancel, 'Cancel', formnovalidate: true,
                               redirect: -> { url_for only_path: true },
                               success: ->  { nil } # nil to disable flash
+
+    button :audit, 'View Audit Trail'
   end
 
 

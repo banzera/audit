@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   protect_from_forgery with: :exception, unless: -> { request.format.json? }
 
+  around_action :set_effective_logging_current_user
+
   before_action do
     if current_user && current_user.is_admin?
       Rack::MiniProfiler.authorize_request

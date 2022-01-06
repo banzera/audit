@@ -15,6 +15,10 @@ class User < ApplicationRecord
 
   SYSTEM_USER_ID = 0
 
+  def to_s
+    email
+  end
+
   def full_name
     # put a real method here to format the user's name
     "#{first_name} #{last_name}"

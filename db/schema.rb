@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_29_221118) do
+ActiveRecord::Schema.define(version: 2022_01_05_032328) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,6 +40,28 @@ ActiveRecord::Schema.define(version: 2021_12_29_221118) do
     t.jsonb "request"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "logs", id: :serial, force: :cascade do |t|
+    t.integer "parent_id"
+    t.string "user_type"
+    t.integer "user_id"
+    t.string "changes_to_type"
+    t.integer "changes_to_id"
+    t.string "associated_type"
+    t.integer "associated_id"
+    t.string "associated_to_s"
+    t.integer "logs_count"
+    t.text "message"
+    t.text "details"
+    t.string "status"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["associated_id"], name: "index_logs_on_associated_id"
+    t.index ["associated_to_s"], name: "index_logs_on_associated_to_s"
+    t.index ["associated_type", "associated_id"], name: "index_logs_on_associated_type_and_associated_id"
+    t.index ["parent_id"], name: "index_logs_on_parent_id"
+    t.index ["user_id"], name: "index_logs_on_user_id"
   end
 
   create_table "tblanalysis", primary_key: "analysisid", id: :integer, default: -> { "nextval('tblanalysis_id_seq'::regclass)" }, force: :cascade do |t|

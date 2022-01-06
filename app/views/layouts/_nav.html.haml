@@ -23,6 +23,9 @@
         %a.dropdown-item{href: export_dashboard_index_path, data: { remote: true, method: :post, confirm: 'Really export the tables?'} }
           =fa_icon 'database', text: 'Export Tables'
         .dropdown-divider
+        %a.dropdown-item{href: effective_logging.admin_logs_path }
+          =fa_icon 'key', text: 'Application Logs'
+        .dropdown-divider
 
 
     %li.nav-item

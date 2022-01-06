@@ -29,6 +29,9 @@ gem "coffee-rails", "~> 5.0"
 # Easy resource tables
 gem "effective_datatables", "~> 4.9", github: 'banzera/effective_datatables', branch: :master
 
+# General application auditing
+gem "effective_logging", "~> 3.2"
+
 # Charting/reporting
 gem "chartkick", "~> 4.1"
 gem "groupdate", "~> 5.2"
