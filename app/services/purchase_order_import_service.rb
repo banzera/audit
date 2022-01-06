@@ -1,4 +1,4 @@
-class PurchaseOrderImportService < ItemInputService
+class PurchaseOrderImportService < ItemImportService
 
   TARGET_SHEET = 0
   KEY_FIELD    = :poid
