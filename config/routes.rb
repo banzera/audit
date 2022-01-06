@@ -4,6 +4,21 @@ Rails.application.routes.draw do
     sessions: 'users/sessions'
   }
 
+  concern :auditable do
+    member { get :audit }
+  end
+
+  concern :receivable do
+    member { get :receive }
+  end
+
+  concern :has_items do
+    member do
+      post :upload
+      get :new_items
+    end
+  end
+
   get 'home',        to: 'dashboard#home'
   get 'export',      to: 'dashboard#export'
   get 'billing/due', to: 'billing#due'
@@ -38,36 +53,18 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :pre_orders do
-    resources :pre_order_items, only: [:index, :new, :create, :update, :edit, :show], path: :items
-
-    member do
-      post :upload
-      get :new_items
-    end
+  resources :pre_orders, concerns: [:has_items, :auditable] do
+    resources :pre_order_items, except: [:destroy], path: :items
   end
 
   resources :pre_order_codes
-  resources :pre_order_items, only: [:destroy]
+  resources :pre_order_items, only: [:destroy], concerns: [:auditable]
 
-  resources :purchase_orders do
-    collection do
-    end
-
-    member do
-      post :upload
-      get :new_items
-      get :receive
-    end
-
-    resources :purchase_order_items, only: [:index, :new, :create, :update, :edit, :show], path: :items do
-      member do
-        get :receive
-      end
-    end
+  resources :purchase_orders, concerns: [:has_items, :auditable, :receivable] do
+    resources :purchase_order_items, except: [:destroy], path: :items
   end
 
-  resources :purchase_order_items, only: [:update, :edit, :show] do
+  resources :purchase_order_items, only: [:index, :destroy, :update, :edit, :show], concerns: [:receivable] do
     member do
       get :label
       get :label_preview
@@ -76,11 +73,7 @@ Rails.application.routes.draw do
   end
 
   resources :suppliers
-  resources :skus do
-    member do
-      get :receive
-    end
-
+  resources :skus, concerns: [:auditable, :receivable] do
     collection do
       get  :export
       get  :lookup
