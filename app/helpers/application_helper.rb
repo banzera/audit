@@ -4,12 +4,14 @@ module ApplicationHelper
     action_name.in? %w(new create)
   end
 
-  def default_resource_form(read_only: false)
-    simple_form_for @resource,
-      defaults: { disabled: read_only }, wrapper: :horizontal_form do |f|
+  def default_resource_form(resource=nil, read_only: false, wrapper: :horizontal_form)
+    required = read_only ? { required: false } : {}
+
+    simple_form_for (resource || @resource),
+      defaults: { disabled: read_only }.merge(required),
+      wrapper: wrapper do |f|
         yield f if block_given?
       end
-
   end
 
   def flash_to_css_class_mapping(flash_key)

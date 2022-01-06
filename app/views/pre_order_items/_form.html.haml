@@ -1,7 +1,4 @@
-= simple_form_for [@pre_order, @pre_order_item],
-    defaults: { disabled: local_assigns[:readonly], stimulus: {controller: 'price'} },
-    wrapper: :vertical_form do |f|
-
+= default_resource_form([@pre_order, @pre_order_item], read_only: local_assigns[:readonly], wrapper: :vertical_form) do |f|
   .row.post
     .col-3
       = f.association :sku1, as: :sku_selection, source_url: '/skus'

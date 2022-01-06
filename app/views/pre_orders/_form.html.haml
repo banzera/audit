@@ -1,5 +1,5 @@
 .content
-  = simple_form_for @pre_order, defaults: { disabled: local_assigns[:readonly] }, wrapper: :vertical_form do |f|
+  = default_resource_form(read_only: local_assigns[:readonly], wrapper: :vertical_form) do |f|
     .row
       .col-12
         .card.card-primary.card-outline.card-outline-tabs
