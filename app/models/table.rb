@@ -9,8 +9,14 @@ class Table < ApplicationRecord
   scope :tables, -> { where(table_type: 'BASE TABLE') }
   scope :legacy, -> { where("table_name ILIKE 'tbl%'") }
 
+  has_many :columns, foreign_key: :table_name
+
+  def select_columns
+    self.columns.map do|c| c.to_s end.join(',')
+  end
+
   def copy_sql
-    "COPY #{table_schema}.#{table_name} TO STDOUT WITH (FORMAT CSV, FORCE_QUOTE *, HEADER);"
+    "COPY (select #{select_columns} from #{table_name}) TO STDOUT WITH (FORMAT CSV, FORCE_QUOTE *, HEADER);"
   end
 
   def cnx
