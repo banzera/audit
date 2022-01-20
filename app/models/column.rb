@@ -7,8 +7,11 @@ class Column < ApplicationRecord
   belongs_to :table, foreign_key: :table_name
 
   def to_s
-    cast = data_type == "timestamp with time zone" ? '::date' : ''
-    "#{column_name}#{cast}"
+    case data_type
+    when "timestamp with time zone" then "#{column_name}::date"
+    when "boolean"                  then "(case when #{column_name} = 't' then 'Yes' else 'No' end) AS #{column_name}"
+    else column_name
+    end
   end
 
 end
