@@ -17,9 +17,7 @@
             = link_to (resource.action_path(:index) || root_path), class: 'btn btn-primary' do
               = fa_icon 'table'
               Back to #{resource.klass.model_name.human} Listing
-
           .card-tools
-            = render_resource_buttons(@resource, show: false, destroy: false)
-
+            = render_resource_buttons(@resource, only: [:show, :edit])
         .card-body
-          = render_datatable(@resource.log_changes_datatable)
+          = render_datatable(@resource.log_changes_datatable, buttons: false)
