@@ -2,11 +2,18 @@ class PurchaseOrdersDatatable < Effective::Datatable
 
   collection do
     scope = PurchaseOrder.all
+    if filters[:sku].present?
+      scope = scope.with_sku_fuzzy filters[:sku]
+    end
+
+    scope
   end
 
   filters do
     scope :all
     scope :outstanding
+
+    filter :sku, '', placeholder: "Fuzzy SKU Search"
   end
 
   datatable do
@@ -28,6 +35,6 @@ class PurchaseOrdersDatatable < Effective::Datatable
     col :posplrorderno,   visible: true,  search: { as: :string, fuzzy: true }
     col :pochecksentdate, visible: true,  search: false, as: :date
 
-    actions_col only: [:show]
+    actions_col only: [:show, :receive]
   end
 end

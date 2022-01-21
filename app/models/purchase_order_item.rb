@@ -7,6 +7,11 @@ class PurchaseOrderItem < ApplicationRecord
 
   scope :unfulfilled, -> { where('poorderquant != poorderrcvdquant') }
 
+  scope :with_sku_fuzzy, -> (term) {
+    skus  = Sku.search(term).pluck(:skuid)
+    where(skuid: skus)
+  }
+
   validates_presence_of :poorderquant, :poorderrcvdquant
 
   def unfulfilled?
@@ -20,6 +25,6 @@ class PurchaseOrderItem < ApplicationRecord
   end
 
   def to_s
-    "#{sku} (#{poorderquant})"
+    "PO Item: #{sku} (#{poorderquant})"
   end
 end

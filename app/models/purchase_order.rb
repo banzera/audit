@@ -10,6 +10,17 @@ class PurchaseOrder < ApplicationRecord
 
   scope :outstanding, -> { where(poid: PurchaseOrderItem.unfulfilled.pluck(:poid)) }
 
+  scope :for_sku_id, -> (skuid) {
+    items = PurchaseOrderItem.where(skuid: skuid).pluck(:poid)
+    where(poid: items)
+  }
+
+  scope :with_sku_fuzzy, -> (term) {
+    skus  = Sku.search(term).pluck(:skuid)
+    items = PurchaseOrderItem.where(skuid: skus).pluck(:poid)
+    where(poid: items)
+  }
+
   validates_presence_of :supplier1,
                         :supplier2,
                         :posplrorderno,
