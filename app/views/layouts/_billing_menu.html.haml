@@ -1,6 +1,2 @@
-%li.nav-item.dropdown.d-none.d-sm-inline-block
-  %a.nav-link{"data-toggle" => "dropdown", :href => "#"} Billing
-  .dropdown-menu.dropdown-menu-lg
-    %a.dropdown-item{:href => billing_due_path}
-      =fa_icon 'credit-card', text: 'CC BIlling Due'
-    .dropdown-divider
+= nav_dropdown 'Billing' do
+  = nav_link_to fa_icon('credit-card', text: 'CC BIlling Due'), billing_due_path

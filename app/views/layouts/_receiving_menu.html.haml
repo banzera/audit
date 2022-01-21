@@ -1,10 +1,4 @@
-%li.nav-item.dropdown.d-none.d-sm-inline-block
-  %a.nav-link{"data-toggle" => "dropdown", :href => "#"} Receiving
-  .dropdown-menu.dropdown-menu-lg
-    %a.dropdown-item{:href => lookup_skus_path}
-      =fa_icon 'barcode'
-      SKU Lookup
-    .dropdown-divider
-    %a.dropdown-item{:href => purchase_orders_path}
-      =fa_icon 'file'
-      PO Lookup
+= nav_dropdown 'Receiving' do
+  = nav_link_to fa_icon('barcode', text: 'SKU Lookup'), lookup_skus_path
+  = nav_divider
+  = nav_link_to fa_icon('file',    text: 'PO Lookup'), purchase_orders_path
