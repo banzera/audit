@@ -15,6 +15,7 @@ class PreOrdersDatatable < Effective::Datatable
   datatable do
     order :preorderdate, :desc
 
+    col :preorderid
     col :preorderdate, as: :date, search: false
     col :preorderbatch
     col :customer, action: :show

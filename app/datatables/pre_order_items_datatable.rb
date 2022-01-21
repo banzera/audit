@@ -6,17 +6,20 @@ class PreOrderItemsDatatable < Effective::Datatable
   end
 
   filters do
-    scope :all, default: true
+    scope :recent, default: true
+    scope :outstanding
   end
 
   datatable do
-    length :all
+    length 100
 
     order :preorderitemsid, :asc
 
     col :preorderitemsid, visible: false
-    col :preorderid,      visible: false
+
+    col :orderdate, as: :date
     col :skuid1,          visible: true, partial: 'pre_order_items/dt/sku'
+    # col :preorderid,      visible: true
     col :skuid2,          visible: true, partial: 'pre_order_items/dt/sku'
 
     col :poid,            visible: true, partial: 'application/dt/po'

@@ -23,6 +23,10 @@ class PreOrderItem < ApplicationRecord
 
   validates_presence_of :sku1, :orderquant1, :orderpriceper1, :orderpricetotal1, on: :create
 
+  scope :recent,      -> { order(preorderitemsid: :desc).limit(100) }
+  scope :outstanding, -> { where(preorderitemcode: [PreOrderCode::EXACT, PreOrderCode::SUB, PreOrderCode::NEW]).
+                           where('poid isnull or poid=0') }
+
   def diff_quant
     self.poorderquant - self.poorderrcvdquant
   end

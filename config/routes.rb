@@ -58,7 +58,11 @@ Rails.application.routes.draw do
   end
 
   resources :pre_order_codes
-  resources :pre_order_items, only: [:destroy], concerns: [:auditable]
+  resources :pre_order_items, only: [:destroy], concerns: [:auditable] do
+    collection do
+      get :outstanding
+    end
+  end
 
   resources :purchase_orders, concerns: [:has_items, :auditable, :receivable] do
     resources :purchase_order_items, except: [:destroy], path: :items

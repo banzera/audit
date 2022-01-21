@@ -14,7 +14,11 @@
       = f.input :orderpricetotal2
   .row.post
     .col-3
-      = f.association :purchase_order, required: false
+      -#as: :po_selection, source_url: "/purchase_orders?with_sku=#{@pre_order_item.skuid2}",
+      = f.association :purchase_order,
+          required: false,
+          as: :po_selection, no_ajax: true,
+          collection: PurchaseOrder.for_sku_id(@pre_order_item.skuid2)
     .col-3
       = f.input :orderaupriceper
     .col-3

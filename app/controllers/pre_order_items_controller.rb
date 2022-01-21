@@ -4,7 +4,7 @@ class PreOrderItemsController < ApplicationController
   load_and_authorize_resource :pre_order
   load_and_authorize_resource :pre_order_item, through: :pre_order, through_association: :items, shallow: true
 
-  before_action :load_resources, except: [:index, :new]
+  before_action :load_resources, except: [:index, :new, :outstanding]
 
   page_title only: :new do
     "New #{resource_name.titleize}(s) for PreOrder #{@pre_order}"
@@ -18,8 +18,13 @@ class PreOrderItemsController < ApplicationController
     @parent = @pre_order_item.pre_order
   end
 
+  def outstanding
+    @datatable = PreOrderItemOutstandingDatatable.new
+    @page_title = "PreOrder Items Outstanding"
+  end
+
   def index
-    redirect_to @pre_order
+    redirect_to @pre_order if @pre_order
   end
 
   def update
