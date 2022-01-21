@@ -14,6 +14,10 @@ class PurchaseOrderItem < ApplicationRecord
 
   validates_presence_of :poorderquant, :poorderrcvdquant
 
+  def receive!
+    self.update(poorderrcvddate: Time.current)
+  end
+
   def unfulfilled?
     poorderquant != poorderrcvdquant
   end
