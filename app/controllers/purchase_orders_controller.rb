@@ -5,6 +5,7 @@ class PurchaseOrdersController < ApplicationController
 
   button :upload, false
   button :new_items, 'Add or Upload Items'
+  button :receive, 'Receive', if: -> { resource.unfullfilled? }
 
   def new_items
     redirect_to new_purchase_order_purchase_order_item_path(resource)
