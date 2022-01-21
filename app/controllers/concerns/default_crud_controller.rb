@@ -10,7 +10,7 @@ module DefaultCrudController extend ActiveSupport::Concern
                               redirect: -> { url_for only_path: true },
                               success: ->  { nil } # nil to disable flash
 
-    button :audit, 'View Audit Trail'
+    button :audit, false #'View Audit Trail'
   end
 
 
