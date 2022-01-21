@@ -21,8 +21,7 @@ class SkusController < ApplicationController
   end
 
   def receive
-    @po_items        = PurchaseOrderItem.where(skuid: @sku) #.unfulfilled
-    @purchase_orders = PurchaseOrder.where(poid: @po_items.collect(&:poid))
+    @purchase_orders = PurchaseOrder.for_sku_id(@sku).order('podate desc')
   end
 
   def lookup
