@@ -13,7 +13,7 @@ class OrderItemsDatatable < Effective::Datatable
     order :orderitemsid, :desc
 
     col :orderitemsid, search: false, visible: false
-    col :sku, search: false
+    col :sku, partial: 'application/dt/sku'
     col :purchase_order
     col :orderquant
     col :orderpriceper, visible: false
