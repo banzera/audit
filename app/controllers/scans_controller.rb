@@ -16,7 +16,7 @@ class ScansController < ActionController::Base
     @scan.request     = request_params
 
     if @scan.save
-      # CodeReadrService.process_scan(@scan)
+      CodeReadrService.process_scan(@scan)
     else
     end
   end
