@@ -106,6 +106,8 @@ group :development do
   gem "binding_of_caller", "~> 1.0"
 
   gem "pry-byebug", "~> 3.9"
+
+  gem "rails_real_favicon"
 end
 
 group :test do
