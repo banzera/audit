@@ -24,3 +24,10 @@
           %p effective_resources index view is not sure what to render.
           %p Define an @datatable, @#{resource.try(:plural_name) || 'a plural'}, or @#{resource.try(:name) || 'a singular'}.
           %p or include Effective::CrudController in your controller
+
+- begin
+  - content_for :scripts do
+    = javascript_include_tag "#{controller_path}_datatable"
+- rescue Sprockets::Rails::Helper::AssetNotFound => e
+  - Rails.logger.warn e.message
+
