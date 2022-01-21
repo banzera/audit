@@ -12,6 +12,7 @@ class PurchaseOrderItemsController < ApplicationController
 
   button :label, false
   button :receive, 'Receive', redirect: -> { receive_purchase_order_item_path(skuid: resource.id) }
+  submit :receive, 'Receive'
   on     :create, redirect: -> { purchase_order_path(resource.purchase_order) }
   on     :save,   redirect: -> { purchase_order_path(resource.purchase_order) }
 
@@ -53,19 +54,11 @@ class PurchaseOrderItemsController < ApplicationController
     end
   end
 
-  def update
-    # resource.update permitted_params
-    # respond_to do |format|
-    #   format.html { redirect_to receive_purchase_order_path(resource.purchase_order) }
-    #   format.js { render 'receive' }
-    # end
-    super
-  end
-
   private
 
   def load_resources
     @sku = @purchase_order_item.sku
+    @purchase_order ||= @purchase_order_item.purchase_order
   end
 
   def purchase_order_item_params

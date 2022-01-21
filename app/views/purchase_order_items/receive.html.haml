@@ -1,5 +1,5 @@
 .content
-  = simple_form_for @purchase_order_item, remote: true do |f|
+  = simple_form_for [@purchase_order_item.purchase_order, @purchase_order_item], remote: true do |f|
     .row
       .col-8.offset-2
         .card.card-primary.card-outline

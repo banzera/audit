@@ -32,14 +32,12 @@
 
   .row
     .offset-4.col-md-4
-      %button#finish-button.btn.btn-block.btn-success.btn-lg
+      %button#finish-button.btn.btn-block.btn-success.btn-lg{type: :submit, name: :commit, value: "Receive", 'data-disable-with': "Save & Print" }
         Save & Print
 
 - content_for :scripts do
   :coffee
-    # $('#finish-button').click () ->
-
-    $('#stepper')[0].addEventListener 'show.bs-stepper', (e) ->
+     $('#stepper')[0].addEventListener 'show.bs-stepper', (e) ->
       $('#review-qty').html      $('#purchase_order_item_poorderrcvdquant').val()
       $('#review-exp').html      $('#purchase_order_item_poorderexpiration').val()
       $('#review-max-temp').html $('#purchase_order_item_sku_attributes_skumaxtemp').val()
