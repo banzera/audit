@@ -1,0 +1,9 @@
+.row
+  .col-9
+    %span=po.id
+    %br
+    %span=po.podate
+  .col-3
+    .text-right
+      %a.btn.btn-blocka.btn-sm.btn-secondary{:href => purchase_order_path(po), :target => "_po"}
+        =fa_icon 'external-link-square-alt', text: po.id, right: true
