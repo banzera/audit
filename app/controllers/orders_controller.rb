@@ -5,10 +5,12 @@ class OrdersController < ApplicationController
 
   before_action :load_customer, except: [:outstanding, :index]
   before_action :set_page_title
-  before_action :set_pdf_options, only: [:invoice, :pick_list, :ship_list]
+  before_action :set_pdf_options, only: [:confirmation, :invoice, :pick_list, :ship_list]
 
-  button :invoice, false
-  button :ship_list, false
+  button :confirmation, false
+  button :invoice,      false
+  button :ship_list,    false
+
   on     :mark_as_billed, redirect: -> { billing_due_path }
   button :mark_as_billed, 'Bill Credit Card', unless: -> { resource.billed? },
                                               class: 'btn btn-primary',
@@ -29,6 +31,10 @@ class OrdersController < ApplicationController
   end
 
   def ship_list_preview
+    render 'preview'
+  end
+
+  def confirmation_preview
     render 'preview'
   end
 

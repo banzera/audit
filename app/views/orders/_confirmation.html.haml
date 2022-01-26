@@ -1,0 +1,93 @@
+.content
+  %table.table.table-sm.table-borderless
+    %tr
+      %td.w-25
+        %strong Accelerate United
+        %br
+        10 East 9th Street, Suite G
+        %br
+        Lawrence, KS 66044
+        %br
+        Phone: (785) 748-0871
+      %td.w-25
+        %img{:alt => "AU Logo", :src => "/img/logo_black.png", :style => ""}
+      %td.w-25.text-center
+        %h1.display-3
+          %u Order Confirmation
+      %td.w-25.text-right
+        Report Date: #{Date.today}
+        %br
+        Order Date: #{@order.orderdate.to_date}
+    %tr
+      %td.w-25.text-right
+        %strong TO:
+        = @customer.full_name
+        %br
+        = @customer.custbusinessname
+        %br
+        = @customer.custaddress
+        %br
+        = @customer.city_state_zip
+      %td.w-25
+      %td.w-25
+        %p.text-right Order Number:
+      %td.w-25.text-right
+        %p.text-left
+          = @order.orderbatch
+        = @order.barcode_data(margin: 0, height: 40, xdim: 2).html_safe
+        %br
+        =@order.orderid
+    %tr
+      %td.align-bottom
+      %td(colspan=2)
+        Order Notes:
+        %br
+        = @order.ordernotes
+      %td
+
+  %table.table.table-striped.table-sm.table-bordered
+    %thead
+      %th.border.border-dark Qty
+      %th.border.border-dark UoM
+      %th.border.border-dark ID#
+      %th.border.border-dark Manf
+      %th.border.border-dark Item #
+      %th.border.border-dark Desc
+      %th.border.border-dark Price Per
+      %th.border.border-dark Price Total
+    %tbody
+      - @order.items.each do |item|
+        %tr
+          %td=item.orderquant
+          %td=item.sku.skuminunitstype
+          %td=item.sku.skuid
+          %td=item.sku.manf
+          %td=item.sku.itemno
+          %td=item.sku.skudesc
+          %td=item.orderpriceper
+          %td=item.orderpricetotal
+
+  %table.table.table-sm.table-borderless
+    %tr
+      %td.wpc20.align-top
+        #{@order.items.size} SKUs Total
+      %td
+      %td.wpc20
+        .callout.callout-info
+          %table.table
+            %tr
+              %th.text-right Subtotal
+              %td.text-right=number_to_currency(@order.ordersubtotal)
+            %tr
+              %th.text-right S and H
+              %td.text-right=number_to_currency(@order.orderdeliverycosttotal)
+            %tr
+              %th.text-right Sales Tax
+              %td.text-right=number_to_currency(@order.ordertaxtotal)
+            %tr
+              %th.text-right TOTAL
+              %td.text-right=number_to_currency(@order.orderpricetotal)
+
+
+
+
