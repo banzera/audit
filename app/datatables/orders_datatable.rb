@@ -12,7 +12,7 @@ class OrdersDatatable < Effective::Datatable
   datatable do
     order :orderdate, :desc
 
-    col :orderid, visible: false
+    col :orderid
     col :orderdate, as: :date
     col :orderbatch
     col :customer, action: :show
