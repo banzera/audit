@@ -2,7 +2,15 @@
   Outstanding Orders Report
 
 .content
-#accordion
+  .row
+    .col-md-8.offset-md-2
+      .input-group
+        %input#search.form-control.form-control-lg(placeholder = "Filter By Order ID" type="text")
+        .input-group-append
+          %button.btn.btn-lg.btn-default{:type => "submit", data: { controller: 'receive', action: 'click->receive#search'}}
+            %i.fa.fa-search
+
+#accordian
 - @customers.each do |cust_id, name|
   - batches = batches_for_customer(cust_id)
   .card.card-secondary.add-appropriate-style-fororderdate
@@ -15,7 +23,7 @@
     .collapse{class: expanded ? 'show' : '', id: "collapse#{cust_id}", "data-parent" => "#accordion", :style => ""}
       .card-body
         - batches.pluck(:orderid, :orderbatch).each do |oid, batch|
-          .card.card-primary.card-outline
+          .card.card-primary.card-outline{id: "card-#{oid}"}
             .card-header
               %h2.card-title
                 = batch
@@ -55,3 +63,14 @@
                     %td=i.dccurquant
                     %td{class: i.totaldue.zero? ? 'bg-danger' : '' }=i.totaldue
                     %td{class: i.dcloc == 'N/A' ? 'bg-danger' : '' }=i.dcloc
+
+- content_for :scripts do
+  :coffee
+    $("#search").on "keyup", () ->
+      value = $(this).val().toLowerCase()
+      $(".card-secondary").filter () ->
+        order_cards = $(this).find('.card-primary')
+        matches = _.filter order_cards, (c) -> c.id.indexOf(value) > -1
+        toggle = matches.length > 0
+        $(this).toggle(toggle)
+    .focus()
