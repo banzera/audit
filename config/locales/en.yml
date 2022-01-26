@@ -41,6 +41,12 @@ en:
       order:
         one: Order
         other: Orders
+      order_payment:
+        one: Order Payment
+        other: Order Payments
+      order_deposit:
+        one: Order Deposit
+        other: Order Deposits
       pre_order:
         one: Pre-Order
         other: Pre-Orders
@@ -162,6 +168,16 @@ en:
         orderitemsdelivereddate: Items Delivered Date
         orderdeliveredquant: Delivered Qty
         orderretailtotal: Retail Total
+      order_payment:
+        opmtsid: ID
+        opmtsdate: Date
+        opmtsbatch: Batch
+      order_payment_item:
+        opmtsitemsid: ID
+        opmtsid: Payment
+        orderitemsid: Order Item
+        opmtstotal: Total
+        odepositid: Deposit
       pre_order:
         preorderdate: Date
         preorderbatch: Batch

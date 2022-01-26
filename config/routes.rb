@@ -53,6 +53,16 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :order_deposits do
+  end
+
+  resources :order_payments do
+    resources :order_payment_items, except: [:destroy], path: :items
+  end
+
+  resources :order_payment_items do
+  end
+
   resources :pre_orders, concerns: [:has_items, :auditable] do
     resources :pre_order_items, except: [:destroy], path: :items
   end

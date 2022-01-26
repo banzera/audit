@@ -1,8 +1,6 @@
 class PoSelectionInput < SimpleSelect2Input
 
   def default_value_text
-    binding.pry
-
     @default_value_text ||= '' if options[:no_default] || !default_value
 
     @default_value_text ||= begin
