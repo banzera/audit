@@ -40,6 +40,8 @@ Rails.application.routes.draw do
       get :invoice
       get :invoice_preview
 
+      get 'ship_list(/:preview)', to: 'orders#ship_list', as: :ship_list
+      get :ship_list_preview
       post :mark_as_billed
     end
 

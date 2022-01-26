@@ -3,8 +3,11 @@ class OrdersController < ApplicationController
 
   load_and_authorize_resource
   before_action :load_customer, only: [:invoice, :invoice_preview, :pick_list]
+  before_action :set_page_title
+  before_action :set_pdf_options, only: [:ship_list]
 
   button :invoice, false
+  button :ship_list, false
   on     :mark_as_billed, redirect: -> { billing_due_path }
   button :mark_as_billed, 'Bill Credit Card', unless: -> { resource.billed? },
                                               class: 'btn btn-primary',
@@ -23,10 +26,15 @@ class OrdersController < ApplicationController
 
   def invoice_preview
     @page_title = "Invoice Preview: #{@order}"
+  def ship_list
+    @ship_list = @order.ship_list_items.order(:orderitemsid)
   end
 
   def pick_list
     @pick_list = @order.pick_list_items.order(:orderitemsid)
+  def ship_list_preview
+    render 'preview'
+  end
 
     @pdf_options['orientation']  = 'Landscape'
     @pdf_options['margin-left']  = '0.3in'
@@ -48,6 +56,16 @@ class OrdersController < ApplicationController
   end
 
   private
+
+  def set_pdf_options
+    @pdf_options['orientation']  = 'Landscape'
+    @pdf_options['margin-left']  = '0.3in'
+    @pdf_options['margin-right'] = '0.3in'
+  end
+
+  def set_page_title
+    @page_title = "#{action_name.titleize}: #{@order}"
+  end
 
   def load_customer
     @customer  = @order.customer

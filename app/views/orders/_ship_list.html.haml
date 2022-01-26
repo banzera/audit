@@ -1,0 +1,76 @@
+.content
+  %table.table.table-sm
+    %tr
+      %td.w-25
+        %strong Accelerate United
+        %br
+        10 East 9th Street, Suite G
+        %br
+        Lawrence, KS 66044
+        %br
+        Phone: (785) 748-0871
+      %td.w-25
+        %img{:alt => "AU Logo", :src => "/img/logo_black.png", :style => ""}
+      %td.w-25
+        %h1 Shipping List
+        Order Number: #{@order.orderbatch}
+      %td.w-25.text-right
+        Report Date: #{Date.today}
+        %br
+        Order Date: #{@order.orderdate.to_date}
+    %tr
+      %td.w-25.text-right
+        %strong TO:
+        = @customer.full_name
+        %br
+        = @customer.custbusinessname
+        %br
+        = @customer.custaddress
+        %br
+        = @customer.city_state_zip
+      %td.w-25
+      %td.w-25
+        %h2.text-right Order Number:
+      %td.w-25.text-right()
+        %h2.text-left
+          = @order.orderbatch
+        = @order.barcode_data(margin: 0, height: 40, xdim: 4).html_safe
+        %br
+        =@order.orderid
+        %br
+    %tr
+      %td(colspan=2)
+        Order Notes:
+        %br
+        = @order.ordernotes
+      %td
+
+  %table.table.table-striped.table-sm.table-bordered
+    %thead
+      %th.border.border-dark Order Qty
+      %th.border.border-dark Ship Qty
+      %th.border.border-dark Due Qty
+      %th.border.border-dark UoM
+      %th.border.border-dark Ship Date*
+      %th.border.border-dark SKUID
+      %th.border.border-dark Manufacturer
+      %th.border.border-dark Item #
+      %th.border.border-dark Description
+    %tbody
+      - @order.ship_list_items.each do |item|
+        %tr
+          %td=item.sumoforderquant
+          %td{class: ship_list_cell_style(item)}=item.sumoforderdeliveredquant
+          %td{class: ship_list_remaining_style(item)}=item.sumoforderquant - item.sumoforderdeliveredquant
+          %td=item.skuminunitstype
+          %td{class: ship_list_cell_style(item)}
+            - if item.orderitemsdelivereddate.present?
+              =item.orderitemsdelivereddate.to_date.to_s(:american)
+          %td=item.skuid
+          %td=item.manf
+          %td=item.itemno
+          %td=item.skudesc
+
+
+
+

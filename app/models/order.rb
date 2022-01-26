@@ -1,5 +1,7 @@
 class Order < ApplicationRecord
   include HasBatch
+  include HasBarcode
+
   self.table_name  = 'tblorder'
   self.primary_key = 'orderid'
 
@@ -7,6 +9,7 @@ class Order < ApplicationRecord
 
   has_many :items,           class_name: 'OrderItem',         foreign_key: :orderid
   has_many :pick_list_items, class_name: 'OrderDataPickList', foreign_key: :orderid
+  has_many :ship_list_items, class_name: 'OrderDataShipList', foreign_key: :orderid
 
   scope :awaiting_confirmation, -> { where(orderconfirmdate: nil).where.not(preordercompletedate: nil) }
   scope :outstanding, -> { where(orderitemsid: OrderItem.unfulfilled.pluck(:orderid)) }
@@ -22,6 +25,11 @@ class Order < ApplicationRecord
     .where(orderccdate: nil)
     .where('tblcustomer.custccauth': true)
   }
+
+  has_barcode :barcode,
+    :outputter => :svg,
+    :type => :code_39,
+    :value => Proc.new { |o| o.orderid.to_s }
 
   has_batch_number :orderbatch, attrs: 'customer.custname' do
     Order

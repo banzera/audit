@@ -1,0 +1,33 @@
+- content_for :page_title do
+  = @page_title
+
+- resource = (@_effective_resource || Effective::Resource.new(controller_path))
+- @resource = instance_variable_get('@' + resource.name) if resource.name
+- base_action = action_name.gsub('_preview','')
+
+.content
+  .row
+    .col-10.offset-1
+      .card.card-primary.card-outline.shadow
+        .card-header
+          %h3.card-title
+            = link_to :back, class: 'btn btn-sm btn-secondary' do
+              = fa_icon 'backward', text: 'Back'
+            = fa_icon 'print', text: "Preview For: #{@resource}"
+          .card-tools
+            %button.btn.btn-secondary#print-button
+              = fa_icon 'print', text: 'Print'
+            - if extra_actions = local_assigns[:extra_resource_actions]
+              = render_resource_buttons(@order, btn_class: 'btn', only: extra_actions)
+
+  .row
+    .col-10.offset-1
+      .card.card-primary.card-outline.shadow
+        .card-body
+          =render partial: base_action
+
+- content_for :scripts do
+  :coffee
+    $(document).ready () ->
+      $('#print-button').click (e) ->
+        window.open('#{resource.action_path base_action.to_sym, @resource}.pdf', '_print')
