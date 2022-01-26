@@ -2,9 +2,10 @@ class OrdersController < ApplicationController
   include DefaultCrudController
 
   load_and_authorize_resource
-  before_action :load_customer, only: [:invoice, :invoice_preview, :pick_list]
+
+  before_action :load_customer, except: [:outstanding, :index]
   before_action :set_page_title
-  before_action :set_pdf_options, only: [:ship_list]
+  before_action :set_pdf_options, only: [:invoice, :pick_list, :ship_list]
 
   button :invoice, false
   button :ship_list, false
@@ -16,31 +17,23 @@ class OrdersController < ApplicationController
                                                 confirm: "Really mark @resource as billed?"
                                               }
 
-  def invoice
-    @pdf_options['orientation']  = 'Landscape'
-    @pdf_options['margin-left']  = '0.25in'
-    @pdf_options['margin-right'] = '0.25in'
-
-    @page_title = "Invoice: #{@order}"
-  end
+  # def invoice
+  # end
 
   def invoice_preview
-    @page_title = "Invoice Preview: #{@order}"
+    render 'preview', locals: { extra_resource_actions: [:mark_as_billed] }
+  end
+
   def ship_list
     @ship_list = @order.ship_list_items.order(:orderitemsid)
   end
 
-  def pick_list
-    @pick_list = @order.pick_list_items.order(:orderitemsid)
   def ship_list_preview
     render 'preview'
   end
 
-    @pdf_options['orientation']  = 'Landscape'
-    @pdf_options['margin-left']  = '0.3in'
-    @pdf_options['margin-right'] = '0.3in'
-
-    @page_title = "Pick List: #{@order.orderbatch}"
+  def pick_list
+    @pick_list = @order.pick_list_items.order(:orderitemsid)
   end
 
   def outstanding
