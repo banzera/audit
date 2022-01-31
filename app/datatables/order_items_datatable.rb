@@ -13,18 +13,18 @@ class OrderItemsDatatable < Effective::Datatable
     order :orderitemsid, :desc
 
     col :orderitemsid, search: false, visible: false
-    col :sku, partial: 'application/dt/sku', label: "SKU"
-    col :purchase_order
-    col :orderquant, label: "Quantity"
-    col :orderpriceper, visible: false
-    col :orderpricetotal, visible: false
-    col :ordertaxrate, visible: false
-    col :ordertaxtotal, visible: false
+    col :sku,  partial: 'application/dt/sku',    label: "SKU"
+    col :poid, partial: 'application/dt/po',     label: "PO"
+    col :orderquant,                             label: "Quantity"
+    col :orderpriceper,          visible: false
+    col :orderpricetotal,        visible: false
+    col :ordertaxrate,           visible: false
+    col :ordertaxtotal,          visible: false
     col :orderdeliverycosttotal, visible: false
-    col :orderfeestotal, visible: false
-    col :ordergrandtotal, visible: false
-    col :orderitemsdelivereddate, visible: false
-    col :orderdeliveredquant, label: "Delivered"
+    col :orderfeestotal,         visible: false
+    col :ordergrandtotal,        visible: false
+    col :orderdeliveredquant,                    label: "Delivered"
+    col :orderitemsdelivereddate, visible: true, as: :date, label: "Delivered Date"
     # col :orderretailtotal
 
     actions_col
