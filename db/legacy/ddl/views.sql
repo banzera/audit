@@ -4,6 +4,9 @@
   \i db/legacy/queries/qryOrderCCBillDue.sql
   \i db/legacy/queries/qryOrderDataShippingList2.sql
 
+-- for ship list
+  \i db/legacy/queries/qryOrderDataShippingList.sql
+
 -- for sku form
   \i db/legacy/queries/qryInventoryCounts.sql
   \i db/legacy/queries/qryInventoryCountsFilter.sql
