@@ -19,6 +19,8 @@
       = nav_link_to fa_icon('database', text: 'Export Tables'), export_dashboard_index_path, data: { remote: true, method: :post, confirm: 'Really export the tables?'}
       = nav_divider
       = nav_link_to fa_icon('key', text: 'Application Logs'), effective_logging.admin_logs_path
+      = nav_divider
+      = nav_link_to fa_icon('key', text: 'Blazer Dashboard'), blazer.root_path
 
     = nav_link_to fa_icon('expand-arrows-alt'), '#', 'data-widget': :fullscreen, role: :button
     = nav_link_to fa_icon('adjust'), '#', id: 'control-sidebar', data: {slide: true, widget: "control-sidebar"}, role: :button
