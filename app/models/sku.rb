@@ -32,7 +32,7 @@ class Sku < ApplicationRecord
                   }
 
   def to_s
-    "SKU #{id} (#{skudesc.truncate(20)})"
+    "SKU #{id} (#{skudesc&.truncate(20) || '<no description>'})"
   end
 
   def missing_temperature_values?
