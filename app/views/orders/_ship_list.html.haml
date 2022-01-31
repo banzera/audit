@@ -1,5 +1,5 @@
 .content
-  %table.table.table-sm
+  %table.table.table-sm.table-borderless
     %tr
       %td.w-25
         %strong Accelerate United
@@ -29,6 +29,9 @@
         %br
         = @customer.city_state_zip
       %td.w-25
+        - if @order.preordercompletedate.blank?
+          %h1.text-danger
+            PARTIAL ORDER #{Date.today}
       %td.w-25
         %h2.text-right Order Number:
       %td.w-25.text-right()
@@ -57,7 +60,7 @@
       %th.border.border-dark Item #
       %th.border.border-dark Description
     %tbody
-      - @order.ship_list_items.each do |item|
+      - @order.ship_list_items.order(:manf).each do |item|
         %tr
           %td=item.sumoforderquant
           %td{class: ship_list_cell_style(item)}=item.sumoforderdeliveredquant
