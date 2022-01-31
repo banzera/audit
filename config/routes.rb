@@ -71,6 +71,12 @@ Rails.application.routes.draw do
 
   resources :pre_orders, concerns: [:has_items, :auditable] do
     resources :pre_order_items, except: [:destroy], path: :items
+
+    member do
+      post :create_order
+      post :resend_confirmation
+    end
+
   end
 
   resources :pre_order_codes

@@ -5,6 +5,15 @@ class PreOrdersController < ApplicationController
 
   button :upload, false
   button :new_items, 'Add or Upload Items'
+  button :reseend_confirmation, 'Resend Confirmation Email'
+
+  # def create_order
+  #   binding.pry
+
+  #   o = @pre_order.build_order(custid: custid, orderdate: Date.today)
+  #   @pre_order.ordercreatedate = Date.today
+
+  # end
 
   def new_items
     redirect_to new_pre_order_pre_order_item_path(resource)
