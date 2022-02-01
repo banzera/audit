@@ -56,6 +56,7 @@
 # TODO figure out how to make them work together as the following
 # contains the effective_form JS used by effectivedatatables inline AJAX submits
 # require effective_bootstrap
+#= require effective_bootstrap/form
 #
 #= require chartkick
 #= require Chart.bundle
