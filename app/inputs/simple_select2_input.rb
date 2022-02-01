@@ -6,25 +6,28 @@ class SimpleSelect2Input < SimpleForm::Inputs::CollectionSelectInput
   end
 
   def input(wrapper_options={})
-
     field = super(wrapper_options)
+    tag   = script_tag
 
-    script_tag = template.content_tag(:script, type: 'text/javascript') do
-      """
-      $(document).ready(function() {
-        $('##{field_id}').select2({#{select2_options}})#{set_val}
-      });
-      """.html_safe
-    end
+    field + tag
+  end
 
+  def script_tag
     # TODO: make this configurable. For now, we're putting the script local to
     # the field so that dynamic partial page reloading works properly
     #
     # template.content_for :scripts do
     #   script_tag
     # end
-
-    field + script_tag
+    template.content_tag(:script, type: 'text/javascript') do
+      """
+      $(document).ready(function() {
+        $('##{field_id}').select2({
+          #{select2_options}
+        })#{set_val}
+      });
+      """.html_safe
+    end
   end
 
   def default_value
@@ -96,4 +99,43 @@ class SimpleSelect2Input < SimpleForm::Inputs::CollectionSelectInput
   def set_val
     @set_val ||= default_value_text.present? ? ".val('#{default_value_id}').trigger('change.select2');" : ''
   end
+
+  def template_selection?
+    true
+  end
+
+  def template_selection
+    @templateSelection ||= template_selection? ? "templateSelection: #{selection_fx.lstrip.chomp}," : ''
+  end
+
+  def selection_fx
+    fx = <<-JS
+      function(item) {
+        if(item.selection) { return $(item.selection) }
+        return item.text
+      }
+    JS
+  end
+
+  def template_result?
+    options[:template_result].present? || true
+  end
+
+  def template_result
+    @templateResult ||= template_result? ? "templateResult: #{result_fx.lstrip.chomp}," : ''
+  end
+
+  def result_fx
+    fx = <<-JS
+      function(item) {
+        if(!item.result) { return item.text }
+
+        $result = $(item.result)
+        $result.find('a').on('mouseup', function(e) { e.stopPropagation(); });
+
+        return $result
+      }
+    JS
+  end
+
 end

@@ -8,46 +8,4 @@ class SkuSelectionInput < SimpleSelect2Input
     end
   end
 
-  def template_selection?
-    true
-  end
-
-  def template_selection
-    @templateSelection ||= template_selection? ? "templateSelection: #{selection_fx}," : ''
-  end
-
-  def selection_fx
-    fx = <<-STR
-      function(item) {
-        if(item.selection) { return $(item.selection) }
-        return item.text
-      }
-    STR
-  end
-
-  def template_result?
-    options[:template_result].present? || true
-  end
-
-  def template_result
-    @templateResult ||= template_result? ? "templateResult: #{result_fx}," : ''
-  end
-
-  def result_fx
-    fx = <<-STR
-      function(item) {
-        if(!item.result) {
-          return item.text
-        }
-
-        $result = $(item.result)
-        $result.find('a').on('mouseup', function(e) {
-          e.stopPropagation();
-        });
-
-        return $result
-      }
-    STR
-  end
-
 end

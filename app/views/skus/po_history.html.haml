@@ -1,0 +1,39 @@
+%h2.text-center.display-4 PO History for #{@sku}
+.row
+  .col-12
+    .card
+      .card-header
+        %h3.card-title POs With this SKU
+      .card-body
+        %table.table.table-bordered.table-hover.table-stripe.table-sm
+          %thead
+            %tr
+              %th podate
+              %th skuid
+              %th splrid2
+              %th splrname
+              %th poorderquant
+              %th poorderrcvdquant
+              %th podiff
+              %th poorderpriceper
+              %th priceeachlesstax
+              %th poid
+              %th sumoforderquant
+              %th sumoforderdeliveredquant
+              %th poorderexpiration
+          %tbody
+            - @sku_po_histories.each do |po|
+              %tr
+                %td= po.podate&.to_date
+                %td= po.skuid
+                %td= po.splrid2
+                %td= po.splrname
+                %td= po.poorderquant
+                %td= po.poorderrcvdquant
+                %td= po.podiff
+                %td= po.poorderpriceper
+                %td= po.priceeachlesstax
+                %td= po.poid
+                %td= po.sumoforderquant
+                %td= po.sumoforderdeliveredquant
+                %td= po.poorderexpiration

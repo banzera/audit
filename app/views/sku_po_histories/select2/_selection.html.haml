@@ -1,0 +1,16 @@
+%span
+  %b=po.poid
+|
+%span=po.podate&.to_date
+|
+In DC
+%span.badge{class: po.in_dc.positive? ? 'bg-success' : 'bg-warning'}=po.in_dc
+|
+Available
+%span.badge{class: po.available.positive? ? 'bg-success' : 'bg-warning'}=po.available
+|
+%span
+  - if date = po.expiration_date&.to_date
+    = date
+  - else
+    No Expiration

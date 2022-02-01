@@ -108,8 +108,16 @@ Rails.application.routes.draw do
       put  :search
       post :search
     end
+
+    member do
+      get :po_history
+    end
+
     resources :sku_cust_infos, shallow: true
   end
+
+  resources :sku_po_histories, only: [:index]
+
   resources :vendors
 
   scope 'receive' do

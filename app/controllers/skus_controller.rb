@@ -35,6 +35,19 @@ class SkusController < ApplicationController
     render :lookup
   end
 
+  def po_history
+    @sku_po_histories = SkuPoHistory.for_sku(@sku)
+    @sku_po_histories = @sku_po_histories.available.in_dc if params[:available_only].present?
+
+    respond_to do |format|
+      format.html { }
+      format.json {
+        @sku_po_histories = @sku_po_histories.limit(10)
+        render 'sku_po_histories/index'
+      }
+    end
+  end
+
   private
 
   def sku_params
