@@ -2,6 +2,9 @@ class PurchaseOrderItem < ApplicationRecord
   self.table_name  = 'tblpurchaseorderitems'
   self.primary_key = 'poitemsid'
 
+  include HasParent
+  parent :purchase_order
+
   belongs_to :purchase_order, class_name: 'PurchaseOrder', foreign_key: :poid, inverse_of: :items
   belongs_to :sku,            class_name: 'Sku',           foreign_key: :skuid
 

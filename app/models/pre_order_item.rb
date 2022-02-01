@@ -2,6 +2,9 @@ class PreOrderItem < ApplicationRecord
   self.table_name  = 'tblpreorderitems'
   self.primary_key = 'preorderitemsid'
 
+  include HasParent
+  parent :pre_order
+
   belongs_to :pre_order,      class_name: 'PreOrder',      foreign_key: :preorderid, inverse_of: :items
   belongs_to :sku1,           class_name: 'Sku',           foreign_key: :skuid1
   belongs_to :sku2,           class_name: 'Sku',           foreign_key: :skuid2          , optional: true

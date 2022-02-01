@@ -9,11 +9,11 @@
     .col-12
       .card
         .card-header
-          -if @parent.present?
-            = link_to url_for(@parent), class: 'btn btn-primary' do
+          - if @resource.respond_to?(:parent)
+            = link_to url_for(@resource.parent), class: 'btn btn-primary' do
               = fa_icon 'backward'
-              Back to #{@parent}
-          -else
+              Back to #{@resource.parent}
+          - else
             = link_to (resource.action_path(:index) || root_path), class: 'btn btn-primary' do
               = fa_icon 'table'
               Back to #{resource.klass.model_name.human} Listing
