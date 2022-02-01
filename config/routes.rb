@@ -53,9 +53,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :order_items, only: [:update, :edit, :show] do
+  resources :order_items, only: [:update, :edit, :show, :destroy] do
     member do
-      get :split
+      get   :split
+      patch :split
+      post :mark_as_delivered
     end
   end
 

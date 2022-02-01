@@ -1,0 +1,17 @@
+- if resource.diff_quant.positive?
+  = link_to split_order_item_path(resource), class: 'btn btn-sm btn-outline-secondary' do
+    = fa_icon 'exchange-alt', text: 'Split'
+
+&nbsp;
+
+%a.btn.btn-sm.btn-outline-secondary{href: mark_as_delivered_order_item_path(resource), data: {remote: true, params: 'foo', method: :post, confirm: ''}}
+  = fa_icon 'box-open', text: 'Set Ship Date!'
+
+
+- opts = { partial:    :dropleft,
+  btn_class:         'btn btn-sm btn-outline-primary',
+  mark_as_delivered: false,
+  split:             false,
+  show:              false,
+  }
+= render_resource_actions(resource, opts )

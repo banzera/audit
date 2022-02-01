@@ -20,6 +20,7 @@ Rails.application.config.assets.precompile += %w(
   favicon/browserconfig.xml
   application.js
   drop_zone.js
+  order_items_datatable.js
   purchase_order_items_datatable.js
   pre_order_items_datatable.js
   pre_order_items_outstanding_datatable.js

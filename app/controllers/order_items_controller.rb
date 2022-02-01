@@ -9,29 +9,29 @@ class OrderItemsController < ApplicationController
 
   before_action :load_resources, except: [:index]
 
-  # button :split, 'Spl'
-  # submit :split, 'SS'
-  #
-  def split
+  on :destroy, redirect: -> { order_path(resource.order) }
+  submit :split, 'Split', default: true, only: [:split], redirect: -> { order_path(resource.order) }
+  submit :save, 'Save', except: [:split]
 
-    dup = @order_item.dup
-    # dup.purchase_order = nil
-    dup.save
+  before_action :duplicate_resource, only: [:split]
+  after_error only: [:split]  do
+    @order_item.reload
+    duplicate_resource
+    @order_item.assign_attributes permitted_params
+    @order_item.valid?
+  end
 
-    redirect_to edit_order_item_path dup
+  def index
+    @datatable = OrderItemsDatatable.new(order: @order)
+  end
+
+  def duplicate_resource
+    @dup = @order_item.duplicate_for_split
   end
 
   def show
-    @parent = @order_item.order
+    redirect_to @order_item.order
   end
-
-  # def update
-    # resource.update permitted_params
-    # respond_to do |format|
-    #   format.html { redirect_to receive_purchase_order_path(resource.purchase_order) }
-    #   format.js { render 'receive' }
-    # end
-  # end
 
   private
 
@@ -39,9 +39,9 @@ class OrderItemsController < ApplicationController
     @sku = @order_item.sku
   end
 
-  def permitted_params
-    params.require(:order_item).permit([
-    ])
+  def order_item_params
+    params.require(:order_item).permit!
   end
+  alias_method :permitted_params, :order_item_params
 
 end

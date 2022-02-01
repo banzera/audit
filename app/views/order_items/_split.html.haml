@@ -1,0 +1,25 @@
+.content
+  .row
+    .col-12
+      .card.card-primary.card-outline
+        .card-header
+          Splitting #{@order_item}
+        .card-body
+          .row
+            .col-6
+              = simple_form_for @dup, url: '#',
+                html: {novalidate: true},
+                defaults: { wrapper: :horizontal_form, disabled: true } do |f|
+                = f.association :sku,            as: :sku_selection, input_html: { id: :nil1 }
+                = f.association :purchase_order, as: :po_selection,  input_html: { id: :nil2 }
+                = f.input :orderquant
+                = f.input :orderdeliveredquant
+            .col-6
+              = simple_form_for @order_item, url: split_order_item_path,
+                defaults: { wrapper: :horizontal_form } do |f|
+                = f.association :sku,            as: :sku_selection
+                = f.association :purchase_order, as: :sku_po_history_selection, available_only: true
+                = f.input :orderquant, readonly: true
+                = f.input :orderdeliveredquant, label: 'Shipped'
+
+                = simple_form_submit(f)

@@ -15,18 +15,22 @@ class OrderItemsDatatable < Effective::Datatable
     col :orderitemsid, search: false, visible: false
     col :sku,  partial: 'application/dt/sku',    label: "SKU"
     col :poid, partial: 'application/dt/po',     label: "PO"
-    col :orderquant,                             label: "Quantity"
-    col :orderpriceper,          visible: false
-    col :orderpricetotal,        visible: false
+    col :orderpriceper,          visible: true, as: :currency, label: 'Price Per'
+    col :orderpricetotal,        visible: true, as: :currency, label: 'Sub-total'
     col :ordertaxrate,           visible: false
-    col :ordertaxtotal,          visible: false
-    col :orderdeliverycosttotal, visible: false
-    col :orderfeestotal,         visible: false
-    col :ordergrandtotal,        visible: false
+    col :ordertaxtotal,          visible: true, as: :currency, label: 'Tax'
+    col :orderdeliverycosttotal, visible: false, as: :currency, label: 'Delivery Cost'
+    col :orderfeestotal,         visible: false, as: :currency, label: 'Fees'
+    col :ordergrandtotal,        visible: true, as: :currency, label: 'Total'
+    col :orderquant,                             label: "Qty"
     col :orderdeliveredquant,                    label: "Delivered"
+    col :diff_quant,              search: false, label: "Due"
     col :orderitemsdelivereddate, visible: true, as: :date, label: "Delivered Date"
+
+    # add button to delivery date column
     # col :orderretailtotal
 
-    actions_col
+    actions_col partial: 'order_items/dt/actions'
+    # actions_col
   end
 end

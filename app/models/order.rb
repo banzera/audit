@@ -48,15 +48,15 @@ class Order < ApplicationRecord
 
   # pricing calcs... probably should be calced on item edit and stored on the table row
   def ordersubtotal
-    items.pluck(:orderpricetotal).sum
+    items.pluck(:orderpricetotal).compact.sum
   end
 
   def orderdeliverycosttotal
-    items.pluck(:orderdeliverycosttotal).sum
+    items.pluck(:orderdeliverycosttotal).compact.sum
   end
 
   def ordertaxtotal
-    items.pluck(:ordertaxtotal).sum
+    items.pluck(:ordertaxtotal).compact.sum
   end
 
   def orderpricetotal

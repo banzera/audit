@@ -11,8 +11,52 @@ class OrderItem < ApplicationRecord
 
   scope :unfulfilled, -> { where('orderquant != orderdeliveredquant') }
 
+  validates :orderquant,          numericality: { greater_than_or_equal_to: 0 }
+  validates :orderdeliveredquant, numericality: { less_than_or_equal_to: :orderquant,
+                                                  message: "must be less than or equal to Quantity" }
+
   def unfulfilled?
     orderquant != orderdeliveredquant
+  end
+
+  def diff_quant
+    self.orderquant - self.orderdeliveredquant
+  end
+
+  def mark_as_delivered!
+    save
+  end
+
+  def split!
+    # self will have the user's attributes set
+    # need to duplicate item with these attributes,
+    # reset the object back to its original state,
+    # and then calc pricing for dup and original item
+
+    dup = self.dup
+
+    self.restore_attributes
+    self.decrement(:orderquant, dup.orderquant)
+
+    self.update_pricing_for_split
+    dup.update_pricing_for_split
+
+    self.save and dup.save
+  end
+
+  def update_pricing_for_split
+    self.orderpricetotal = (self.orderquant * self.orderpriceper).round(2)
+    self.ordertaxtotal   = (self.orderpricetotal * self.ordertaxrate).round(2)
+    self.ordergrandtotal = [self.orderpricetotal, self.ordertaxtotal].sum
+  end
+
+  def duplicate_for_split
+    dup = self.dup
+    self.poid                    = nil
+    self.orderquant              = self.orderquant - self.orderdeliveredquant
+    self.orderdeliveredquant     = 0
+    self.orderitemsdelivereddate = nil
+    dup
   end
 
   def to_s

@@ -4,7 +4,7 @@ class OrdersController < ApplicationController
   load_and_authorize_resource
 
   before_action :load_customer, except: [:outstanding, :index]
-  before_action :set_page_title
+  before_action :set_page_title, except: [:show, :edit, :index]
   before_action :set_pdf_options, only: [:confirmation, :invoice, :pick_list, :ship_list]
 
   button :confirmation, false
@@ -19,15 +19,8 @@ class OrdersController < ApplicationController
                                                 confirm: "Really mark @resource as billed?"
                                               }
 
-  # def invoice
-  # end
-
   def invoice_preview
     render 'preview', locals: { extra_resource_actions: [:mark_as_billed] }
-  end
-
-  def ship_list
-    @ship_list = @order.ship_list_items.order(:orderitemsid)
   end
 
   def ship_list_preview
@@ -63,7 +56,7 @@ class OrdersController < ApplicationController
   end
 
   def set_page_title
-    @page_title = "#{action_name.titleize}: #{@order}"
+    @page_title = "#{action_name.titleize} for Order: #{@order}"
   end
 
   def load_customer
