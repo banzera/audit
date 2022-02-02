@@ -36,6 +36,8 @@ class OrdersController < ApplicationController
   end
 
   def outstanding
+    @page_title = "Outstanding Orders Report"
+
     @datatable = OrderItemOutstandingDatatable.new
     @items     = OrderItemOutstanding.known_location
                                      .order(:orderid, :manf, :skudesc)
