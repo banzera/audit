@@ -1,17 +1,12 @@
-- if resource.diff_quant.positive?
-  = link_to split_order_item_path(resource), class: 'btn btn-sm btn-outline-secondary' do
-    = fa_icon 'exchange-alt', text: 'Split'
-
-&nbsp;
-
-%a.btn.btn-sm.btn-outline-secondary{href: mark_as_delivered_order_item_path(resource), data: {remote: true, params: 'foo', method: :post, confirm: ''}}
-  = fa_icon 'box-open', text: 'Set Ship Date!'
-
-
-- opts = { partial:    :dropleft,
-  btn_class:         'btn btn-sm btn-outline-primary',
-  mark_as_delivered: false,
-  split:             false,
-  show:              false,
-  }
-= render_resource_actions(resource, opts )
+.btn-group
+  - if resource.diff_quant.positive?
+    = link_to split_order_item_path(resource), class: 'btn btn-sm btn-outline-secondary' do
+      = fa_icon 'exchange-alt', text: 'Split'
+  %a.btn.btn-sm.btn-success{href: confirm_picked_order_item_path(resource), data: {remote: true, method: :post, confirm: ''}}
+    = fa_icon 'check-circle', text: 'Confirm Picked'
+  %button.btn.btn-sm.btn-default.dropdown-toggle.dropdown-icon{"aria-expanded" => "false", "data-toggle" => "dropdown", :type => "button"}
+    %span.sr-only Toggle Dropdown
+  .dropdown-menu{:role => "menu", :style => ""}
+    %a.dropdown-item{href: edit_order_item_path(resource)} Edit
+    .dropdown-divider
+    %a.dropdown-item.text-danger{data: {confirm: "Really delete #{resource}?", method: :delete}, href: order_item_path(resource), title: "Delete #{resource}"} Delete

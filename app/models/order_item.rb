@@ -23,7 +23,20 @@ class OrderItem < ApplicationRecord
     self.orderquant - self.orderdeliveredquant
   end
 
+  def confirm_picked!
+    unless self.attribute_changed?(:orderitemsdelivereddate)
+      self.orderitemsdelivereddate = Time.current.to_date
+    end
+    self.orderdeliveredquant = self.orderquant
+
+    save
+  end
+
   def mark_as_delivered!
+    unless self.attribute_changed?(:orderitemsdelivereddate)
+      self.orderitemsdelivereddate = Time.current.to_date
+    end
+
     save
   end
 

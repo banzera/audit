@@ -58,6 +58,7 @@ Rails.application.routes.draw do
       get   :split
       patch :split
       post :mark_as_delivered
+      post :confirm_picked
     end
   end
 
