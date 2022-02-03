@@ -2,7 +2,7 @@
   .row.post
     .col-6
       = f.association :sku, as: :sku_selection
-      = f.association :purchase_order, as: :sku_po_history_selection, available_only: true
+      = f.association :purchase_order, as: :sku_po_history_selection, available_only: false
       = f.input :orderquant
       = f.input :orderitemsdelivereddate, as: :date
       = f.input :orderdeliveredquant
