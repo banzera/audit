@@ -40,7 +40,7 @@ module OrdersHelper
 
     if ship_date.blank?
       ''
-    elsif ship_date == Date.today
+    elsif ship_date == (@report_date || Date.today)
       'bg-highlight'
     else
       'bg-peach'

@@ -13,12 +13,25 @@
           %h3.card-title
             = link_to :back, class: 'btn btn-sm btn-secondary' do
               = fa_icon 'backward', text: 'Back'
+            &nbsp;
             = fa_icon 'print', text: "Preview For: #{@resource}"
           .card-tools
-            %button.btn.btn-secondary#print-button
-              = fa_icon 'print', text: 'Print'
-            - if extra_actions = local_assigns[:extra_resource_actions]
-              = render_resource_buttons(@order, btn_class: 'btn', only: extra_actions)
+            .row
+              %label.col-sm-6.col-form-label.date.optional.text-right{:for => "ship_date"} Target Ship Date:
+              .col-sm-6
+                #dp_ship_date.input-group.date{"data-target-input" => "nearest"}
+                  = text_field_tag("ship_date", @report_date,
+                               class: "form-control date optional datetimepicker-input",
+                               "data-target": "#dp_ship_date")
+
+                  .input-group-append{data: {target: "#dp_ship_date", toggle: "datetimepicker"} }
+                    .input-group-text
+                      %i.fa.fa-calendar
+
+              %button.btn.btn-secondary#print-button
+                = fa_icon 'print', text: 'Print'
+                - if extra_actions = local_assigns[:extra_resource_actions]
+                  = render_resource_buttons(@order, btn_class: 'btn', only: extra_actions)
 
   .row
     .col-10.offset-1
@@ -29,5 +42,9 @@
 - content_for :scripts do
   :coffee
     $(document).ready () ->
+      $('#dp_ship_date').datetimepicker()
+      $('#dp_ship_date').on 'change.datetimepicker', (e) ->
+        window.location.search = "report_date=" + e.date.format('L')
       $('#print-button').click (e) ->
-        window.open('#{resource.action_path base_action.to_sym, @resource}.pdf', '_print')
+        window.open('#{resource.action_path base_action.to_sym, @resource}.pdf?report_date=#{@report_date}', '_print')
+

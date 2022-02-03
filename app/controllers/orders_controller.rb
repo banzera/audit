@@ -6,6 +6,7 @@ class OrdersController < ApplicationController
   before_action :load_customer, except: [:outstanding, :index]
   before_action :set_page_title, except: [:show, :edit, :index]
   before_action :set_pdf_options, only: [:confirmation, :invoice, :pick_list, :ship_list]
+  before_action :set_report_date
 
   button :confirmation, false
   button :invoice,      false
@@ -54,6 +55,14 @@ class OrdersController < ApplicationController
   end
 
   private
+
+  def set_report_date
+    @report_date = begin
+      Date.parse params[:report_date]
+    rescue TypeError
+      Date.today
+    end
+  end
 
   def set_pdf_options
     @pdf_options['orientation']  = 'Landscape'
