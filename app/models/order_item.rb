@@ -73,7 +73,7 @@ class OrderItem < ApplicationRecord
   end
 
   def to_s
-    "#{sku} (#{orderquant})"
+    "Item for Order #{order} (SKU: #{skuid}, PO: #{poid}, Qty: #{orderquant})"
   end
 
 end
