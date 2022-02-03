@@ -1,14 +1,19 @@
 window.formatDiffQ = () ->
   $("td.col-diff_quant").each (_,v) ->
-    $v = $(v)
-    clazz = if Number($v.html()) == 0 then 'bg-success' else 'bg-warning'
-    $v.addClass(clazz)
+    zero = Number($(v).html()) == 0
+
+    $(v).toggleClass('bg-success', zero)
+    $(v).toggleClass('bg-warning', !zero)
+
+  total_outstanding = $("tfoot td.col-diff_quant")[0]
+  $total = $(total_outstanding)
+
+  is_zero = Number($total.html()) == 0
+  $('#order_orderdelivereddate').toggleClass('is-valid', is_zero)
 
 $(document).ready ->
   formatDiffQ()
   $('.effective-datatable').on 'draw.dt', -> formatDiffQ()
-
-
 
 $(document).on 'ajax:before', (event) ->
   $action = $(event.target)

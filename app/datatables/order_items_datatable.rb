@@ -25,12 +25,28 @@ class OrderItemsDatatable < Effective::Datatable
     col :orderquant,                             label: "Qty"
     col :orderdeliveredquant,                    label: "Delivered"
     col :diff_quant,              search: false, label: "Due"
-    col :orderitemsdelivereddate, visible: true, as: :date, label: "Delivered Date"
 
-    # add button to delivery date column
-    # col :orderretailtotal
+    col :orderitemsdelivereddate, visible: true, as: :date, col_class: 'col-actions', label: "Delivered Date" do |i|
+      if i.orderitemsdelivereddate.present?
+        i.orderitemsdelivereddate.to_date.to_s(:american)
+      else
+        link_to mark_as_delivered_order_item_path(i),
+          class: "btn btn-sm btn-outline-secondary",
+          data: {confirm: '', method: :post, remote: true } do
+          fa_icon 'box-open', text: "Set Ship Date!"
+        end
+      end
+    end
 
     actions_col partial: 'order_items/dt/actions'
-    # actions_col
+
+    # aggregate :total
+    aggregate :total do |values, column|
+      if column[:name] == :orderitemsdelivereddate
+        fa_icon 'arrow-left', text: 'Total Outstanding Items'
+      elsif column[:name] == :diff_quant
+        values.sum
+      end
+    end
   end
 end
