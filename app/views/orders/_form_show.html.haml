@@ -1,78 +1,25 @@
 .content
-  .noting
-    .row
-      .col-12
-        .card.card-primary.card-outline.card-outline-tabs
-          .card-header.p-0.border-bottom-0
-            %ul#tab.nav.nav-tabs{:role => "tablist"}
-              %li.nav-item
-                %a#general-tab.nav-link.active{"aria-controls" => "general", "aria-selected" => "true", "data-toggle" => "pill", :href => "#general", :role => "tab"} General
-              %li.nav-item
-                %a#shipping-tab.nav-link{"aria-controls" => "shipping", "aria-selected" => "false", "data-toggle" => "pill", :href => "#shipping", :role => "tab"} Shipping
-              %li.nav-item
-                %a#payment-tab.nav-link{"aria-controls" => "payment", "aria-selected" => "false", "data-toggle" => "pill", :href => "#payment", :role => "tab"} Payment
-              %li.nav-item
-                %a#notes-tab.nav-link{"aria-controls" => "payment", "aria-selected" => "false", "data-toggle" => "pill", :href => "#notes", :role => "tab"} Notes
-          .card-body
-            = simple_form_for @resource, defaults: { wrapper: :vertical_form, disabled: local_assigns[:readonly] }, wrapper: :vertical_form do |f|
-              #tabContent.tab-content
-                #general.tab-pane.fade.active.show{"aria-labelledby" => "general-tab", :role => "tabpanel"}
-                  .row
-                    .col-4
-                      = f.input :orderbatch, disabled: true
-                      = f.input :orderdate
-                    .col-4
-                      = f.association :customer
-                      = f.input :ordertaxrate
-                    .col-4
-                  .row
-                    .col-4
-                      = f.input :preordercompletedate
-                    .col-4
-                      = f.input :orderconfirmdate
-                    .col-4
-                      = f.input :orderccdate
-                #shipping.tab-pane.fade{"aria-labelledby" => "shipping-tab", :role => "tabpanel"}
-                  .row
-                    .col-4
-                      = f.input :orderdelivereddate
-                      = f.input :orderdeliverdfrom
-                      = f.input :orderdeliveredto
-                      = f.input :ordershipmethod
-                      = f.input :orderreceipthl
-                    .col-4
+  .row
+    .col-12
+      = render 'form', readonly: readonly
+      .card.card-outline.card-secondary
+        .card-header.border-bottom-0
+          %h2.card-title
+            %a.btn.btn-tool.btn-outline-secondary{href: new_order_order_item_path(@order)}
+              = fa_icon 'plus', text: 'Add Item'
 
-                #payment.tab-pane.fade{"aria-labelledby" => "payment-tab", :role => "tabpanel"}
-                  .row
-                    .col-4
-                      = f.input :orderdateinvoiced
-                      = f.input :orderdatepaid
-                    .col-4
-                      = f.input :orderpaymentmethod
-                      = f.input :orderpaymentamount
-                    .col-4
-                #notes.tab-pane.fade{"aria-labelledby" => "notes-tab", :role => "tabpanel"}
-                  = f.input :ordernotes, wrapper: :vertical_form
+          .card-tools
+            .row
+              %label.col-sm-6.col-form-label.date.optional.text-right{:for => "ship_date"} Target Ship Date:
+              .col-sm-6
+                #dp_ship_date.input-group.date{"data-target-input" => "nearest"}
+                  %input#ship_date.form-control.date.optional.datetimepicker-input{"data-target" => "#dp_ship_date", :name => "target_ship_date", :type => "text", :value => Date.today}
+                  .input-group-append{data: {target: "#dp_ship_date", toggle: "datetimepicker"} }
+                    .input-group-text
+                      %i.fa.fa-calendar
 
-              - unless local_assigns[:readonly]
-                .row
-                  = simple_form_submit(f)
-
-        .card.card-outline.card-secondary
-          .card-header.border-bottom-0
-            %h2.card-title
-              %a.btn.btn-tool.btn-outline-secondary{href: new_order_order_item_path(@order)}
-                = fa_icon 'plus', text: 'Add Item'
-
-            .card-tools
-              #dp_ship_date.input-group.date{"data-target-input" => "nearest"}
-                %input#ship_date.form-control.date.optional.datetimepicker-input{"data-target" => "#dp_ship_date", :name => "order_item[orderitemsdelivereddate]", :type => "text", :value => Date.today}/
-                .input-group-append{"data-target" => "#dp_ship_date", "data-toggle" => "datetimepicker"}
-                  .input-group-text
-                    %i.fa.fa-calendar
-
-          .card.body
-            = render_datatable OrderItemsDatatable.new(order: @order), simple: true
+        .card.body
+          = render_datatable OrderItemsDatatable.new(order: @order), simple: true
 
 - content_for :scripts do
   = javascript_include_tag 'order_items_datatable'

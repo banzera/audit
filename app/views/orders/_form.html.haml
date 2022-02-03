@@ -1,0 +1,55 @@
+.card.card-primary.card-outline.card-outline-tabs
+  .card-header.p-0.border-bottom-0
+    %ul#tab.nav.nav-tabs{:role => "tablist"}
+      %li.nav-item
+        %a#general-tab.nav-link.active{"aria-controls" => "general", "aria-selected" => "true", "data-toggle" => "pill", :href => "#general", :role => "tab"} General
+      %li.nav-item
+        %a#shipping-tab.nav-link{"aria-controls" => "shipping", "aria-selected" => "false", "data-toggle" => "pill", :href => "#shipping", :role => "tab"} Shipping
+      %li.nav-item
+        %a#payment-tab.nav-link{"aria-controls" => "payment", "aria-selected" => "false", "data-toggle" => "pill", :href => "#payment", :role => "tab"} Payment
+      %li.nav-item
+        %a#notes-tab.nav-link{"aria-controls" => "payment", "aria-selected" => "false", "data-toggle" => "pill", :href => "#notes", :role => "tab"} Notes
+  .card-body
+    = simple_form_for @resource, defaults: { wrapper: :vertical_form, disabled: local_assigns[:readonly] }, wrapper: :vertical_form do |f|
+      #tabContent.tab-content
+        #general.tab-pane.fade.active.show{"aria-labelledby" => "general-tab", :role => "tabpanel"}
+          .row
+            .col-4
+              = f.input :orderbatch, disabled: true
+              = f.input :orderdate
+            .col-4
+              = f.association :customer
+              = f.input :ordertaxrate
+            .col-4
+              = f.input :orderdelivereddate
+          .row
+            .col-4
+              = f.input :preordercompletedate
+            .col-4
+              = f.input :orderconfirmdate
+            .col-4
+              = f.input :orderccdate
+        #shipping.tab-pane.fade{"aria-labelledby" => "shipping-tab", :role => "tabpanel"}
+          .row
+            .col-4
+              = f.input :orderdeliverdfrom
+              = f.input :orderdeliveredto
+            .col-4
+              = f.input :ordershipmethod
+              = f.input :orderreceipthl
+
+        #payment.tab-pane.fade{"aria-labelledby" => "payment-tab", :role => "tabpanel"}
+          .row
+            .col-4
+              = f.input :orderdateinvoiced
+              = f.input :orderdatepaid
+            .col-4
+              = f.input :orderpaymentmethod
+              = f.input :orderpaymentamount
+            .col-4
+        #notes.tab-pane.fade{"aria-labelledby" => "notes-tab", :role => "tabpanel"}
+          = f.input :ordernotes, wrapper: :vertical_form
+
+      - unless local_assigns[:readonly]
+        .row
+          = simple_form_submit(f)
