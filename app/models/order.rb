@@ -26,6 +26,9 @@ class Order < ApplicationRecord
     .where('tblcustomer.custccauth': true)
   }
 
+  validates :orderdelivereddate, absence: { message: 'cannot be set if there are outstanding items' },
+                                  if: -> { outstanding_items_count.positive? }
+
   has_barcode :barcode,
     :outputter => :svg,
     :type => :code_39,
@@ -61,5 +64,13 @@ class Order < ApplicationRecord
 
   def orderpricetotal
     ordersubtotal + orderdeliverycosttotal + ordertaxtotal
+  end
+
+  def outstanding_items_count
+    items.map(&:diff_quant).sum
+  end
+
+  def to_s
+    "Order #{orderid}"
   end
 end
