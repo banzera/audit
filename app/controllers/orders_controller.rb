@@ -4,13 +4,18 @@ class OrdersController < ApplicationController
   load_and_authorize_resource
 
   before_action :load_customer, except: [:outstanding, :index]
-  before_action :set_page_title, except: [:show, :edit, :index]
+  before_action :set_page_title, if: -> { /_preview/.match? action_name }
   before_action :set_pdf_options, only: [:confirmation, :invoice, :pick_list, :ship_list]
   before_action :set_report_date
 
   button :confirmation, false
   button :invoice,      false
   button :ship_list,    false
+  button :invoice_preview,      'Invoice', if: -> { resource.orderdelivereddate.present? }
+  button :ship_list_preview,    'Ship List'
+  button :confirmation_preview, false #, 'Confirmation'
+  button :pick_list,            'Pick List'
+  button :edit, 'Edit', default: true
 
   on     :mark_as_billed, redirect: -> { billing_due_path }
   button :mark_as_billed, 'Bill Credit Card', unless: -> { resource.billed? },
