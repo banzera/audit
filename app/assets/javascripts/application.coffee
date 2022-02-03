@@ -64,6 +64,7 @@
 #= require datatables
 #= require flashes
 #= require select2_defaults
+#= require tempus_dominus_defaults
 #
 # require_self
 
