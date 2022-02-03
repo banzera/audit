@@ -19,6 +19,10 @@ class OrdersController < ApplicationController
                                                 confirm: "Really mark @resource as billed?"
                                               }
 
+  def invoice
+    @pdf_options['orientation']  = 'Portrait'
+  end
+
   def invoice_preview
     render 'preview', locals: { extra_resource_actions: [:mark_as_billed] }
   end
