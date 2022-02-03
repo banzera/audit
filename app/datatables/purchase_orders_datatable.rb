@@ -19,8 +19,9 @@ class PurchaseOrdersDatatable < Effective::Datatable
   datatable do
     order :podate, :desc
 
+    col :poid
     col :podate,          visible: true,  search: false, as: :date
-    col :pobatch
+    col :pobatch,         visible: false
     col :supplier1,       visible: true,  search: false, action: :show
     col :supplier2,       visible: true,  search: false, action: :show
     col :poshipdate,      visible: true,  search: false, as: :date
@@ -33,7 +34,7 @@ class PurchaseOrdersDatatable < Effective::Datatable
     col :poamountpaid,    visible: true,  search: false, as: :currency
     col :ponotes,         visible: false, search: false
     col :posplrorderno,   visible: true,  search: { as: :string, fuzzy: true }
-    col :pochecksentdate, visible: true,  search: false, as: :date
+    col :pochecksentdate, visible: false, search: false, as: :date
 
     actions_col only: [:show, :receive]
   end
