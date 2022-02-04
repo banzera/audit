@@ -94,6 +94,11 @@ Rails.application.routes.draw do
 
   resources :purchase_orders, concerns: [:has_items, :auditable, :receivable] do
     resources :purchase_order_items, except: [:destroy], path: :items
+
+    member do
+      get :label
+      get :label_preview
+    end
   end
 
   resources :purchase_order_items, only: [:index, :destroy, :update, :edit, :show], concerns: [:receivable] do

@@ -1,0 +1,20 @@
+.content
+  .row
+    = link_to 'Back to Purchase Order', purchase_order_path(@purchase_order)
+  .row
+    .col-6.offset-3
+      .card.card-primary.card-outline
+        .card-header
+          %h2.card-title
+            = fa_icon 'print'
+            Label Preview For: #{@purchase_order}
+          .card-tools
+            %button.btn.btn-primary#print-button Print
+        .card-body
+          =render partial: 'label'
+
+- content_for :scripts do
+  :coffee
+    $(document).ready () ->
+      $('#print-button').click (e) ->
+        window.open('#{label_purchase_order_path(format: :pdf)}', '_label')

@@ -1,0 +1,33 @@
+%table.table.table-sm.table-borderless.m-0
+  %tr
+    %td.wpc30
+      %h3 PO: #{@purchase_order.poid}
+    %td
+      %img{:height => '60px', :alt => "AUDIT Logo", :src => "/img/logo_black_no_text.png"}
+    %td.text-center
+      %h5 Accelerate
+      %h5 United
+
+%table.table.table-sm.table-borderless.m-0
+  %tr
+    %td
+      %h3 Batch: #{@purchase_order.pobatch}
+  %tr
+    %td
+      %h3 Date: #{@purchase_order.podate.to_date}
+
+%table.table.table-sm.table-borderless.m-0
+  %tr
+    %td.wpc70
+      %b Supplier: #{@purchase_order.supplier2.splrbusinessname}
+    %td.text-center
+      %strong Complete?
+      %br
+      YES
+      .icheck-primary.d-inline
+        %input#yes{:type => "checkbox"}
+        %label{:for => "yes"}
+      NO
+      .icheck-primary.d-inline
+        %input#no{:type => "checkbox"}
+        %label{:for => "no"}
