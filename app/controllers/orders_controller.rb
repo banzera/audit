@@ -8,12 +8,14 @@ class OrdersController < ApplicationController
   before_action :set_pdf_options, only: [:confirmation, :invoice, :pick_list, :ship_list]
   before_action :set_report_date
 
-  button :confirmation, false
-  button :invoice,      false
-  button :ship_list,    false
+  button :confirmation,      false
+  button :invoice,           false
+  button :ship_list,         false
+  button :shipping_label,    false
   button :invoice_preview,      'Invoice', if: -> { resource.orderdelivereddate.present? }
   button :ship_list_preview,    'Ship List'
   button :confirmation_preview, false #, 'Confirmation'
+  button :shipping_label_preview, 'Shipping Label'
   button :pick_list,            'Pick List'
   button :edit, 'Edit', default: true
 
@@ -39,6 +41,11 @@ class OrdersController < ApplicationController
 
   def confirmation_preview
     render 'preview'
+  end
+
+  def shipping_label
+    @page_title = "Shipping Label for #{@order}"
+    render layout: 'pdf/dymo-30256'
   end
 
   def pick_list

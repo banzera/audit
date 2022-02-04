@@ -46,6 +46,9 @@ Rails.application.routes.draw do
       get :confirmation
       get :confirmation_preview
 
+      get :shipping_label
+      get :shipping_label_preview
+
       post :mark_as_billed
     end
 

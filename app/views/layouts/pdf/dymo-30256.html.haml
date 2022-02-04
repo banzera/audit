@@ -11,10 +11,10 @@
     -# 2-5/16" x 4"
     %meta{:name => 'pdfkit-page-width',    :content => 101.6}
     %meta{:name => 'pdfkit-page-height',   :content => 58.7375}
-    %meta{:name => 'pdfkit-margin-top',    :content => 0}
-    %meta{:name => 'pdfkit-margin-bottom', :content => 0}
-    %meta{:name => 'pdfkit-margin-left',   :content => 1}
-    %meta{:name => 'pdfkit-margin-right',  :content => 1}
+    %meta{:name => 'pdfkit-margin-top',    :content => 1}
+    %meta{:name => 'pdfkit-margin-bottom', :content => 1}
+    %meta{:name => 'pdfkit-margin-left',   :content => 2}
+    %meta{:name => 'pdfkit-margin-right',  :content => 2}
 
     - (@pdf_options || {}).each do |k,v|
       %meta{:name => "pdfkit-#{k}", :content => v.to_s }

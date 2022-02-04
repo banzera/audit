@@ -1,0 +1,36 @@
+%table.table.table-sm.table-borderless.m-0
+  %tr
+    %td.wpc10
+      %b FROM:
+    %td
+      %strong Accelerate United
+      %br
+      10 East 9th Street, Suite G
+      %br
+      Lawrence, KS 66044
+      %br
+      Phone: (785) 748-0871
+    %td
+      %img{:height => '80px', :alt => "AUDIT Logo", :src => "/img/logo_black_no_text.png"}
+
+%table.table.table-sm.table-borderless.m-0
+  %tr
+    %td(colspan=2)
+      %strong=@order.orderid
+    %td.float-right
+      %u Order # #{@order.orderbatch}
+      %br
+      Order Date: #{@order.orderdate.to_date}
+
+%table.table.table-sm.table-borderless.m-0
+  %tr
+    %td.wpc10
+      %b TO:
+    %td
+      = @customer.full_name
+      %br
+      = @customer.custbusinessname
+      %br
+      = @customer.custaddress
+      %br
+      = @customer.city_state_zip
