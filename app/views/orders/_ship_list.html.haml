@@ -1,5 +1,5 @@
 .content
-  %table.table.table-sm.table-borderless
+  %table.table.table-sm.m-0.table-borderless
     %tr
       %td.w-25
         %strong Accelerate United
@@ -10,17 +10,18 @@
         %br
         Phone: (785) 748-0871
       %td.w-25
-        %img{:alt => "AU Logo", :src => "/img/logo_black.png", :style => ""}
-      %td.w-25
-        %h1 Shipping List
-        Order Number: #{@order.orderbatch}
-      %td.w-25.text-right
-        Report Date: #{Date.today}
+        %img{:height => '80px', :alt => "AU Logo", :src => "/img/logo_black_no_text.png", :style => ""}
+      %td.wpc30
+        %h1.display-5 Shipping List
+      %td.wpc20.text-right
+        Report Date: #{@report_date}
         %br
         Order Date: #{@order.orderdate.to_date}
+  %table.table.table-sm.m-0.table-borderless
     %tr
-      %td.w-25.text-right
+      %td.wpc5(rowspan=4)
         %strong TO:
+      %td.wpc30
         = @customer.full_name
         %br
         = @customer.custbusinessname
@@ -28,30 +29,43 @@
         = @customer.custaddress
         %br
         = @customer.city_state_zip
-      %td.w-25
+      %td(colspan=2)
         - if @order.preordercompletedate.blank?
           %h1.text-danger
-            PARTIAL ORDER #{Date.today}
-      %td.w-25
-        %h2.text-right Order Number:
-      %td.w-25.text-right()
+            PARTIAL ORDER
+            %br
+            #{@report_date}
+      %td.wpc25.text-right()
         %h2.text-left
           = @order.orderbatch
         = @order.barcode_data(margin: 0, height: 40, xdim: 4).html_safe
         %br
-        =@order.orderid
-        %br
+        %h4=@order.orderid
+
+  %table.table.table-sm.table-borderless
     %tr
-      %td(colspan=2)
-        Order Notes:
-        %br
-        = @order.ordernotes
-      %td
+      %td.wpc10(rowspan=4)
+        %b Shipping Status Key:
+      %td.p-0.wpc30.bg-highlight
+        %span.small In Current Shipment
+      %td(rowspan=3)
+        %b Order Notes:
+      %td(colspan=3 rowspan=3)= @order.ordernotes
+    %tr
+      %td.p-0.bg-peach
+        %span.small Previously Shipped
+    %tr
+      %td.p-0
+        %span.small * Items without a ship date have not yet shipped.
+    %tr
+      %td.p-0.bg-success
+        %span.small Still Due to be Shpped
 
   %table.table.table-striped.table-sm.table-bordered
     %thead
       %th.border.border-dark Order Qty
       %th.border.border-dark Ship Qty
+      %th.border.border-dark
       %th.border.border-dark Due Qty
       %th.border.border-dark UoM
       %th.border.border-dark Ship Date*
@@ -64,6 +78,11 @@
         %tr
           %td=item.sumoforderquant
           %td{class: ship_list_cell_style(item)}=item.sumoforderdeliveredquant
+          %td
+            .icheck-primary.d-inline
+              %input#checkboxPrimary2{:type => "checkbox"}/
+              %label{:for => "checkboxPrimary2"}
+
           %td{class: ship_list_remaining_style(item)}=item.sumoforderquant - item.sumoforderdeliveredquant
           %td=item.skuminunitstype
           %td{class: ship_list_cell_style(item)}
