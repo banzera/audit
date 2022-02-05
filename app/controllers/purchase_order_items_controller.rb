@@ -1,16 +1,15 @@
 class PurchaseOrderItemsController < ApplicationController
   include DefaultCrudController
+  include HasLabel
 
   load_and_authorize_resource :purchase_order
   load_and_authorize_resource :purchase_order_item, through: :purchase_order, through_association: :items, shallow: true
 
   before_action :load_resources, except: [:index, :new]
 
-  page_title only: :new do
-    "New #{resource_name.titleize}(s) for PO #{@purchase_order}"
-  end
+  page_title(only: [:new])   { "New #{resource_name.titleize}(s) for PO #{@purchase_order}" }
+  page_title(only: [:label]) { "Bin Label for #{@sku.sku} / #{@purchase_order.pobatch}" }
 
-  button :label, false
   button :receive, 'Receive', redirect: -> { receive_purchase_order_item_path(skuid: resource.id) }
   submit :receive, 'Receive'
   on     :create, redirect: -> { purchase_order_path(resource.purchase_order) }
@@ -27,14 +26,6 @@ class PurchaseOrderItemsController < ApplicationController
 
   def index
     @datatable = PurchaseOrderItemsDatatable.new(po: @purchase_order)
-  end
-
-  def label
-    @page_title = "Bin Label for #{@sku.sku} / #{@purchase_order.pobatch}"
-    render layout: 'pdf/dymo-30256'
-  end
-
-  def label_preview
   end
 
   def print

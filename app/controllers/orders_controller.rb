@@ -1,5 +1,6 @@
 class OrdersController < ApplicationController
   include DefaultCrudController
+  include HasLabel
 
   load_and_authorize_resource
 
@@ -41,6 +42,10 @@ class OrdersController < ApplicationController
 
   def confirmation_preview
     render 'preview'
+  end
+
+  def shipping_label_preview
+    render 'label_preview'
   end
 
   def shipping_label

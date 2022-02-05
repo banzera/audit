@@ -1,6 +1,7 @@
 class SkusController < ApplicationController
   include DefaultCrudController
   include Select2Searchable
+  include HasLabel
 
   load_and_authorize_resource
 
@@ -8,6 +9,7 @@ class SkusController < ApplicationController
   button :export, "Export CSV", path: '/skus.csv'
 
   page_title(only: [:index]) { resource_klass.model_name.human(count: 2) }
+  page_title(only: [:label]) { "SKU Location Label for #{@sku}" }
 
   def index
     respond_to do |format|

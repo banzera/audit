@@ -1,0 +1,26 @@
+%table.table.table-sm.table-borderless.m-0
+  %tr
+    %td(colspan=2)
+      MANF: #{@sku.manf}
+    %td.wpc30(colspan=2)
+      %b SKU: #{@sku.id}
+    %td
+      &nbsp;
+  %tr
+    %td(colspan=2)
+      ITEM#: #{@sku.itemno}
+%table.table.table-sm.table-borderless.m-0
+  %tr
+    %td.wpc75
+      DESCRIPTION: #{@sku.description}
+    %td.text-right
+      Max:
+      %br
+      Min:
+    %td
+      =@sku.max_temp
+      %br
+      =@sku.min_temp
+  %tr
+    %td.text-center(colspan=5)
+      %h1.display-3=@sku.dcloc

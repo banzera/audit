@@ -1,0 +1,27 @@
+- content_for :page_title do
+  = @page_title
+
+- resource = (@_effective_resource || Effective::Resource.new(controller_path))
+- @resource = instance_variable_get('@' + resource.name) if resource.name
+
+.content
+  .row
+    .col-6.offset-3
+      .card.card-primary.card-outline
+        .card-header
+          %h3.card-title
+            = link_to @resource, class: 'btn btn-sm btn-secondary' do
+              = fa_icon 'backward', text: "Back to #{@resource}"
+            &nbsp;
+            = fa_icon 'print', text: "Label Preview For: #{@resource}"
+
+          .card-tools
+            %button.btn.btn-primary#print-button Print
+        .card-body
+          =render partial: 'label'
+
+- content_for :scripts do
+  :coffee
+    $(document).ready () ->
+      $('#print-button').click (e) ->
+        window.open('#{resource.action_path(:label, @resource)}.pdf', '_label')

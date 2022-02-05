@@ -19,6 +19,13 @@ Rails.application.routes.draw do
     end
   end
 
+  concern :has_label do
+    member do
+      get :label
+      get :label_preview
+    end
+  end
+
   get 'home',        to: 'dashboard#home'
   get 'export',      to: 'dashboard#export'
   get 'billing/due', to: 'billing#due'
@@ -31,7 +38,7 @@ Rails.application.routes.draw do
 
   resources :categories
   resources :customers
-  resources :orders do
+  resources :orders, concerns: [:has_label] do
     collection do
       get :outstanding
     end
@@ -46,7 +53,6 @@ Rails.application.routes.draw do
       get :confirmation
       get :confirmation_preview
 
-      get :shipping_label
       get :shipping_label_preview
 
       post :mark_as_billed
@@ -92,25 +98,18 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :purchase_orders, concerns: [:has_items, :auditable, :receivable] do
+  resources :purchase_orders, concerns: [:has_label, :has_items, :auditable, :receivable] do
     resources :purchase_order_items, except: [:destroy], path: :items
-
-    member do
-      get :label
-      get :label_preview
-    end
   end
 
-  resources :purchase_order_items, only: [:index, :destroy, :update, :edit, :show], concerns: [:receivable] do
+  resources :purchase_order_items, only: [:index, :destroy, :update, :edit, :show], concerns: [:has_label, :receivable] do
     member do
-      get :label
-      get :label_preview
       post :print
     end
   end
 
   resources :suppliers
-  resources :skus, concerns: [:auditable, :receivable] do
+  resources :skus, concerns: [:auditable, :has_label, :receivable] do
     collection do
       get  :export
       get  :lookup
