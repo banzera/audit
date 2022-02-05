@@ -13,7 +13,7 @@ class OrdersController < ApplicationController
   button :invoice,           false
   button :ship_list,         false
   button :shipping_label,    false
-  button :invoice_preview,      'Invoice', if: -> { resource.orderdelivereddate.present? }
+  button :invoice_preview,      'Invoice', if: -> { resource.orderdelivereddate.present? && resource.preordercompletedate.present? }
   button :ship_list_preview,    'Ship List'
   button :confirmation_preview, false #, 'Confirmation'
   button :shipping_label_preview, 'Shipping Label'
