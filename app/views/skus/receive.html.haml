@@ -12,6 +12,7 @@
               %th Date
               %th Batch
               %th Ship Date
+              %th Supplier
               %th Supplier Order Number
           %tbody
             - @purchase_orders.each do |po|
@@ -21,6 +22,7 @@
                 %td= po.podate.to_date.to_s(:american)
                 %td= po.pobatch
                 %td= po.poshipdate
+                %td= po.supplier2
                 %td= po.posplrorderno
               %tr.expandable-body
                 %td{:colspan => "5"}
