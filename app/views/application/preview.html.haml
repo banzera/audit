@@ -11,13 +11,13 @@
       .card.card-primary.card-outline.shadow
         .card-header
           %h3.card-title
-            = link_to :back, class: 'btn btn-sm btn-secondary' do
-              = fa_icon 'backward', text: 'Back'
+            = link_to @resource, class: 'btn btn-sm btn-secondary' do
+              = fa_icon 'backward', text: "Back to #{@resource}"
             &nbsp;
             = fa_icon 'print', text: "Preview For: #{@resource}"
           .card-tools
             .row
-              %label.col-sm-6.col-form-label.date.optional.text-right{:for => "ship_date"} Target Ship Date:
+              %label.col-sm-6.col-form-label.date.optional.text-right{:for => "ship_date"} Target Date:
               .col-sm-6
                 #dp_ship_date.input-group.date{"data-target-input" => "nearest"}
                   = text_field_tag("ship_date", @report_date,
@@ -30,8 +30,8 @@
 
               %button.btn.btn-secondary#print-button
                 = fa_icon 'print', text: 'Print'
-                - if extra_actions = local_assigns[:extra_resource_actions]
-                  = render_resource_buttons(@order, btn_class: 'btn', only: extra_actions)
+              - if extra_actions = local_assigns[:extra_resource_actions]
+                = render_resource_buttons(@order, btn_class: 'btn', only: extra_actions)
 
   .row
     .col-10.offset-1
