@@ -6,6 +6,7 @@ class SkusController < ApplicationController
   load_and_authorize_resource
 
   submit :receive, 'Receive Items', only: :show, redirect: -> { receive_skus_path(skuid: resource.id) }
+  button :po_history, "PO History"
   button :export, "Export CSV", path: '/skus.csv'
 
   page_title(only: [:index]) { resource_klass.model_name.human(count: 2) }
