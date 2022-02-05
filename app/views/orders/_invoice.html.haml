@@ -15,7 +15,7 @@
         %h1 Invoice
         Order Number: #{@order.orderbatch}
       %td.w-25.text-right
-        Invoice Date: #{Date.today}
+        Invoice Date: #{@report_date}
         %br
         Order Date: #{@order.orderdate.to_date}
     %tr
