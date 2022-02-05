@@ -1,2 +1,5 @@
 window.open('<%= label_purchase_order_item_path(format: :pdf) %>', '_label')
+<% if @purchase_order_item.sku.has_location? %>
+  window.open('<%= label_sku_path(@purchase_order_item.sku, format: :pdf) %>', '_sku_label')
+<% end %>
 window.location = '<%= purchase_order_path(@purchase_order_item.purchase_order) %>'

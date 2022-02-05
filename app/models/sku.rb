@@ -5,6 +5,8 @@ class Sku < ApplicationRecord
   self.table_name  = 'tblsku'
   self.primary_key = 'skuid'
 
+  DC_LOC_NONE = 'N/A'.freeze
+
   belongs_to :category, foreign_key: :categoryid
   belongs_to :sku_class, foreign_key: :skuclassid
   belongs_to :high_price_vendor, class_name: 'Vendor', foreign_key: :skuhighpricevno, optional: true
@@ -33,6 +35,15 @@ class Sku < ApplicationRecord
 
   def to_s
     "SKU #{id} (#{skudesc&.truncate(20) || '<no description>'})"
+  end
+
+  alias_attribute :id, :skuid
+  alias_attribute :min_temp, :skumintemp
+  alias_attribute :max_temp, :skumaxtemp
+  alias_attribute :description, :skudesc
+
+  def has_location?
+    DC_LOC_NONE != dcloc
   end
 
   def missing_temperature_values?
