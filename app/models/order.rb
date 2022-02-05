@@ -27,7 +27,9 @@ class Order < ApplicationRecord
   }
 
   validates :orderdelivereddate, absence: { message: 'cannot be set if there are outstanding items' },
-                                  if: -> { outstanding_items_count.positive? }
+                                  if: -> { outstanding_items_count.positive? || preordercompletedate.blank? }
+  validates :orderdelivereddate, absence: { message: 'cannot be set if the pre-order is incomplete' },
+                                  if: -> { preordercompletedate.blank? }
 
   has_barcode :barcode,
     :outputter => :svg,
