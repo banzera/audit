@@ -10,6 +10,8 @@ class OrderItemsDatatable < Effective::Datatable
   end
 
   datatable do
+    length :all
+
     order :orderitemsid, :desc
 
     col :orderitemsid, search: false, visible: false
