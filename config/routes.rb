@@ -109,6 +109,9 @@ Rails.application.routes.draw do
   end
 
   resources :suppliers
+
+  resources :sku_classes
+
   resources :skus, concerns: [:auditable, :has_label, :receivable] do
     collection do
       get  :export
