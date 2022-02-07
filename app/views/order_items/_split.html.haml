@@ -18,7 +18,7 @@
               = simple_form_for @order_item, url: split_order_item_path,
                 defaults: { wrapper: :horizontal_form } do |f|
                 = f.association :sku,            as: :sku_selection
-                = f.association :purchase_order, as: :sku_po_history_selection, available_only: false
+                = f.association :purchase_order, as: :sku_po_history_selection, available_only: true
                 = f.input :orderquant, readonly: true
                 = f.input :orderdeliveredquant, label: 'Shipped'
 
