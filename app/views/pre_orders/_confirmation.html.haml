@@ -1,0 +1,95 @@
+.content
+  %table.table.table-sm.m-0.table-borderles
+    %tr
+      %td.wpc30(rowspan=2)
+        %strong Accelerate United
+        %br
+        10 East 9th Street, Suite G
+        %br
+        Lawrence, KS 66044
+        %br
+        Phone: (785) 748-0871
+        %p
+        %strong TO:
+        = @pre_order.customer.full_name
+        %br
+        = @pre_order.customer.custbusinessname
+        %br
+        = @pre_order.customer.custaddress
+        %br
+        = @pre_order.customer.city_state_zip
+
+      %td.wpc25
+        %img{:height => '80px', :alt => "AU Logo", :src => "/img/logo_black_no_text.png", :style => ""}
+      %td.text-center
+        %h1.display-3
+          %u Order Confirmation
+      %td.w-25.text-right
+        Report Date: #{Date.today}
+        %br
+        Order Date: #{@pre_order.preorderdate.to_date}
+    %tr
+      %td.w-25.text-right
+
+      %td.w-25
+        %p.text-right Order Number:
+      %td.w-25.text-right
+        %p.text-left
+          = @pre_order.preorderbatch
+        = @pre_order.order.barcode_data(margin: 0, height: 40, xdim: 2).html_safe
+        %br
+        =@pre_order.orderid
+    %tr
+      %td.align-bottom
+      %td(colspan=2)
+        Order Notes:
+        %br
+        = @pre_order.preordernotes
+      %td
+
+  %table.table.table-striped.table-sm.table-bordered
+    %thead
+      %th.border.border-dark Qty
+      %th.border.border-dark UoM
+      %th.border.border-dark ID#
+      %th.border.border-dark Manf
+      %th.border.border-dark Item #
+      %th.border.border-dark Desc
+      %th.border.border-dark Price Per
+      %th.border.border-dark Price Total
+    %tbody
+      - @pre_order.items.for_confirmation.each do |item|
+        %tr
+          %td=item.orderquant2
+          %td=item.sku2.skuminunitstype
+          %td=item.sku2.skuid
+          %td=item.sku2.manf
+          %td=item.sku2.itemno
+          %td=item.sku2.skudesc
+          %td=item.orderpriceper2
+          %td=item.orderpricetotal2
+
+  %table.table.table-sm.table-borderless
+    %tr
+      %td.wpc20.align-top
+        #{@pre_order.items.for_confirmation.size} SKUs Total
+      %td
+      %td.wpc20
+        .callout.callout-info
+          %table.table
+            %tr
+              %th.text-right Subtotal
+              %td.text-right=number_to_currency(@pre_order.ordersubtotal)
+            %tr
+              %th.text-right S and H
+              %td.text-right 0
+            %tr
+              %th.text-right Sales Tax
+              %td.text-right=number_to_currency(@pre_order.ordertaxtotal)
+            %tr
+              %th.text-right TOTAL
+              %td.text-right=number_to_currency(@pre_order.orderpricetotal)
+
+
+
+

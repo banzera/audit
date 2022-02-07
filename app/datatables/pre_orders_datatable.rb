@@ -22,6 +22,6 @@ class PreOrdersDatatable < Effective::Datatable
     col :vendor
     col :order
 
-    actions_col
+    actions_col only: :show
   end
 end

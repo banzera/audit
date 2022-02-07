@@ -26,6 +26,11 @@ class PreOrderItem < ApplicationRecord
 
   validates_presence_of :sku1, :orderquant1, :orderpriceper1, :orderpricetotal1, on: :create
 
+  scope :direct_order, -> { where(preorderitemcode: PreOrderCode::DIRECT) }
+  scope :qualified,    -> { where.not(preorderitemcode: PreOrderCode::DIRECT) }
+
+  scope :for_confirmation, -> { joins(:sku2).includes(:sku2).qualified.order(:manf) }
+
   scope :recent,      -> { order(preorderitemsid: :desc).limit(100) }
   scope :outstanding, -> { where(preorderitemcode: [PreOrderCode::EXACT, PreOrderCode::SUB, PreOrderCode::NEW]).
                            where('poid isnull or poid=0') }
@@ -37,4 +42,11 @@ class PreOrderItem < ApplicationRecord
   def to_s
      "Item for #{pre_order}"
   end
+
+  def incomplete?
+    # expr from access
+    # =Sum(IIf(IsNull([OrderDate]) And   ([SKUID2]<>0) And   ([PreOrderItemCode]<4) ,1,0))
+    orderdate.blank? && skuid2 != 0 && preorderitemcode < 4
+  end
+
 end

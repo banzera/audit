@@ -86,7 +86,13 @@ Rails.application.routes.draw do
 
     member do
       post :create_order
+      post :order_update
       post :resend_confirmation
+
+      get :confirmation
+      get :confirmation_preview
+
+
     end
 
   end

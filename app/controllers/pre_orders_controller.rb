@@ -3,17 +3,24 @@ class PreOrdersController < ApplicationController
 
   load_and_authorize_resource
 
+  before_action :set_pdf_options, only: [:confirmation]
+
+  button :confirmation, false
+  button :confirmation_preview, 'Confirmation'
+
   button :upload, false
   button :new_items, 'Add or Upload Items'
   button :reseend_confirmation, 'Resend Confirmation Email'
 
-  # def create_order
-  #   binding.pry
+  submit :create_order, false
+  button :create_order, "Create Order", unless: -> { resource.order.present? }, method: :post, remote: true, 'data-confirm': "REally?"
+  submit :order_update, false
+  # button :order_update, "Run Order Update", unless: -> { resource.order.blank? }
 
-  #   o = @pre_order.build_order(custid: custid, orderdate: Date.today)
-  #   @pre_order.ordercreatedate = Date.today
 
-  # end
+  def confirmation_preview
+    render 'preview'
+  end
 
   def new_items
     redirect_to new_pre_order_pre_order_item_path(resource)
@@ -34,6 +41,13 @@ class PreOrdersController < ApplicationController
   rescue => e
     render plain: "Error: #{e.message}", status: :internal_server_error
   end
+
+  def set_pdf_options
+    @pdf_options['orientation']  = 'Landscape'
+    @pdf_options['margin-left']  = '0.3in'
+    @pdf_options['margin-right'] = '0.3in'
+  end
+
 
   def pre_order_params
     params.require(:pre_order).permit([
