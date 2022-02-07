@@ -47,6 +47,8 @@ class Sku < ApplicationRecord
   end
 
   def missing_temperature_values?
+    return false if skumintemp.nil? && skumaxtemp.nil?
+
     skumaxtemp.zero? &&
     skumintemp.zero?
   end
