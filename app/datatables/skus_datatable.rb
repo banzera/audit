@@ -8,6 +8,12 @@ class SkusDatatable < Effective::Datatable
     end
   end
 
+  filters do
+    scope :all, default: true
+    scope :in_transit
+    scope :in_dc, label: "In DC"
+  end
+
   datatable do
     col :skuid
     col :sku,              visible: false
@@ -28,6 +34,6 @@ class SkusDatatable < Effective::Datatable
     col :skumintemp,       visible: false
     col :skunotes,         visible: false
 
-    actions_col except: [:receive]
+    actions_col only: [:show]
   end
 end

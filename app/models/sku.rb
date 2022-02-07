@@ -21,6 +21,9 @@ class Sku < ApplicationRecord
     :type => :code_39,
     :value => Proc.new { |sku| sku.sku }
 
+  scope :in_dc,      -> { where(skuid: InventoryCounts.in_dc.pluck(:skuid)) }
+  scope :in_transit, -> { where(skuid: InventoryCounts.in_transit.pluck(:skuid)) }
+
   pg_search_scope :search,
                   against: :everything,
                   using:  {
