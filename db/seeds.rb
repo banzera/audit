@@ -27,3 +27,25 @@ User.find_or_create_by(email: 'accounting@au.com') do |user|
   user.created_by_id   = 0
   user.is_admin        = false
 end
+
+def create_user(first, last)
+  email = "#{last.downcase}#{first[0].downcase}@accelerate.dental"
+  puts "Creating user for '#{email}'"
+  User.find_or_create_by(email: email) do |user|
+    user.first_name      = first
+    user.last_name       = last
+    user.password        = ENV.fetch('INITIAL_ADMIN_PASSWORD')
+    user.confirmed_at    = Time.current
+    user.created_by_id   = 0
+    user.is_admin        = true
+  end
+end
+
+create_user('Bryan', 'Banz')
+create_user('Paul', 'Lock')
+create_user('Matt', 'Henry')
+create_user('LeeAnn', 'Shaw')
+create_user('Katie', 'Mortinson')
+create_user('Jimmy', 'Lock')
+create_user('Linda', 'Swanson')
+create_user('Lucas', 'Houk')
