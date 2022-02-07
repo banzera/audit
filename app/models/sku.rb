@@ -8,7 +8,7 @@ class Sku < ApplicationRecord
   DC_LOC_NONE = 'N/A'.freeze
 
   belongs_to :category, foreign_key: :categoryid
-  belongs_to :sku_class, foreign_key: :skuclassid
+  belongs_to :sku_class, foreign_key: :skuclassid, optional: true
   belongs_to :high_price_vendor, class_name: 'Vendor', foreign_key: :skuhighpricevno, optional: true
 
   has_many :cust_info, class_name: SkuCustInfo.name, foreign_key: :skuid
