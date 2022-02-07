@@ -47,8 +47,9 @@ class Order < ApplicationRecord
     update(orderccdate: Date.today)
   end
 
-  def billed?
-    orderccdate.present?
+  def billable?
+    return false if orderccdate.present?
+    return preordercompletedate.present? && delivereddate.present?
   end
 
   # pricing calcs... probably should be calced on item edit and stored on the table row

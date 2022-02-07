@@ -21,7 +21,7 @@ class OrdersController < ApplicationController
   button :edit, 'Edit', default: true
 
   on     :mark_as_billed, redirect: -> { billing_due_path }
-  button :mark_as_billed, 'Bill Credit Card', unless: -> { resource.billed? },
+  button :mark_as_billed, 'Bill Credit Card', if: -> { resource.billable? },
                                               class: 'btn btn-primary',
                                               data: {
                                                 method: :post,
