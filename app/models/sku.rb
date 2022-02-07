@@ -13,9 +13,6 @@ class Sku < ApplicationRecord
 
   has_many :cust_info, class_name: SkuCustInfo.name, foreign_key: :skuid
 
-  validates_presence_of :skumaxtemp
-  validates_presence_of :skumintemp
-
   has_barcode :barcode,
     :outputter => :svg,
     :type => :code_39,
@@ -50,8 +47,8 @@ class Sku < ApplicationRecord
   end
 
   def missing_temperature_values?
-    skumaxtemp.blank? ||
-    skumintemp.blank?
+    skumaxtemp.zero? &&
+    skumintemp.zero?
   end
 
   class VendorDetail < OpenStruct ; end

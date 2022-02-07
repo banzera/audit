@@ -21,6 +21,6 @@
     $(document).ready () ->
       $('#no-temps').click (e) ->
         e.preventDefault()
-        $('#purchase_order_item_sku_attributes_skumintemp').val(0)
-        $('#purchase_order_item_sku_attributes_skumaxtemp').val(0)
+        $('#purchase_order_item_sku_attributes_skumintemp').val('')
+        $('#purchase_order_item_sku_attributes_skumaxtemp').val('')
         stepper.next()
