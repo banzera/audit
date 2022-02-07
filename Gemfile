@@ -70,6 +70,10 @@ gem "colorize", "~> 0.8.1"
 # Profiling and error reporting
 gem 'rack-mini-profiler', '~> 2.0'
 
+# Error reporting/perf monitoring
+gem "sentry-ruby"
+gem "sentry-rails"
+
 # Better console
 gem "pry-rails", "~> 0.3.9"
 

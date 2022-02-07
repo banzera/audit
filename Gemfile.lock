@@ -321,6 +321,14 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
+    sentry-rails (5.0.2)
+      railties (>= 5.0)
+      sentry-ruby-core (~> 5.0.2)
+    sentry-ruby (5.0.2)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      sentry-ruby-core (= 5.0.2)
+    sentry-ruby-core (5.0.2)
+      concurrent-ruby
     sexp_processor (4.16.0)
     simple_form (5.1.0)
       actionpack (>= 5.2)
@@ -409,6 +417,8 @@ DEPENDENCIES
   sass-rails (>= 6)
   scenic (~> 1.5)
   selenium-webdriver
+  sentry-rails
+  sentry-ruby
   simple_form (~> 5.1)
   stimulus-rails (~> 1.0)
   turbolinks (~> 5)
