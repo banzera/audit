@@ -85,6 +85,7 @@ class PreOrder < ApplicationRecord
       WHERE tblPreOrderItems.PreOrderItemCode < 4
         AND tblPreOrderItems.PreOrderID = #{self.preorderid}
         AND tblPreOrderItems.OrderDate ISNULL
+        AND tblPreOrderItems.skuid2 > 0
     SQL
   end
 
