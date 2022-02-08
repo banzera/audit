@@ -31,6 +31,10 @@ class Order < ApplicationRecord
   validates :orderdelivereddate, absence: { message: 'cannot be set if the pre-order is incomplete' },
                                   if: -> { preordercompletedate.blank? }
 
+  before_create do
+    self.ordertaxrate = customer.custtaxrate
+  end
+
   has_barcode :barcode,
     :outputter => :svg,
     :type => :code_39,
