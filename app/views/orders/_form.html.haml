@@ -53,3 +53,8 @@
       - unless local_assigns[:readonly]
         .row
           = simple_form_submit(f)
+
+- content_for :scripts do
+  :coffee
+    $(document).ready () ->
+      $('select').select2()
