@@ -117,5 +117,5 @@ class OrdersController < ApplicationController
       :orderconfirmdate,
     ])
   end
-
+  alias_method :order_params, :permitted_params
 end
