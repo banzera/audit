@@ -13,8 +13,8 @@ class SkuPoHistorySelectionInput < SimpleSelect2Input
 
   def skuid
     @skuid ||= begin
-      for_sku = options[:for_sku]
-      skuid = case for_sku
+      for_sku = options[:for_sku] || :skuid
+      case for_sku
       when Integer then for_sku
       when Symbol then object.send(for_sku) if object.respond_to?(for_sku)
       end
