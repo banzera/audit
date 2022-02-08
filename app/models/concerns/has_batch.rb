@@ -31,8 +31,7 @@ module HasBatch
     end
 
     def batch_date
-      date_attr = batch_opts[:date] || "#{self.class.name.downcase}date"
-      public_send(date_attr).to_s(:yymmdd)
+      public_send(self.class.batch_date_attr).to_s(:yymmdd)
     end
 
     def batch_serial_number
@@ -48,10 +47,16 @@ module HasBatch
   class_methods do
     BATCH_SERIAL_NUMBER_FORMAT = '%02d'.freeze
 
+    def batch_date_attr
+      date_attr = batch_opts[:date] || "#{self.name.downcase}date"
+    end
+
     def has_batch_number(attr=:batch, batch_opts={}, &blk)
       self.batch_attribute = attr
       self.batch_opts      = batch_opts
       self.batch_serial_fx = blk
+
+      validates_presence_of batch_date_attr, on: :create
     end
 
   end
