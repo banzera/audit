@@ -6,3 +6,6 @@ import { application } from "./application"
 
 import PriceController from "./price_controller.coffee"
 application.register("price", PriceController)
+
+import OrderPriceController from "./order_price_controller.coffee"
+application.register("oprice", OrderPriceController)
