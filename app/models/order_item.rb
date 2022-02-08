@@ -15,6 +15,8 @@ class OrderItem < ApplicationRecord
   validates :orderdeliveredquant, numericality: { less_than_or_equal_to: :orderquant,
                                                   message: "must be less than or equal to Quantity" }
 
+  attr_accessor :popriceper
+
   def unfulfilled?
     orderquant != orderdeliveredquant
   end
