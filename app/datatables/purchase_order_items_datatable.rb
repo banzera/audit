@@ -19,6 +19,8 @@ class PurchaseOrderItemsDatatable < Effective::Datatable
   end
 
   datatable do
+    length :all
+
     order :poid, :desc
 
     col :poitemsid,    visible: false, search: false
