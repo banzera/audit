@@ -86,6 +86,7 @@ class PreOrder < ApplicationRecord
         AND tblPreOrderItems.PreOrderID = #{self.preorderid}
         AND tblPreOrderItems.OrderDate ISNULL
         AND tblPreOrderItems.skuid2 > 0
+        AND tblPreOrderItems.poid > 0
     SQL
   end
 
