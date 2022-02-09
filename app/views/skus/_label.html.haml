@@ -1,17 +1,17 @@
 %table.table.table-sm.table-borderless.m-0
   %tr
-    %td(colspan=2)
+    %td.p-0(colspan=2)
       MANF: #{@sku.manf}
-    %td.wpc30(colspan=2)
+    %td.p-0.wpc30(colspan=2)
       %b SKU: #{@sku.id}
     %td
-      &nbsp;
+
   %tr
-    %td(colspan=2)
+    %td.p-0(colspan=2)
       ITEM#: #{@sku.itemno}
 %table.table.table-sm.table-borderless.m-0
   %tr
-    %td.wpc75
+    %td.p-0.wpc70
       DESCRIPTION: #{@sku.description}
     %td.text-right
       Max:
@@ -22,5 +22,5 @@
       %br
       =@sku.min_temp
   %tr
-    %td.text-center(colspan=5)
-      %h1.display-3=@sku.dcloc
+    %td.p-0.text-center(colspan=5)
+      %h1.display-4=@sku.dcloc
