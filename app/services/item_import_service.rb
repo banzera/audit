@@ -8,7 +8,7 @@ class ItemImportService
     @resource = resource
   end
 
-  def import(uploaded_file)
+  def import(uploaded_file, overwrite=true)
     @file = uploaded_file
 
     begin
@@ -27,6 +27,8 @@ class ItemImportService
     last_row  = worksheet.last_row
 
     @resource.transaction do
+      @resource.items.delete_all if overwrite
+
       worksheet.parse(self.class::HEADER_MAP).each_with_index do |row, i|
 
         raise ArgumentError.new(mismatched_error(row[self.class::KEY_FIELD], i)) if row[self.class::KEY_FIELD] != @resource.id
