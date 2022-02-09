@@ -13,8 +13,8 @@
     %meta{:name => 'pdfkit-page-height',   :content => 58.7375}
     %meta{:name => 'pdfkit-margin-top',    :content => 1}
     %meta{:name => 'pdfkit-margin-bottom', :content => 1}
-    %meta{:name => 'pdfkit-margin-left',   :content => 2}
-    %meta{:name => 'pdfkit-margin-right',  :content => 3}
+    %meta{:name => 'pdfkit-margin-left',   :content => 6}
+    %meta{:name => 'pdfkit-margin-right',  :content => 8}
 
     - (@pdf_options || {}).each do |k,v|
       %meta{:name => "pdfkit-#{k}", :content => v.to_s }
