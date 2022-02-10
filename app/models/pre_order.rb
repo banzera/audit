@@ -140,4 +140,9 @@ class PreOrder < ApplicationRecord
       end
     end
   end
+
+  def to_s
+    "Pre-Order #{preorderid}"
+  end
+
 end

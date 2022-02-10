@@ -8,10 +8,6 @@ module HasBatch
 
     before_create :set_batch!
 
-    def to_s
-      self.batch_attribute ? public_send(self.batch_attribute) : super
-    end
-
     def batch_string
       batch_string = [
         *batch_attrs,

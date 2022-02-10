@@ -45,6 +45,10 @@ class PurchaseOrder < ApplicationRecord
     items.unfulfilled.any?
   end
 
+  def to_s
+    "Purchase Order #{poid}"
+  end
+
   private
 
 end
