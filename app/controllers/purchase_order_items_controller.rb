@@ -74,6 +74,8 @@ class PurchaseOrderItemsController < ApplicationController
       :poorderrebatesubmitted,
       :poorderrebate,
       :poorderrebatenotes,
+      :poordersplit,
+      :poorderissue,
       sku_attributes: [
         :id,
         :skumaxtemp,

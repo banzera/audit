@@ -6,7 +6,17 @@
     .col-6
       = f.association :sku, as: :sku_selection
     .col-6
+    .col-6
       = f.input :poorderquant, stimulus: {target: :qty, action: 'change->price#updateQty'}
+    .col-6
+      = f.input :poorderrcvdquant
+    .col-6
+      = f.input :poorderrcvddate, wrapper: :vertical_form
+      = f.input :poorderexpiration, wrapper: :vertical_form
+    .col-6
+      = f.input :poordersplit
+      = f.input :poorderissue
+
     .row
       = invoice_field(local_assigns) do |ff|
         .col-2.offset-1= ff.input :invoice_nontax, calculated: true, stimulus: { action: 'price#updateCalculatedFields', target: 'invoiceNontax' }, as: :decimal
@@ -35,6 +45,10 @@
   .row
     .col-3
       = f.input :poorderrebate
+    .col-3
+      = f.input :poorderrebatedeadline, wrapper: :vertical_form
+    .col-3
+      = f.input :poorderrebatesubmitted, wrapper: :vertical_form
     .col-9
       = f.input :poorderrebatenotes, as: :text
   - unless local_assigns[:readonly]

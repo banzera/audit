@@ -36,6 +36,6 @@ class PurchaseOrdersDatatable < Effective::Datatable
     col :posplrorderno,   visible: true,  search: { as: :string, fuzzy: true }
     col :pochecksentdate, visible: false, search: false, as: :date
 
-    actions_col only: [:show, :receive]
+    actions_col only: [:show]
   end
 end
