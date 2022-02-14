@@ -7,19 +7,25 @@ class PreOrdersDatatable < Effective::Datatable
   filters do
     scope :all, default: true
 
-    scope :analyzed
-    scope :confirmed
-    scope :checked
+    scope :awaiting_analysis
+    # scope :confirmed
+    scope :unconfirmed
+    # scope :checked
+    scope :not_checked
   end
 
   datatable do
     order :preorderdate, :desc
 
-    col :preorderid
+    col :preorderid, label: 'ID'
     col :preorderdate, as: :date, search: false
     col :preorderbatch
     col :customer, action: :show
-    col :vendor
+    col :vendor, visible: false
+    col :preorderanalysisdate, search: false, as: :date, label: "Analysis"
+    col :confirmationdate,     search: false, as: :date, label: "Confirmed"
+    col :preordercheck,        search: false, as: :date, label: "Checked"
+    col :ordercreatedate,      search: false, as: :date, label: "Order Date"
     col :order
 
     actions_col only: :show

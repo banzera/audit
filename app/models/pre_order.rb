@@ -11,9 +11,11 @@ class PreOrder < ApplicationRecord
 
   alias_attribute :notes, :preordernotes
 
-  scope :analyzed,  -> { where.not(preorderanalysisdate: nil)}
-  scope :confirmed, -> { where.not(confirmationdate: nil)}
-  scope :checked,   -> { where.not(preordercheck: nil)}
+  scope :analyzed,          -> { where.not(preorderanalysisdate: nil)}
+  scope :confirmed,         -> { where.not(confirmationdate: nil)}
+  scope :unconfirmed,       -> { where(confirmationdate: nil)}
+  scope :checked,           -> { where.not(preordercheck: nil)}
+  scope :not_checked,       -> { where(preordercheck: nil)}
 
   scope :awaiting_analysis, -> { confirmed.where.not(preorderanalysisdate: nil) }
 
