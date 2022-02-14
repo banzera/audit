@@ -31,7 +31,7 @@ class PreOrdersController < ApplicationController
 
     if items = svc.import(params[:file])
       render json: {
-        message: "Imported #{items.size} items to #{@pre_order}",
+        message: "Imported #{items} items to #{@pre_order}",
            href: pre_order_path(@pre_order)
          }
     else

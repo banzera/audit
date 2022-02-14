@@ -35,7 +35,7 @@ class PurchaseOrdersController < ApplicationController
 
     if items = svc.import(params[:file])
       render json: {
-        message: "Created PO and imported #{items.size} items",
+        message: "Created PO and imported #{items} items",
            href: purchase_order_path(@purchase_order)
          }
     else
