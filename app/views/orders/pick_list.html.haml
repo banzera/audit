@@ -5,7 +5,7 @@
   %table.table.table-sm.table-borderless
     %tr
       %td.w-25
-      %td.w-50.text-center
+      %td.w-50.text-center(colspan=2)
         %h1 PICK LIST
       %td.w-25.text-right
         = Date.today.to_s(:long)
@@ -21,7 +21,7 @@
         %br
         = @customer.city_state_zip
 
-      %td.w-50
+      %td.w-50(colspan=2)
         %h2.text-right Order Number:
       %td.w-25.text-right(rowspan=2)
         %h2.text-left
@@ -30,7 +30,9 @@
         %br
         =@order.orderid
     %tr
-      %td.w-50.align-bottom
+      %td.align-bottom
+        %h4 Labels # ________
+      %td.align-bottom
         %h4.text-center Picker: __________________
 
 
