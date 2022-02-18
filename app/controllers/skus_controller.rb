@@ -40,7 +40,7 @@ class SkusController < ApplicationController
 
   def po_history
     @sku_po_histories = SkuPoHistory.for_sku(@sku)
-    @sku_po_histories = @sku_po_histories.available.in_dc if params[:available_only].present?
+    @sku_po_histories = @sku_po_histories.available_or_in_dc if params[:available_only].present?
 
     respond_to do |format|
       format.html { }

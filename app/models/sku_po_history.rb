@@ -10,6 +10,8 @@ class SkuPoHistory < ApplicationRecord
   scope :available, -> { where('available > 0') }
   scope :in_dc,     -> { where('in_dc > 0') }
 
+  scope :available_or_in_dc, -> { where('available > 0 or in_dc > 0')}
+
   belongs_to :purchase_order, foreign_key: :poid
   belongs_to :sku,            foreign_key: :skuid
 
