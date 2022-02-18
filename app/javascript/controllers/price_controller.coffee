@@ -64,15 +64,15 @@ export default class extends Controller
   updateCalculatedFields: (e) ->
     console.log "Update to calculated fields triggered by: ", (e.target.id if e != undefined)
 
-    pct_of_order = currency(this.priceTarget.value).divide(this.invoiceNontaxTarget.value)
+    pct_of_order = Number(this.priceTarget.value) / Number(this.invoiceNontaxTarget.value)
 
-    this.taxTarget.value   = currency(this.invoiceTaxTarget.value).multiply(pct_of_order)
-    this.shTarget.value    = currency(this.invoiceShTarget.value).multiply(pct_of_order)
-    this.feesTarget.value  = currency(this.invoiceFeesTarget.value).multiply(pct_of_order)
+    this.taxTarget.value   = currency(Number(this.invoiceTaxTarget.value)  * pct_of_order)
+    this.shTarget.value    = currency(Number(this.invoiceShTarget.value)   * pct_of_order)
+    this.feesTarget.value  = currency(Number(this.invoiceFeesTarget.value) * pct_of_order)
 
-    this.taxPerTarget.value  = currency(this.taxTarget.value).divide(this.qtyValue)
-    this.shPerTarget.value   = currency(this.shTarget.value).divide(this.qtyValue)
-    this.feesPerTarget.value = currency(this.feesTarget.value).divide(this.qtyValue)
+    this.taxPerTarget.value  = currency(Number(this.taxTarget.value)  / this.qtyValue)
+    this.shPerTarget.value   = currency(Number(this.shTarget.value)   / this.qtyValue)
+    this.feesPerTarget.value = currency(Number(this.feesTarget.value) / this.qtyValue)
 
     this.updateTotals()
     this.flashFields('.calculated')
