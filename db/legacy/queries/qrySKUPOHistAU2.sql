@@ -12,17 +12,12 @@ SELECT qrySKUPOHistAU.PODate,
        qrySKUPOHistAU.POID,
        Sum(tblOrderItems.OrderQuant) AS SumOfOrderQuant,
        Sum(tblOrderItems.OrderDeliveredQuant) AS SumOfOrderDeliveredQuant,
-       poorderrcvdquant - COALESCE(Sum(tblOrderItems.OrderQuant), 0)          as available,
+       poorderquant     - COALESCE(Sum(tblOrderItems.OrderQuant), 0)          as available,
        poorderrcvdquant - COALESCE(Sum(tblOrderItems.OrderDeliveredQuant), 0) as in_dc,
        qrySKUPOHistAU.POOrderExpiration
 FROM qrySKUPOHistAU
 LEFT JOIN tblOrderItems ON (qrySKUPOHistAU.POID = tblOrderItems.POID)
 AND (qrySKUPOHistAU.SKUID = tblOrderItems.SKUID)
- -- LATERAL(
- --    SELECT
- --       poorderrcvdquant - COALESCE(sumoforderdeliveredquant, 0),
-
- --    ) AS s1(in_dc, available)
 GROUP BY qrySKUPOHistAU.PODate,
          qrySKUPOHistAU.SKUID,
          qrySKUPOHistAU.SplrID2,

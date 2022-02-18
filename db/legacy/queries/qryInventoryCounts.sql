@@ -1,4 +1,4 @@
-﻿create view qryInventoryCounts as
+﻿create or replace view qryInventoryCounts as
 
 WITH
 qryPOInventoryCounts AS (
@@ -57,8 +57,8 @@ SELECT qryPOInventoryCounts.SKUID,
        COALESCE(qryOrderInventoryCounts.OrdQuant,0) AS Sold,
        COALESCE(qryPOInventoryCounts.POTotal,0) AS Bought
  FROM tblSKU
- JOIN qryOrderInventoryCounts ON tblSKU.SKUID = qryOrderInventoryCounts.SKUID
- JOIN qryPOInventoryCounts    ON tblSKU.SKUID = qryPOInventoryCounts.SKUID,
+ LEFT JOIN qryOrderInventoryCounts ON tblSKU.SKUID = qryOrderInventoryCounts.SKUID
+ LEFT JOIN qryPOInventoryCounts    ON tblSKU.SKUID = qryPOInventoryCounts.SKUID,
   LATERAL(
     SELECT
       qryPOInventoryCounts.POTotal     - COALESCE(qryOrderInventoryCounts.OrdQuant,0),
