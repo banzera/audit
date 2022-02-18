@@ -18,7 +18,7 @@
               #general.tab-pane.fade.active.show{"aria-labelledby" => "general-tab", :role => "tabpanel"}
                 .row.post
                   .col-4
-                    = f.input :pobatch, wrapper: :vertical_form
+                    = f.input :pobatch, wrapper: :vertical_form, disabled: true
                     = f.input :podate, wrapper: :vertical_form
                   .col-4
                     = f.association :supplier1, wrapper: :vertical_form

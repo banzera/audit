@@ -6,7 +6,7 @@ module HasBatch
     class_attribute :batch_opts
     class_attribute :batch_serial_fx
 
-    before_create :set_batch!
+    before_save :set_batch!, if: :batch_needs_update?
 
     def batch_string
       batch_string = [
@@ -35,8 +35,22 @@ module HasBatch
       BATCH_SERIAL_NUMBER_FORMAT % (x+1)
     end
 
+    def batch_needs_update?
+      date_changed  = self.changed_attributes.include?(batch_opts[:date].to_s)
+      attrs_changed = (self.changed_attributes.keys & batch_attribute_names).present?
+
+      date_changed || attrs_changed
+    end
+
     def set_batch!
       public_send("#{self.batch_attribute}=", batch_string)
+    end
+
+    private
+
+    def batch_attribute_names
+      syms = Array(batch_opts[:attrs]).collect {|a| a.split('.').first.to_sym }
+      fks  = syms.collect {|a| association(a).options[:foreign_key].to_s }
     end
   end
 
