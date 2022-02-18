@@ -1,7 +1,8 @@
 class SkuPoHistorySelectionInput < SimpleSelect2Input
 
   def default_value
-    SkuPoHistory.for_po(object.poid).for_sku(object.skuid).first
+    skuid = options[:for_sku] || object.skuid
+    SkuPoHistory.for_po(object.poid).for_sku(skuid).first
   end
 
   def default_value_text
