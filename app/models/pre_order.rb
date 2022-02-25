@@ -123,9 +123,9 @@ class PreOrder < ApplicationRecord
   end
 
   def order_update!
-    return unless order.present?
-
     transaction do
+      create_order! unless order.present?
+
       # create order items
       PreOrder.connection.execute create_order_items_sql
 

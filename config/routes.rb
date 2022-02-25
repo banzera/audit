@@ -85,14 +85,11 @@ Rails.application.routes.draw do
     resources :pre_order_items, except: [:destroy], path: :items
 
     member do
-      post :create_order
       post :order_update
       post :resend_confirmation
 
       get :confirmation
       get :confirmation_preview
-
-
     end
 
   end

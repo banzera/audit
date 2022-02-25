@@ -12,8 +12,6 @@ class PreOrdersController < ApplicationController
   button :new_items, 'Add or Upload Items'
   button :resend_confirmation, false #'Resend Confirmation Email'
 
-  submit :create_order, false
-  button :create_order, "Create Order", unless: -> { resource.order.present? }, method: :post, remote: true, 'data-confirm': "REally?"
   submit :order_update, false
   # button :order_update, "Run Order Update", unless: -> { resource.order.blank? }
 
