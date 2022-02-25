@@ -12,3 +12,5 @@ $.fn.select2.defaults.set('placeholder', 'Select...')
 $(document).on 'select2:open', () =>
   document.querySelector('.select2-search__field').focus()
 
+$(document).ready () ->
+  $('select').not('.select2-hidden-accessible').select2()

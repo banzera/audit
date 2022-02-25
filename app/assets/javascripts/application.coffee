@@ -69,6 +69,8 @@
 # require_self
 
 $(document).on 'turbolinks:load', ->
+  $('select').not('.select2-hidden-accessible').select2()
+
   $('#control-sidebar').click ->
     $('body').toggleClass('dark-mode')
     $('.main-header.navbar').toggleClass('navbar-dark')
