@@ -1,0 +1,28 @@
+.content
+  = default_resource_form(wrapper: :vertical_form, read_only: local_assigns[:readonly]) do |f|
+    .row
+      .col-lg-6.offset-3
+        .card.card-primary.card-outline
+          .card-header
+            %h3.card-title General
+            .card-tools
+              .button.btn.btn-tool{type: :button, 'data-card-widget': :collapse, title: :collapse}
+                %i.fas.fa-minus
+          .card-body
+            =f.association :sku, as: :sku_selection
+            =f.association :customer
+            .row
+              .col-1
+                =f.input :skuonly, wrapper: :vertical_form
+              .col-6
+                =f.input :skuonlydate, wrapper: :vertical_form
+            .row
+              .col-1
+                =f.input :skunever, wrapper: :vertical_form
+              .col-6
+                =f.input :skuneverdate, wrapper: :vertical_form
+            =f.input :skucustnotes
+
+    - unless local_assigns[:readonly]
+      .row
+        = simple_form_submit(f)

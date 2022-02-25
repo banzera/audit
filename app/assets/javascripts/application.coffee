@@ -68,6 +68,9 @@
 #
 # require_self
 
+$(document).ready () ->
+  $('[data-toggle="tooltip"]').tooltip()
+
 $(document).on 'turbolinks:load', ->
   $('select').not('.select2-hidden-accessible').select2()
 

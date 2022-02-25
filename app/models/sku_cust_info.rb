@@ -11,4 +11,16 @@ class SkuCustInfo < ApplicationRecord
   scope :only_for,  -> (sku) { always.where(skuid: sku) }
   scope :never_for, -> (sku) { never.where(skuid: sku) }
 
+  def to_s
+    verb = skuonly? ? "prefers" : "refuses"
+
+    detail = if customer.present? && sku.present?
+      ": #{customer.custbusinessname} #{verb} #{sku}"
+    else
+      ""
+    end
+
+    "SKU Customer Info#{detail}"
+  end
+
 end

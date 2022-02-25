@@ -63,8 +63,11 @@ en:
         one: SKU
         other: SKUs
       sku_class:
-        one: Class
-        other: Classes
+        one: SKU Class
+        other: SKU Classes
+      sku_cust_info:
+        one: SKU Customer Info
+        other: SKU Customer Infos
       supplier:
         one: Supplier
         other: Suppliers
@@ -300,6 +303,16 @@ en:
         tsv: Text Search Vector (meta)
       sku_class:
         skuclassdesc: Description
+      sku_cust_info:
+        skucustinfoid: ID
+        skuid: SKU ID
+        sku: SKU
+        custid: Customer
+        skuonly: Only
+        skunever: Never
+        skuonlydate: Only Date
+        skuneverdate: Never Date
+        skucustnotes: Notes
       supplier:
         splrname: Code
         splrfirst: First Name

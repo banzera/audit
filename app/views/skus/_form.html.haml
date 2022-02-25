@@ -53,11 +53,11 @@
             %p.card-text
               %table.table.table-compact
                 - SkuCustInfo.never_for(@sku).each do |ci|
-                  %tr
+                  %tr{ data: { toggle: :tooltip }, title: ci.skucustnotes }
                     %th=ci.customer.custname
                     %td=ci.customer.custlast
                     %td=ci.customer.custbusinessname
-                    %td=ci.skuneverdate
+                    %td=ci.skuneverdate&.to_date
         .card.card-success.card-outline
           .card-header
             %h3.card-title SKU Customer Only
@@ -68,11 +68,11 @@
             %p.card-text
               %table.table.table-compact
                 - SkuCustInfo.only_for(@sku).each do |ci|
-                  %tr
+                  %tr{ data: { toggle: :tooltip }, title: ci.skucustnotes }
                     %th=ci.customer.custname
                     %td=ci.customer.custlast
                     %td=ci.customer.custbusinessname
-                    %td=ci.skualwaysdate
+                    %td=ci.skuonlydate&.to_date
 
     - unless local_assigns[:readonly]
       .row

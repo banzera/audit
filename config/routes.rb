@@ -118,6 +118,8 @@ Rails.application.routes.draw do
 
   resources :sku_classes
 
+  resources :sku_cust_infos
+
   resources :skus, concerns: [:auditable, :has_label, :receivable] do
     collection do
       get  :export
@@ -129,8 +131,6 @@ Rails.application.routes.draw do
     member do
       get :po_history
     end
-
-    resources :sku_cust_infos, shallow: true
   end
 
   resources :sku_po_histories, only: [:index]
