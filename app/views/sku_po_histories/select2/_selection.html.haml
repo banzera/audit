@@ -10,7 +10,4 @@ Available
 %span.badge{class: po.available.positive? ? 'bg-success' : 'bg-warning'}=po.available
 |
 %span
-  - if date = po.expiration_date&.to_date
-    = date
-  - else
-    No Expiration
+  = number_to_currency(po.poorderpriceper)

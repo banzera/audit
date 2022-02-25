@@ -7,7 +7,7 @@
     %br
     %span
       %b SKUID: #{po.skuid}
-  .col-7
+  .col-5
     %span In DC: #{po.in_dc}
     %br
     %span Avaliable: #{po.available}
@@ -18,6 +18,9 @@
         = date
       - else
         N/A
+  .col-2
+    %span
+      = number_to_currency(po.poorderpriceper)
   .col-2
     .text-right
       %a.btn.btn-blocka.btn-sm.btn-secondary{:href => purchase_order_path(po.poid), :target => "_po"}
