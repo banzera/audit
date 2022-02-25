@@ -8,7 +8,7 @@ class PreOrderItem < ApplicationRecord
   belongs_to :pre_order,      class_name: 'PreOrder',      foreign_key: :preorderid, inverse_of: :items
   belongs_to :sku1,           class_name: 'Sku',           foreign_key: :skuid1
   belongs_to :sku2,           class_name: 'Sku',           foreign_key: :skuid2          , optional: true
-  belongs_to :code,           class_name: 'PreOrderCode',  foreign_key: :preorderitemcode, optional: true
+  belongs_to :code,           class_name: 'PreOrderCode',  foreign_key: :preorderitemcode #, optional: true
   belongs_to :purchase_order, class_name: 'PurchaseOrder', foreign_key: :poid            , optional: true
 
   alias_attribute :requested_qty, :orderquant1
