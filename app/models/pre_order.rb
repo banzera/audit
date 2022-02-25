@@ -99,7 +99,7 @@ class PreOrder < ApplicationRecord
       WHERE OrderDate ISNULL
         AND PreOrderItemCode != 4
         AND PreOrderID = #{self.preorderid}
-        AND (POID != 0 OR POID ISNULL)
+        AND (POID != 0 OR POID NOTNULL)
     SQL
   end
 
