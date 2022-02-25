@@ -22,9 +22,9 @@
   .row
     .col-1
       = f.input :preorderurgent, wrapper: :vertical_form
-    .col-1
-      = f.association :code, required: !creating_resource?
-    .col-10
+    .col-3
+      = f.association :code
+    .col-8
       = f.input :notes
 
   - unless local_assigns[:readonly]
