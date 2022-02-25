@@ -6,14 +6,14 @@ class CustomersDatatable < Effective::Datatable
 
   datatable do
     col :custname
-    col :custbusinessname,         visible: false
+    col :custbusinessname,        visible: true
     col :custfirst
     col :custlast
     col :custsal,                 visible: false
     col :custtitle,               visible: false
     col :custaddress,             visible: false
-    col :custcity,                visible: false
-    col :custst,                  visible: false
+    col :custcity,                visible: true
+    col :custst,                  visible: true
     col :custzip,                 visible: false
     col :custphone,               visible: false
     col :custfax,                 visible: false
