@@ -3,7 +3,10 @@ class PreOrderItemsDatatable < Effective::Datatable
   collection do
     pre_order = attributes[:pre_order]
     scope     = pre_order.present? ? pre_order.items : PreOrderItem.none
-    scope.order(preorderitemsid: :asc)
+
+    scope.joins(:sku1)
+         .includes(:sku1)
+         .order(preorderitemsid: :asc)
   end
 
   filters do
@@ -24,11 +27,9 @@ class PreOrderItemsDatatable < Effective::Datatable
     col :code do |item| item.code&.preordercode end
     col :orderquant1,      label: 'Qty 1'
     col :orderquant2,      label: 'Qty 2'
-    col :orderpriceper1,   as: :currency, sort: false, label: 'Price @ 1'
-    col :orderpriceper2,   as: :currency, sort: false, label: 'Price @ 2'
-    col :orderpricetotal1, as: :currency, sort: false, label: 'Price Total 1'
-    col :orderpricetotal2, as: :currency, sort: false, label: 'Price Total 2'
-    col :orderaupriceper,  as: :currency, sort: false, label: 'AU Price @'
+    col 'sku1.manf'
+    col 'sku1.itemno',      label: "Item No"
+    col 'sku1.skudesc',     label: "Description"
     col :preordernotes, visible: false
     col :preorderurgent, partial: 'application/dt/boolean', label: 'Urgent', sort: false
 
