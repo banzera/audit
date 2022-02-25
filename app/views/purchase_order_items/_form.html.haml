@@ -47,9 +47,9 @@
       .col-2.offset-1= f.input :poordertotal,    calculated: true, stimulus: { target: :total }
       .col-2.offset-1= f.input :poordertotalper, calculated: true, stimulus: { target: :totalPer }
   .row
-    .col-3
-      = f.input :poorderrebate
-    .col-9
+    .col-1
+      = f.input :poorderrebate, wrapper: :vertical_form
+    .col-11
       = f.input :poorderrebatenotes
   - unless local_assigns[:readonly]
     .row
