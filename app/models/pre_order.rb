@@ -21,6 +21,8 @@ class PreOrder < ApplicationRecord
 
   validates :preorderdate, presence: true
 
+  after_save :set_order_confirmed_date
+
   has_batch_number :preorderbatch, date: :preorderdate, prefix: 'P-', attrs: 'customer.custname' do
     PreOrder
       .where("DATE(preorderdate) = ?", self.preorderdate)
@@ -36,6 +38,14 @@ class PreOrder < ApplicationRecord
       )
 
     save
+  end
+
+  def set_order_confirmed_date
+    return unless self.confirmationdate.present? &&
+                  self.order.present?
+
+    Rails.logger.debug "Setting order confirmationdate for #{self.order}"
+    self.order.update(orderconfirmdate: self.confirmationdate)
   end
 
   # pricing calcs... probably should be calced on item edit and stored on the table row
