@@ -17,7 +17,7 @@ class PurchaseOrdersDatatable < Effective::Datatable
   end
 
   datatable do
-    order :podate, :desc
+    order :poid, :desc
 
     col :poid
     col :podate,          visible: true,  search: false, as: :date

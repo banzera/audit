@@ -15,7 +15,7 @@ class PreOrdersDatatable < Effective::Datatable
   end
 
   datatable do
-    order :preorderdate, :desc
+    order :preorderid, :desc
 
     col :preorderid, label: 'ID'
     col :preorderdate, as: :date, search: false

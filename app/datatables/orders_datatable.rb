@@ -10,7 +10,7 @@ class OrdersDatatable < Effective::Datatable
   end
 
   datatable do
-    order :orderdate, :desc
+    order :orderid, :desc
 
     col :orderid
     col :orderdate, as: :date
