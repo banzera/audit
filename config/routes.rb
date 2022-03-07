@@ -67,6 +67,7 @@ Rails.application.routes.draw do
       get   :split
       patch :split
       post :mark_as_delivered
+      post :mark_has_issue
       post :confirm_picked
     end
   end
@@ -123,10 +124,14 @@ Rails.application.routes.draw do
       get  :lookup
       put  :search
       post :search
+
+      get :with_issues
     end
 
     member do
       get :po_history
+      post :resolve_issue
+      post :mark_has_issue
     end
   end
 

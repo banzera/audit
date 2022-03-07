@@ -23,6 +23,17 @@ class SkusController < ApplicationController
     end
   end
 
+  def with_issues
+    @datatable = SkuIssuesDatatable.new
+    @dt_opts = {
+      buttons:    false,
+      pagination: false,
+      entries:    false,
+    }
+
+    render :index
+  end
+
   def receive
     @purchase_orders = PurchaseOrder.for_sku_id(@sku).order('podate desc')
   end

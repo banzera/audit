@@ -42,6 +42,10 @@ class OrderItem < ApplicationRecord
     save
   end
 
+  def mark_has_issue!
+    sku.update(has_issue: true)
+  end
+
   def split!
     # self will have the user's attributes set
     # need to duplicate item with these attributes,

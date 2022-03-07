@@ -1,6 +1,10 @@
 .content
   = default_resource_form(read_only: local_assigns[:readonly]) do |f|
     .row
+      -if @sku.has_issue?
+        .col-12
+          .callout.callout-danger
+            %h5 This SKU currently is in ISSUE status
       .col-lg-6
         .card.card-primary.card-outline
           .card-header

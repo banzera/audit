@@ -1,4 +1,5 @@
 - skuid = resource.skuid
+- btn_class = resource.sku.has_issue? ? ' bg-danger' : ''
 
 - if skuid.positive?
-  = link_to skuid, sku_path(skuid), title: 'Show', class: 'btn btn-sm btn-outline-secondary '
+  = link_to skuid, sku_path(skuid), title: 'Show', class: 'btn btn-sm btn-outline-secondary' + btn_class

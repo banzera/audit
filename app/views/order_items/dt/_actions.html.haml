@@ -9,4 +9,5 @@
   %button.btn.btn-sm.btn-default.dropdown-toggle.dropdown-icon{"aria-expanded" => "false", "data-toggle" => "dropdown", :type => "button"}
     %span.sr-only Toggle Dropdown
   .dropdown-menu{:role => "menu", :style => ""}
-    %a.dropdown-item.text-danger{data: {confirm: "Really delete #{resource}?", method: :delete}, href: order_item_path(resource), title: "Delete #{resource}"} Delete
+    %a.dropdown-item.text-danger{data: {confirm: '', method: :post, remote: true}, href: mark_has_issue_order_item_path(resource), title: "Has an issue"}
+      = fa_icon 'exclamation-circle', text: 'Has Issue'

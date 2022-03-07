@@ -20,6 +20,7 @@ class Sku < ApplicationRecord
 
   scope :in_dc,      -> { where(skuid: InventoryCounts.in_dc.pluck(:skuid)) }
   scope :in_transit, -> { where(skuid: InventoryCounts.in_transit.pluck(:skuid)) }
+  scope :has_issue,  -> { where(has_issue: true) }
 
   pg_search_scope :search,
                   against: :everything,
@@ -41,6 +42,14 @@ class Sku < ApplicationRecord
   alias_attribute :min_temp, :skumintemp
   alias_attribute :max_temp, :skumaxtemp
   alias_attribute :description, :skudesc
+
+  def mark_has_issue!
+    update(has_issue: true)
+  end
+
+  def resolve_issue!
+    update(has_issue: false)
+  end
 
   def has_location?
     DC_LOC_NONE != dcloc
