@@ -11,7 +11,6 @@ class OrderItem < ApplicationRecord
 
   scope :unfulfilled, -> { where('orderquant != orderdeliveredquant') }
 
-  validates :orderquant,          numericality: { greater_than_or_equal_to: 0 }
   validates :orderdeliveredquant, numericality: { less_than_or_equal_to: :orderquant,
                                                   message: "must be less than or equal to Quantity" }
 
