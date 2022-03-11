@@ -14,7 +14,7 @@
       = f.input :orderpricetotal2
   .row.post
     .col-4
-      = f.association :purchase_order, disabled: true, collection: []
+      = f.association :purchase_order, as: :sku_po_history_selection, for_sku: :skuid2
     .col-4
       = f.input :orderaupriceper
     .col-4
@@ -32,8 +32,5 @@
       = simple_form_submit(f)
 
 - content_for :scripts do
-  = javascript_include_tag "linked_sku_po_selects"
-
   :coffee
-    $(document).ready () ->
-      new LinkedSkuPoSelects('#pre_order_item_skuid2', '#pre_order_item_poid')
+    $(document).ready () -> new LinkedSkuPoSelects('#pre_order_item_skuid2', '#pre_order_item_poid')

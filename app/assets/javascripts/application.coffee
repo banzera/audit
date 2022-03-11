@@ -65,6 +65,7 @@
 #= require flashes
 #= require select2_defaults
 #= require tempus_dominus_defaults
+#= require linked_sku_po_selects
 #
 # require_self
 

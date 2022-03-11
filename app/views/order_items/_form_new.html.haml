@@ -6,9 +6,9 @@
   .row.post
     .col-6
       = f.association :sku, as: :sku_selection
-      = f.association :purchase_order, disabled: true, collection: []
       = f.input :orderquant, stimulus: {target: :qty, action: 'oprice#updateQty'}
       = f.input :orderitemsurgent
+      = f.association :purchase_order, as: :sku_po_history_selection, for_sku: :skuid
     .col-6
       = f.input :popriceper, label: 'PO Price Per + 20%', as: :currency
       = f.input :orderpriceper,   stimulus: { target: 'pricePer', action: 'oprice#updatePrice' }, as: :decimal

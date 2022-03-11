@@ -22,8 +22,5 @@
       = simple_form_submit(f)
 
 - content_for :scripts do
-  = javascript_include_tag "linked_sku_po_selects"
-
   :coffee
-    $(document).ready () ->
-      new LinkedSkuPoSelects('#order_item_skuid', '#order_item_poid')
+    $(document).ready () -> new LinkedSkuPoSelects('#order_item_skuid', '#order_item_poid')
