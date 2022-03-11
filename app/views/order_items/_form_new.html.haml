@@ -6,9 +6,12 @@
   .row.post
     .col-6
       = f.association :sku, as: :sku_selection
-      = f.input :orderquant, stimulus: {target: :qty, action: 'oprice#updateQty'}
-      = f.input :orderitemsurgent
       = f.association :purchase_order, as: :sku_po_history_selection, for_sku: :skuid
+      .row
+        .col-5
+          = f.input :orderquant, wrapper: :vertical_form, stimulus: {target: :qty, action: 'oprice#updateQty'}
+        .col-2
+          = f.input :orderitemsurgent, wrapper: :vertical_form
     .col-6
       = f.input :popriceper, label: 'PO Price Per + 20%', as: :currency
       = f.input :orderpriceper,   stimulus: { target: 'pricePer', action: 'oprice#updatePrice' }, as: :decimal
@@ -22,8 +25,6 @@
       = simple_form_submit(f)
 
 - content_for :scripts do
-  = javascript_include_tag "linked_sku_po_selects"
-
   :coffee
     $(document).ready () ->
       new LinkedSkuPoSelects('#order_item_skuid', '#order_item_poid')

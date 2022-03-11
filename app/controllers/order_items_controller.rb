@@ -13,6 +13,8 @@ class OrderItemsController < ApplicationController
   submit :split, 'Split', default: true, only: [:split], redirect: -> { order_path(resource.order) }
   submit :save, 'Save', except: [:split]
 
+  button :split, false
+
   before_action :duplicate_resource, only: [:split]
   after_error only: [:split]  do
     @order_item.reload

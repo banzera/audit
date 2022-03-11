@@ -3,10 +3,14 @@
     .col-6
       = f.association :sku, as: :sku_selection
       = f.association :purchase_order, as: :sku_po_history_selection, available_only: true
-      = f.input :orderquant
       = f.input :orderitemsdelivereddate, as: :date
-      = f.input :orderdeliveredquant
-      = f.input :orderitemsurgent
+      .row
+        .col-5
+          = f.input :orderquant, wrapper: :vertical_form
+        .col-5
+          = f.input :orderdeliveredquant, wrapper: :vertical_form
+        .col-2
+          = f.input :orderitemsurgent, wrapper: :vertical_form
     .col-6
       = f.input :orderpriceper, as: :currency
       = f.input :orderpricetotal, as: :currency

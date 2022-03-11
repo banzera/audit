@@ -171,6 +171,7 @@ en:
         orderitemsdelivereddate: Items Delivered Date
         orderdeliveredquant: Delivered Qty
         orderretailtotal: Retail Total
+        orderitemsurgent: Urgent
       order_payment:
         opmtsid: ID
         opmtsdate: Date
