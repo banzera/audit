@@ -68,10 +68,7 @@ class PreOrder < ApplicationRecord
         OrderID, SKUID, OrderQuant,
         OrderPricePer, OrderPriceTotal,
         OrderTaxRate,  OrderTaxTotal,
-        OrderDeliveryCostTotal,
-        OrderFeesTotal,
         OrderGrandTotal,
-        orderdeliveredquant,
         POID
       )
 
@@ -83,10 +80,7 @@ class PreOrder < ApplicationRecord
         tblPreOrderItems.orderpricetotal2,
         tblCustomer.CustTaxRate,
         round((orderpricetotal2 * CustTaxRate)::numeric, 2) as tax_total,
-        0 as delivery_cost,       -- this is only while the order item OrderDeliveryCostTotal doesn't default to 0
-        0 as fees,                -- this is only while the order item OrderFeesTotal doesn't default to 0
         round((orderpricetotal2 + round((orderpricetotal2 * CustTaxRate)::numeric, 2))::numeric, 2) as OrderGrandTotal,
-        0 as orderdeliveredquant,  -- this is only while the order item orderdeliveredquant doesn't default to 0
        CASE tblPreOrderItems.POID
        WHEN 0 THEN NULL
        ELSE tblPreOrderItems.POID
@@ -109,7 +103,7 @@ class PreOrder < ApplicationRecord
       WHERE OrderDate ISNULL
         AND PreOrderItemCode != 4
         AND PreOrderID = #{self.preorderid}
-        AND (POID != 0 OR POID NOTNULL)
+        AND poid > 0
     SQL
   end
 
