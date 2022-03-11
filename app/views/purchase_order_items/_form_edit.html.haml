@@ -13,9 +13,10 @@
     .col-6
       = f.input :poorderrcvddate, wrapper: :vertical_form
       = f.input :poorderexpiration, wrapper: :vertical_form
-    .col-6
-      = f.input :poordersplit
-      = f.input :poorderissue
+    .col-2
+      = f.input :poordersplit, wrapper: :vertical_form
+    .col-2
+      = f.input :poorderissue, wrapper: :vertical_form
 
     .row
       = invoice_field(local_assigns) do |ff|
@@ -44,7 +45,7 @@
       .col-2.offset-1= f.input :poordertotalper, stimulus: { target: :totalPer }
   .row
     .col-3
-      = f.input :poorderrebate
+      = f.input :poorderrebate, wrapper: :vertical_form
     .col-3
       = f.input :poorderrebatedeadline, wrapper: :vertical_form
     .col-3
