@@ -50,13 +50,14 @@ class SkusController < ApplicationController
   end
 
   def po_history
-    @sku_po_histories = SkuPoHistory.for_sku(@sku)
+    @sku_po_histories = SkuPoHistory.for_sku(@sku).order(:poid)
+    @sku_po_histories = @sku_po_histories.where(poid: select2_search_term) if select2_search_term?
     @sku_po_histories = @sku_po_histories.available_or_in_dc if params[:available_only].present?
 
     respond_to do |format|
       format.html { }
       format.json {
-        @sku_po_histories = @sku_po_histories.limit(10)
+        @sku_po_histories = @sku_po_histories
         render 'sku_po_histories/index'
       }
     end

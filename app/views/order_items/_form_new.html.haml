@@ -27,7 +27,7 @@
 - content_for :scripts do
   :coffee
     $(document).ready () ->
-      new LinkedSkuPoSelects('#order_item_skuid', '#order_item_poid')
+      new LinkedSkuPoSelects('#order_item_skuid', '#order_item_poid', false)
 
       $('#order_item_poid').on 'select2:select', (e) ->
         price = currency(e.params.data.price)
