@@ -1,2 +1,7 @@
-= nav_dropdown 'Shipping' do
-  = nav_link_to fa_icon('star', text: 'Outstanding Orders'), outstanding_orders_path
+- link = capture_haml do
+  = fa_icon('star', text: 'Outstanding Orders')
+  - order_count = OrderItemOutstanding.known_location.no_issues.select(:orderid).distinct(:orderid).count
+  - if order_count.positive?
+    %span.badge.badge-danger.navbar-badge=order_count
+
+= nav_link_to link, outstanding_orders_path

@@ -63,10 +63,12 @@ class OrdersController < ApplicationController
 
     @datatable = OrderItemOutstandingDatatable.new
     @items     = OrderItemOutstanding.known_location
+                                     .no_issues
                                      .order(:orderid, :manf, :skudesc)
     @items_a = @items.to_a
 
-    @customers = OrderItemOutstanding.known_location.limit(100)
+    @customers = OrderItemOutstanding.known_location
+                                     .no_issues
                                      .distinct(:custid)
                                      .order(:custname)
                                      .pluck(:custid, :custbusinessname, :custname)

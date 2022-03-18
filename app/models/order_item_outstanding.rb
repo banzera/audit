@@ -9,6 +9,7 @@ class OrderItemOutstanding < ApplicationRecord
   # scope :awaiting_confirmation, -> { where(orderconfirmdate: nil).where.not(preordercompletedate: nil) }
   # scope :outstanding, -> { all }
 
+  scope :no_issues,        -> { where.not(has_issue: true) }
   scope :known_location,   -> { where.not(dcloc: 'N/A') }
   scope :unknown_location, -> { where(dcloc: 'N/A') }
   scope :in_stock,         -> { where('dccurquant > 0') }
