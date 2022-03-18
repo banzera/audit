@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_05_032328) do
+ActiveRecord::Schema.define(version: 2022_03_16_145526) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -202,7 +203,7 @@ ActiveRecord::Schema.define(version: 2022_01_05_032328) do
     t.datetime "orderdateinvoiced"
     t.datetime "orderdatepaid"
     t.string "orderpaymentmethod", limit: 255
-    t.float "orderpaymentamount"
+    t.float "orderpaymentamount", default: 0.0
     t.text "ordernotes"
     t.datetime "orderccdate"
     t.datetime "preordercompletedate"
@@ -224,16 +225,16 @@ ActiveRecord::Schema.define(version: 2022_01_05_032328) do
     t.integer "poid"
     t.integer "orderid"
     t.integer "orderquant"
-    t.float "orderpriceper"
-    t.float "orderpricetotal"
+    t.float "orderpriceper", default: 0.0
+    t.float "orderpricetotal", default: 0.0
     t.float "ordertaxrate"
-    t.float "ordertaxtotal"
-    t.float "orderdeliverycosttotal"
-    t.float "orderfeestotal"
-    t.float "ordergrandtotal"
+    t.float "ordertaxtotal", default: 0.0
+    t.float "orderdeliverycosttotal", default: 0.0
+    t.float "orderfeestotal", default: 0.0
+    t.float "ordergrandtotal", default: 0.0
     t.datetime "orderitemsdelivereddate"
-    t.integer "orderdeliveredquant"
-    t.float "orderretailtotal"
+    t.integer "orderdeliveredquant", default: 0
+    t.float "orderretailtotal", default: 0.0
     t.boolean "orderitemsurgent", default: false, null: false
     t.index ["orderid"], name: "index_tblorderitems_on_orderid"
     t.index ["poid"], name: "index_tblorderitems_on_poid"
@@ -313,10 +314,16 @@ ActiveRecord::Schema.define(version: 2022_01_05_032328) do
     t.datetime "podatepaid"
     t.string "pomethodpaid", limit: 255
     t.string "popaymentno", limit: 255
-    t.float "poamountpaid"
+    t.float "poamountpaid", default: 0.0
     t.text "ponotes"
     t.string "posplrorderno", limit: 255
     t.datetime "pochecksentdate"
+    t.decimal "invoice_nontax"
+    t.decimal "invoice_tax"
+    t.decimal "invoice_sh"
+    t.decimal "invoice_fees"
+    t.decimal "invoice_subtotal"
+    t.decimal "invoice_total"
     t.index ["poamountpaid"], name: "index_tblpurchaseorder_on_poamountpaid"
     t.index ["pobatch"], name: "index_tblpurchaseorder_on_pobatch", unique: true
     t.index ["podatepaid"], name: "index_tblpurchaseorder_on_podatepaid"
@@ -377,11 +384,11 @@ ActiveRecord::Schema.define(version: 2022_01_05_032328) do
     t.string "itemno", limit: 255
     t.string "skudesc", limit: 255
     t.string "unitweight", limit: 255
-    t.integer "categoryid"
+    t.integer "categoryid", default: 3
     t.integer "skuminunits"
     t.string "skuminunitstype", limit: 255
-    t.string "dcloc", limit: 255
-    t.integer "skuminpercs"
+    t.string "dcloc", limit: 255, default: "N/A"
+    t.integer "skuminpercs", default: 1
     t.integer "vno01"
     t.string "vsku01", limit: 255
     t.text "vhl01"
@@ -416,10 +423,11 @@ ActiveRecord::Schema.define(version: 2022_01_05_032328) do
     t.integer "skuhighpricevno"
     t.datetime "skuhighpricedate"
     t.integer "skuclassid"
-    t.integer "skumaxtemp"
-    t.integer "skumintemp"
+    t.integer "skumaxtemp", default: 0
+    t.integer "skumintemp", default: 0
     t.text "skunotes"
     t.tsvector "tsv"
+    t.boolean "has_issue", default: false
     t.index ["itemno"], name: "index_tblsku_on_itemno", unique: true
     t.index ["sku"], name: "index_tblsku_on_sku", unique: true
     t.index ["skuclassid"], name: "index_tblsku_on_skuclassid"
@@ -543,37 +551,6 @@ ActiveRecord::Schema.define(version: 2022_01_05_032328) do
   add_foreign_key "tblpurchaseorderitems", "tblsku", column: "skuid", primary_key: "skuid", name: "tblpurchaseorderitems_skuid_fkey"
   add_foreign_key "tblsupplierpmtsitems", "tblpurchaseorderitems", column: "poitemsid", primary_key: "poitemsid", name: "tblsupplierpmtsitems_poitemsid_fkey"
   add_foreign_key "tblsupplierpmtsitems", "tblsupplierpmts", column: "spmtsid", primary_key: "spmtid", name: "tblsupplierpmtsitems_spmtsid_fkey"
-  create_function :update_sku_tsvector, sql_definition: <<-SQL
-      CREATE OR REPLACE FUNCTION public.update_sku_tsvector()
-       RETURNS trigger
-       LANGUAGE plpgsql
-      AS $function$
-      BEGIN
-        new.tsv :=
-          to_tsvector('pg_catalog.english', coalesce(new.skuid::text,           '')) ||
-          to_tsvector('pg_catalog.english', coalesce(new.sku::text,             '')) ||
-          to_tsvector('pg_catalog.english', coalesce(new.manf::text,            '')) ||
-          to_tsvector('pg_catalog.english', coalesce(new.itemno::text,          '')) ||
-          to_tsvector('pg_catalog.english', coalesce(new.skudesc::text,         '')) ||
-          to_tsvector('pg_catalog.english', coalesce(new.unitweight::text,      '')) ||
-          to_tsvector('pg_catalog.english', coalesce(new.skuminunitstype::text, '')) ||
-          to_tsvector('pg_catalog.english', coalesce(new.dcloc::text,           '')) ||
-          to_tsvector('pg_catalog.english', coalesce(new.vsku01::text,          '')) ||
-          to_tsvector('pg_catalog.english', coalesce(new.vsku02::text,          '')) ||
-          to_tsvector('pg_catalog.english', coalesce(new.vsku03::text,          '')) ||
-          to_tsvector('pg_catalog.english', coalesce(new.vsku04::text,          '')) ||
-          to_tsvector('pg_catalog.english', coalesce(new.vsku05::text,          '')) ||
-          to_tsvector('pg_catalog.english', coalesce(new.vsku06::text,          '')) ||
-          to_tsvector('pg_catalog.english', coalesce(new.vsku07::text,          '')) ||
-          to_tsvector('pg_catalog.english', coalesce(new.vsku08::text,          '')) ||
-          to_tsvector('pg_catalog.english', coalesce(new.vsku09::text,          '')) ||
-          to_tsvector('pg_catalog.english', coalesce(new.vsku10::text,          '')) ||
-          to_tsvector('pg_catalog.english', coalesce(new.skunotes::text,        ''))
-          ;
-        return new;
-      END
-      $function$
-  SQL
   create_function :db_to_csv, sql_definition: <<-SQL
       CREATE OR REPLACE FUNCTION public.db_to_csv(path text)
        RETURNS void
@@ -592,11 +569,38 @@ ActiveRecord::Schema.define(version: 2022_01_05_032328) do
          ORDER BY schema_table
       LOOP
          statement := 'COPY ' || tables.schema_table || ' TO ''' || path || '/' || tables.schema_table || '.csv' ||
-                        ''' WITH(FORMAT CSV, FORCE_QUOTE *, DELIMITER '';'', HEADER';
+                        ''' WITH(FORMAT CSV, FORCE_QUOTE *, DELIMITER '';'', HEADER)';
          EXECUTE statement;
       END LOOP;
       return;
       end;
+      $function$
+  SQL
+  create_function :update_sku_tsvector, sql_definition: <<-SQL
+      CREATE OR REPLACE FUNCTION public.update_sku_tsvector()
+       RETURNS trigger
+       LANGUAGE plpgsql
+      AS $function$
+      BEGIN
+        new.tsv :=
+          setweight(to_tsvector('pg_catalog.english', coalesce(new.skuid::text,           '')), 'A') ||
+                    to_tsvector('pg_catalog.english', coalesce(new.manf::text,            '')) ||
+          setweight(to_tsvector('pg_catalog.english', coalesce(new.itemno::text,          '')), 'B') ||
+                    to_tsvector('pg_catalog.english', coalesce(new.skudesc::text,         '')) ||
+                    to_tsvector('pg_catalog.english', coalesce(new.vsku01::text,          '')) ||
+                    to_tsvector('pg_catalog.english', coalesce(new.vsku02::text,          '')) ||
+                    to_tsvector('pg_catalog.english', coalesce(new.vsku03::text,          '')) ||
+                    to_tsvector('pg_catalog.english', coalesce(new.vsku04::text,          '')) ||
+                    to_tsvector('pg_catalog.english', coalesce(new.vsku05::text,          '')) ||
+                    to_tsvector('pg_catalog.english', coalesce(new.vsku06::text,          '')) ||
+                    to_tsvector('pg_catalog.english', coalesce(new.vsku07::text,          '')) ||
+                    to_tsvector('pg_catalog.english', coalesce(new.vsku08::text,          '')) ||
+                    to_tsvector('pg_catalog.english', coalesce(new.vsku09::text,          '')) ||
+                    to_tsvector('pg_catalog.english', coalesce(new.vsku10::text,          '')) ||
+                    to_tsvector('pg_catalog.english', coalesce(new.skunotes::text,        ''))
+          ;
+        return new;
+      END
       $function$
   SQL
 
@@ -605,357 +609,6 @@ ActiveRecord::Schema.define(version: 2022_01_05_032328) do
       CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON public.tblsku FOR EACH ROW EXECUTE FUNCTION update_sku_tsvector()
   SQL
 
-  create_view "qryinventorycounts", sql_definition: <<-SQL
-      WITH qrypoinventorycounts AS (
-           SELECT tblsku_1.skuid,
-              tblsku_1.sku,
-              tblsku_1.manf,
-              tblsku_1.itemno,
-              tblsku_1.skudesc,
-              sum(COALESCE(tblpurchaseorderitems.poorderquant, 0)) AS pototal,
-              sum(COALESCE(tblpurchaseorderitems.poorderrcvdquant, 0)) AS pototalrcvd
-             FROM (tblsku tblsku_1
-               JOIN tblpurchaseorderitems ON ((tblsku_1.skuid = tblpurchaseorderitems.skuid)))
-            GROUP BY tblsku_1.skuid, tblsku_1.sku, tblsku_1.manf, tblsku_1.itemno, tblsku_1.skudesc
-          ), qryorderinventorycounts AS (
-           SELECT tblsku_1.skuid,
-              tblsku_1.sku,
-              tblsku_1.manf,
-              tblsku_1.itemno,
-              tblsku_1.skudesc,
-              sum(COALESCE(tblorderitems.orderquant, 0)) AS ordquant,
-              sum(COALESCE(tblorderitems.orderdeliveredquant, 0)) AS orddelquant
-             FROM (tblsku tblsku_1
-               JOIN tblorderitems ON ((tblsku_1.skuid = tblorderitems.skuid)))
-            GROUP BY tblsku_1.skuid, tblsku_1.sku, tblsku_1.manf, tblsku_1.itemno, tblsku_1.skudesc
-          )
-   SELECT qrypoinventorycounts.skuid,
-      qrypoinventorycounts.sku,
-      qrypoinventorycounts.manf,
-      qrypoinventorycounts.itemno,
-      qrypoinventorycounts.skudesc,
-      s1.total,
-      (s1.total * tblsku.skuminunits) AS totalunits,
-      tblsku.skuminpercs,
-      (s1.total / tblsku.skuminpercs) AS totalcases,
-      tblsku.dcloc,
-      tblsku.categoryid,
-      s1.totalrcvd,
-      (s1.totalrcvd * tblsku.skuminunits) AS totalunitsrcvd,
-      (s1.totalrcvd / tblsku.skuminpercs) AS totalcasesrcvd,
-      (s1.total - s1.totalrcvd) AS totaldue,
-      (qrypoinventorycounts.pototalrcvd - COALESCE(qryorderinventorycounts.orddelquant, (0)::bigint)) AS dccurquant,
-      COALESCE(qryorderinventorycounts.ordquant, (0)::bigint) AS sold,
-      COALESCE(qrypoinventorycounts.pototal, (0)::bigint) AS bought
-     FROM ((tblsku
-       JOIN qryorderinventorycounts ON ((tblsku.skuid = qryorderinventorycounts.skuid)))
-       JOIN qrypoinventorycounts ON ((tblsku.skuid = qrypoinventorycounts.skuid))),
-      LATERAL ( SELECT (qrypoinventorycounts.pototal - COALESCE(qryorderinventorycounts.ordquant, (0)::bigint)),
-              (qrypoinventorycounts.pototalrcvd - COALESCE(qryorderinventorycounts.ordquant, (0)::bigint))) s1(total, totalrcvd);
-  SQL
-  create_view "qryinventorycountsfilter", sql_definition: <<-SQL
-      WITH qrypoinventorycountsfilter AS (
-           SELECT tblsku.skuid,
-              tblsku.sku,
-              tblsku.manf,
-              tblsku.itemno,
-              tblsku.skudesc,
-              sum(COALESCE(tblpurchaseorderitems.poorderquant, 0)) AS pototal,
-              sum(COALESCE(tblpurchaseorderitems.poorderrcvdquant, 0)) AS pototalrcvd
-             FROM (tblsku
-               LEFT JOIN tblpurchaseorderitems ON ((tblsku.skuid = tblpurchaseorderitems.skuid)))
-            GROUP BY tblsku.skuid, tblsku.sku, tblsku.manf, tblsku.itemno, tblsku.skudesc
-          ), qryorderinventorycountsfilter AS (
-           SELECT tblsku.skuid,
-              tblsku.sku,
-              tblsku.manf,
-              tblsku.itemno,
-              tblsku.skudesc,
-              sum(COALESCE(tblorderitems.orderquant, 0)) AS ordquant,
-              sum(COALESCE(tblorderitems.orderdeliveredquant, 0)) AS orddelquant
-             FROM (tblsku
-               LEFT JOIN tblorderitems ON ((tblsku.skuid = tblorderitems.skuid)))
-            GROUP BY tblsku.skuid, tblsku.sku, tblsku.manf, tblsku.itemno, tblsku.skudesc
-          )
-   SELECT qrypoinventorycountsfilter.skuid,
-      (((qrypoinventorycountsfilter.pototalrcvd - COALESCE(qryorderinventorycountsfilter.orddelquant, (0)::bigint)))::integer)::boolean AS indc
-     FROM (qrypoinventorycountsfilter
-       LEFT JOIN qryorderinventorycountsfilter ON ((qrypoinventorycountsfilter.skuid = qryorderinventorycountsfilter.skuid)))
-    GROUP BY qrypoinventorycountsfilter.skuid, (qrypoinventorycountsfilter.pototalrcvd - COALESCE(qryorderinventorycountsfilter.orddelquant, (0)::bigint));
-  SQL
-  create_view "qryskuorderhistoryunion", sql_definition: <<-SQL
-      SELECT tblorder.orderdate,
-      tblorderitems.skuid,
-      tblpurchaseorder.splrid2,
-      tblorderitems.orderquant,
-      tblorderitems.orderpriceper,
-      tblorder.custid,
-      18 AS splrid,
-      tblpurchaseorder.poid
-     FROM (tblpurchaseorder
-       RIGHT JOIN (tblorder
-       RIGHT JOIN tblorderitems ON ((tblorder.orderid = tblorderitems.orderid))) ON ((tblpurchaseorder.poid = tblorderitems.poid)))
-  UNION
-   SELECT tblanalysisitems.aorderdate AS orderdate,
-      tblanalysisitems.skuid,
-      tblanalysisitems.splrid2,
-      tblanalysisitems.aorderquant AS orderquant,
-      tblanalysisitems.aorderpriceper AS orderpriceper,
-      tblanalysisitems.customerid AS custid,
-      tblanalysisitems.splrid,
-      0 AS poid
-     FROM tblanalysisitems
-  UNION
-   SELECT tblpreorder.preorderdate AS orderdate,
-      tblpreorderitems.skuid1 AS skuid,
-      tblpreorder.preordervendorid AS splrid2,
-      tblpreorderitems.orderquant1 AS orderquant,
-      tblpreorderitems.orderpriceper1 AS orderpriceper,
-      tblpreorder.custid,
-      tblpreorder.preordervendorid AS splrid,
-      4444 AS poid
-     FROM (tblpreorderitems
-       JOIN tblpreorder ON ((tblpreorderitems.preorderid = tblpreorder.preorderid)))
-    WHERE (tblpreorderitems.preorderitemcode = 4)
-  UNION
-   SELECT tblpreorder.preorderdate AS orderdate,
-      tblpreorderitems.skuid2 AS skuid,
-      2 AS splrid2,
-      tblpreorderitems.orderquant2 AS orderquant,
-      tblpreorderitems.orderpriceper2 AS orderpriceper,
-      tblpreorder.custid,
-      2 AS splrid,
-      5555 AS poid
-     FROM (tblpreorderitems
-       JOIN tblpreorder ON ((tblpreorderitems.preorderid = tblpreorder.preorderid)))
-    WHERE (tblpreorderitems.preorderitemcode = 5);
-  SQL
-  create_view "frm_sku_subform3", sql_definition: <<-SQL
-      SELECT qryskuorderhistoryunion.skuid,
-      qryskuorderhistoryunion.orderdate,
-      qryskuorderhistoryunion.orderquant,
-      qryskuorderhistoryunion.orderpriceper,
-      qryskuorderhistoryunion.splrid2,
-      qryskuorderhistoryunion.splrid,
-      tblcustomer.custbusinessname,
-      qryskuorderhistoryunion.custid,
-      qryskuorderhistoryunion.poid
-     FROM (qryskuorderhistoryunion
-       JOIN tblcustomer ON ((qryskuorderhistoryunion.custid = tblcustomer.custid)))
-    ORDER BY qryskuorderhistoryunion.orderdate DESC;
-  SQL
-  create_view "qryskupohistau", sql_definition: <<-SQL
-      SELECT tblpurchaseorder.podate,
-      tblpurchaseorderitems.skuid,
-      tblpurchaseorder.splrid2,
-      tblsupplier.splrname,
-      tblpurchaseorderitems.poorderquant,
-      tblpurchaseorderitems.poorderpriceper,
-      (tblpurchaseorderitems.poordertotalper - tblpurchaseorderitems.poordertaxper) AS priceeachlesstax,
-      tblpurchaseorder.poid,
-      tblpurchaseorderitems.poorderrcvdquant,
-      (tblpurchaseorderitems.poorderquant - tblpurchaseorderitems.poorderrcvdquant) AS podiff,
-      tblpurchaseorderitems.poorderexpiration
-     FROM ((tblsupplier
-       JOIN tblpurchaseorder ON ((tblsupplier.splrid = tblpurchaseorder.splrid2)))
-       JOIN tblpurchaseorderitems ON ((tblpurchaseorder.poid = tblpurchaseorderitems.poid)));
-  SQL
-  create_view "qryskupohistau2", sql_definition: <<-SQL
-      SELECT qryskupohistau.podate,
-      qryskupohistau.skuid,
-      qryskupohistau.splrid2,
-      qryskupohistau.splrname,
-      qryskupohistau.poorderquant,
-      qryskupohistau.poorderrcvdquant,
-      qryskupohistau.podiff,
-      qryskupohistau.poorderpriceper,
-      qryskupohistau.priceeachlesstax,
-      qryskupohistau.poid,
-      sum(tblorderitems.orderquant) AS sumoforderquant,
-      sum(tblorderitems.orderdeliveredquant) AS sumoforderdeliveredquant,
-      qryskupohistau.poorderexpiration
-     FROM (qryskupohistau
-       LEFT JOIN tblorderitems ON (((qryskupohistau.poid = tblorderitems.poid) AND (qryskupohistau.skuid = tblorderitems.skuid))))
-    GROUP BY qryskupohistau.podate, qryskupohistau.skuid, qryskupohistau.splrid2, qryskupohistau.splrname, qryskupohistau.poorderquant, qryskupohistau.poorderrcvdquant, qryskupohistau.podiff, qryskupohistau.poorderpriceper, qryskupohistau.priceeachlesstax, qryskupohistau.poid, qryskupohistau.poorderexpiration;
-  SQL
-  create_view "frm_sku_cust_info_subform1", sql_definition: <<-SQL
-      SELECT tblskucustinfo.skuid,
-      tblskucustinfo.custid,
-      tblskucustinfo.skunever,
-      tblskucustinfo.skuneverdate,
-      tblcustomer.custname,
-      tblcustomer.custbusinessname,
-      tblcustomer.custlast
-     FROM (tblskucustinfo
-       JOIN tblcustomer ON ((tblskucustinfo.custid = tblcustomer.custid)))
-    WHERE (tblskucustinfo.skunever = true);
-  SQL
-  create_view "frm_sku_cust_info_subform2", sql_definition: <<-SQL
-      SELECT tblskucustinfo.skuid,
-      tblskucustinfo.custid,
-      tblskucustinfo.skunever,
-      tblskucustinfo.skuneverdate,
-      tblcustomer.custname,
-      tblcustomer.custbusinessname,
-      tblcustomer.custlast
-     FROM (tblskucustinfo
-       JOIN tblcustomer ON ((tblskucustinfo.custid = tblcustomer.custid)))
-    WHERE (tblskucustinfo.skuonly = true);
-  SQL
-  create_view "qry_order_items_outstanding", sql_definition: <<-SQL
-      SELECT gen_random_uuid() AS id,
-      tblorder.orderid,
-      tblorder.orderdate,
-      tblorder.orderbatch,
-      tblorder.custid,
-      tblorder.ordertaxrate,
-      tblorder.orderdelivereddate,
-      tblorder.orderdeliverdfrom,
-      tblorder.orderdeliveredto,
-      tblorder.ordershipmethod,
-      tblorder.orderreceipthl,
-      tblorder.orderdateinvoiced,
-      tblorder.orderdatepaid,
-      tblorder.orderpaymentmethod,
-      tblorder.orderpaymentamount,
-      tblorder.ordernotes,
-      tblorderitems.orderitemsid,
-      tblorderitems.skuid,
-      tblorderitems.poid,
-      tblorderitems.orderquant,
-      tblorderitems.orderdeliveredquant,
-      s1.orderquantdue,
-      tblorderitems.orderpriceper,
-      tblorderitems.orderpricetotal,
-      tblorderitems.ordertaxrate AS order_item_tax_rate,
-      tblorderitems.ordertaxtotal,
-      tblorderitems.orderdeliverycosttotal,
-      tblorderitems.orderfeestotal,
-      tblorderitems.ordergrandtotal,
-      tblorderitems.orderitemsdelivereddate,
-      tblorderitems.orderretailtotal,
-      tblcustomer.custname,
-      tblcustomer.custbusinessname,
-      tblcustomer.custfirst,
-      tblcustomer.custlast,
-      tblcustomer.custsal,
-      tblcustomer.custtitle,
-      tblcustomer.custaddress,
-      tblcustomer.custcity,
-      tblcustomer.custst,
-      tblcustomer.custzip,
-      tblcustomer.custphone,
-      tblcustomer.custfax,
-      tblcustomer.custemail,
-      tblcustomer.custprimarycontact1,
-      tblcustomer.custphone1,
-      tblcustomer.custphonetype1,
-      tblcustomer.custemail1,
-      tblcustomer.custprimarycontact2,
-      tblcustomer.custphone2,
-      tblcustomer.custphonetype2,
-      tblcustomer.custemail2,
-      tblcustomer.custtaxrate,
-      tblcustomer.custnotes,
-      tblcustomer.custdatecreated,
-      tblcustomer.custdatemodified,
-      tblcustomer.custbillingbusinessname,
-      tblcustomer.custbillingfirst,
-      tblcustomer.custbillinglast,
-      tblcustomer.custbillingsal,
-      tblcustomer.custbillingtitle,
-      tblcustomer.custbillingaddress,
-      tblcustomer.custbillingcity,
-      tblcustomer.custbillingst,
-      tblcustomer.custbillingzip,
-      tblcustomer.custbillingphone,
-      tblcustomer.custbillingfax,
-      tblcustomer.custbillingemail,
-      tblcustomer.custbillingsame,
-      tblcustomer.custqbo,
-      tblsku.sku,
-      tblsku.manf,
-      tblsku.itemno,
-      tblsku.skudesc,
-      tblsku.unitweight,
-      tblsku.categoryid,
-      tblsku.skuminunits,
-      tblsku.skuminunitstype,
-      tblsku.dcloc,
-      tblsku.skuminpercs,
-      qryinventorycounts.total,
-      qryinventorycounts.totalrcvd,
-      qryinventorycounts.totaldue,
-      qryinventorycounts.dccurquant
-     FROM ((((tblsku
-       JOIN tblorderitems ON ((tblsku.skuid = tblorderitems.skuid)))
-       JOIN tblorder ON ((tblorderitems.orderid = tblorder.orderid)))
-       JOIN tblcustomer ON ((tblcustomer.custid = tblorder.custid)))
-       LEFT JOIN qryinventorycounts ON ((tblsku.skuid = qryinventorycounts.skuid))),
-      LATERAL ( SELECT (tblorderitems.orderquant - tblorderitems.orderdeliveredquant)) s1(orderquantdue)
-    WHERE (s1.orderquantdue > 0)
-    ORDER BY tblorder.orderid;
-  SQL
-  create_view "qry_order_data_pick_list", sql_definition: <<-SQL
-      SELECT tblcustomer.custid,
-      tblcustomer.custname,
-      tblcustomer.custfirst,
-      tblcustomer.custlast,
-      tblcustomer.custsal,
-      tblcustomer.custtitle,
-      tblcustomer.custbusinessname,
-      tblcustomer.custaddress,
-      tblcustomer.custcity,
-      tblcustomer.custst,
-      tblcustomer.custzip,
-      tblcustomer.custprimarycontact1,
-      tblcustomer.custphone1,
-      tblcustomer.custphonetype1,
-      tblcustomer.custemail1,
-      tblcustomer.custprimarycontact2,
-      tblcustomer.custphone2,
-      tblcustomer.custphonetype2,
-      tblcustomer.custemail2,
-      tblcustomer.custfax,
-      tblcustomer.custtaxrate,
-      tblcustomer.custccauth,
-      tblcustomer.custcclast4,
-      tblorder.orderid,
-      tblorder.orderdate,
-      tblorder.orderbatch,
-      tblorder.ordertaxrate,
-      tblorder.ordernotes,
-      tblorder.preordercompletedate,
-      tblorderitems.orderitemsid,
-      tblorderitems.poid,
-      tblorderitems.orderdeliverycosttotal,
-      tblorderitems.ordertaxtotal,
-      tblorderitems.ordergrandtotal,
-      tblorderitems.orderquant,
-      tblorderitems.orderpriceper,
-      tblorderitems.orderpricetotal,
-      tblorderitems.orderretailtotal,
-      tblorderitems.orderitemsdelivereddate,
-      tblorderitems.orderdeliveredquant,
-      tblsku.skuid,
-      tblsku.sku,
-      tblsku.manf,
-      tblsku.itemno,
-      tblsku.skudesc,
-      tblsku.unitweight,
-      tblsku.categoryid,
-      tblsku.skuminunits,
-      tblsku.skuminunitstype,
-      tblsku.dcloc,
-      tblsku.skuminpercs,
-      s1.orderquantdue
-     FROM (((tblsku
-       JOIN tblorderitems ON ((tblorderitems.skuid = tblsku.skuid)))
-       JOIN tblorder ON ((tblorder.orderid = tblorderitems.orderid)))
-       JOIN tblcustomer ON ((tblcustomer.custid = tblorder.custid))),
-      LATERAL ( SELECT (tblorderitems.orderquant - tblorderitems.orderdeliveredquant)) s1(orderquantdue)
-    WHERE ((((tblsku.dcloc)::text <> 'N/A'::text) AND (s1.orderquantdue <> 0)) OR (s1.orderquantdue < 0));
-  SQL
   create_view "frm_preorder_subform1", sql_definition: <<-SQL
       SELECT tblpreorder.preorderid,
       (tblpreorder.preorderdate)::date AS preorderdate,
@@ -1314,51 +967,107 @@ ActiveRecord::Schema.define(version: 2022_01_05_032328) do
        JOIN qrypreorderhistoryunion ON ((tblcustomer.custid = qrypreorderhistoryunion.custid)))
     ORDER BY qrypreorderhistoryunion.orderdate DESC;
   SQL
-  create_view "qrypreorderpohistau", sql_definition: <<-SQL
-      SELECT tblpurchaseorder.podate,
-      tblpurchaseorderitems.skuid,
-      tblpurchaseorder.splrid2,
-      tblsupplier.splrname,
-      tblpurchaseorderitems.poorderquant,
-      tblpurchaseorderitems.poorderpriceper,
-      s1.priceeachlesstax,
-      tblpurchaseorder.poid,
-      tblpurchaseorderitems.poorderrcvdquant,
-      s1.podiff,
-      tblpurchaseorderitems.poorderexpiration
-     FROM ((tblsupplier
-       JOIN tblpurchaseorder ON ((tblsupplier.splrid = tblpurchaseorder.splrid2)))
-       JOIN tblpurchaseorderitems ON ((tblpurchaseorder.poid = tblpurchaseorderitems.poid))),
-      LATERAL ( SELECT (tblpurchaseorderitems.poordertotalper - tblpurchaseorderitems.poordertaxper),
-              (tblpurchaseorderitems.poorderquant - tblpurchaseorderitems.poorderrcvdquant)) s1(priceeachlesstax, podiff);
+  create_view "frm_sku_cust_info_subform1", sql_definition: <<-SQL
+      SELECT tblskucustinfo.skuid,
+      tblskucustinfo.custid,
+      tblskucustinfo.skunever,
+      tblskucustinfo.skuneverdate,
+      tblcustomer.custname,
+      tblcustomer.custbusinessname,
+      tblcustomer.custlast
+     FROM (tblskucustinfo
+       JOIN tblcustomer ON ((tblskucustinfo.custid = tblcustomer.custid)))
+    WHERE (tblskucustinfo.skunever = true);
   SQL
-  create_view "qrypreorderpohistau2", sql_definition: <<-SQL
-      SELECT qrypreorderpohistau.podate,
-      qrypreorderpohistau.skuid,
-      qrypreorderpohistau.splrid2,
-      qrypreorderpohistau.splrname,
-      qrypreorderpohistau.poorderquant,
-      qrypreorderpohistau.poorderrcvdquant,
-      qrypreorderpohistau.podiff,
-      qrypreorderpohistau.poorderpriceper,
-      qrypreorderpohistau.priceeachlesstax,
-      qrypreorderpohistau.poid,
-      sum(tblorderitems.orderquant) AS sumoforderquant,
-      sum(tblorderitems.orderdeliveredquant) AS sumoforderdeliveredquant,
-      qrypreorderpohistau.poorderexpiration
-     FROM (tblorderitems
-       RIGHT JOIN qrypreorderpohistau ON (((tblorderitems.skuid = qrypreorderpohistau.skuid) AND (tblorderitems.poid = qrypreorderpohistau.poid))))
-    GROUP BY qrypreorderpohistau.podate, qrypreorderpohistau.skuid, qrypreorderpohistau.splrid2, qrypreorderpohistau.splrname, qrypreorderpohistau.poorderquant, qrypreorderpohistau.poorderrcvdquant, qrypreorderpohistau.podiff, qrypreorderpohistau.poorderpriceper, qrypreorderpohistau.priceeachlesstax, qrypreorderpohistau.poid, qrypreorderpohistau.poorderexpiration;
+  create_view "frm_sku_cust_info_subform2", sql_definition: <<-SQL
+      SELECT tblskucustinfo.skuid,
+      tblskucustinfo.custid,
+      tblskucustinfo.skunever,
+      tblskucustinfo.skuneverdate,
+      tblcustomer.custname,
+      tblcustomer.custbusinessname,
+      tblcustomer.custlast
+     FROM (tblskucustinfo
+       JOIN tblcustomer ON ((tblskucustinfo.custid = tblcustomer.custid)))
+    WHERE (tblskucustinfo.skuonly = true);
   SQL
-  create_view "qrypreordersublist", sql_definition: <<-SQL
-      SELECT tblpreorderitems.skuid1,
-      tblpreorderitems.skuid2,
-      tblcustomer.custname
-     FROM ((tblpreorderitems
-       JOIN tblpreorder ON ((tblpreorderitems.preorderid = tblpreorder.preorderid)))
-       JOIN tblcustomer ON ((tblpreorder.custid = tblcustomer.custid)))
-    GROUP BY tblpreorderitems.skuid1, tblpreorderitems.skuid2, tblcustomer.custname, tblpreorder.custid
-   HAVING (tblpreorderitems.skuid2 <> 0);
+  create_view "qryinventorycounts", sql_definition: <<-SQL
+      WITH qrypoinventorycounts AS (
+           SELECT tblsku_1.skuid,
+              tblsku_1.sku,
+              tblsku_1.manf,
+              tblsku_1.itemno,
+              tblsku_1.skudesc,
+              sum(COALESCE(tblpurchaseorderitems.poorderquant, 0)) AS pototal,
+              sum(COALESCE(tblpurchaseorderitems.poorderrcvdquant, 0)) AS pototalrcvd
+             FROM (tblsku tblsku_1
+               JOIN tblpurchaseorderitems ON ((tblsku_1.skuid = tblpurchaseorderitems.skuid)))
+            GROUP BY tblsku_1.skuid, tblsku_1.sku, tblsku_1.manf, tblsku_1.itemno, tblsku_1.skudesc
+          ), qryorderinventorycounts AS (
+           SELECT tblsku_1.skuid,
+              tblsku_1.sku,
+              tblsku_1.manf,
+              tblsku_1.itemno,
+              tblsku_1.skudesc,
+              sum(COALESCE(tblorderitems.orderquant, 0)) AS ordquant,
+              sum(COALESCE(tblorderitems.orderdeliveredquant, 0)) AS orddelquant
+             FROM (tblsku tblsku_1
+               JOIN tblorderitems ON ((tblsku_1.skuid = tblorderitems.skuid)))
+            GROUP BY tblsku_1.skuid, tblsku_1.sku, tblsku_1.manf, tblsku_1.itemno, tblsku_1.skudesc
+          )
+   SELECT qrypoinventorycounts.skuid,
+      qrypoinventorycounts.sku,
+      qrypoinventorycounts.manf,
+      qrypoinventorycounts.itemno,
+      qrypoinventorycounts.skudesc,
+      s1.total,
+      (s1.total * tblsku.skuminunits) AS totalunits,
+      tblsku.skuminpercs,
+      (s1.total / tblsku.skuminpercs) AS totalcases,
+      tblsku.dcloc,
+      tblsku.categoryid,
+      s1.totalrcvd,
+      (s1.totalrcvd * tblsku.skuminunits) AS totalunitsrcvd,
+      (s1.totalrcvd / tblsku.skuminpercs) AS totalcasesrcvd,
+      (s1.total - s1.totalrcvd) AS totaldue,
+      (qrypoinventorycounts.pototalrcvd - COALESCE(qryorderinventorycounts.orddelquant, (0)::bigint)) AS dccurquant,
+      COALESCE(qryorderinventorycounts.ordquant, (0)::bigint) AS sold,
+      COALESCE(qrypoinventorycounts.pototal, (0)::bigint) AS bought
+     FROM ((tblsku
+       LEFT JOIN qryorderinventorycounts ON ((tblsku.skuid = qryorderinventorycounts.skuid)))
+       LEFT JOIN qrypoinventorycounts ON ((tblsku.skuid = qrypoinventorycounts.skuid))),
+      LATERAL ( SELECT (qrypoinventorycounts.pototal - COALESCE(qryorderinventorycounts.ordquant, (0)::bigint)),
+              (qrypoinventorycounts.pototalrcvd - COALESCE(qryorderinventorycounts.ordquant, (0)::bigint))) s1(total, totalrcvd);
+  SQL
+  create_view "qryinventorycountsfilter", sql_definition: <<-SQL
+      WITH qrypoinventorycountsfilter AS (
+           SELECT tblsku.skuid,
+              tblsku.sku,
+              tblsku.manf,
+              tblsku.itemno,
+              tblsku.skudesc,
+              sum(COALESCE(tblpurchaseorderitems.poorderquant, 0)) AS pototal,
+              sum(COALESCE(tblpurchaseorderitems.poorderrcvdquant, 0)) AS pototalrcvd
+             FROM (tblsku
+               LEFT JOIN tblpurchaseorderitems ON ((tblsku.skuid = tblpurchaseorderitems.skuid)))
+            GROUP BY tblsku.skuid, tblsku.sku, tblsku.manf, tblsku.itemno, tblsku.skudesc
+          ), qryorderinventorycountsfilter AS (
+           SELECT tblsku.skuid,
+              tblsku.sku,
+              tblsku.manf,
+              tblsku.itemno,
+              tblsku.skudesc,
+              sum(COALESCE(tblorderitems.orderquant, 0)) AS ordquant,
+              sum(COALESCE(tblorderitems.orderdeliveredquant, 0)) AS orddelquant
+             FROM (tblsku
+               LEFT JOIN tblorderitems ON ((tblsku.skuid = tblorderitems.skuid)))
+            GROUP BY tblsku.skuid, tblsku.sku, tblsku.manf, tblsku.itemno, tblsku.skudesc
+          )
+   SELECT qrypoinventorycountsfilter.skuid,
+      (((qrypoinventorycountsfilter.pototalrcvd - COALESCE(qryorderinventorycountsfilter.orddelquant, (0)::bigint)))::integer)::boolean AS indc
+     FROM (qrypoinventorycountsfilter
+       LEFT JOIN qryorderinventorycountsfilter ON ((qrypoinventorycountsfilter.skuid = qryorderinventorycountsfilter.skuid)))
+    GROUP BY qrypoinventorycountsfilter.skuid, (qrypoinventorycountsfilter.pototalrcvd - COALESCE(qryorderinventorycountsfilter.orddelquant, (0)::bigint));
   SQL
   create_view "frm_sku_subform1", sql_definition: <<-SQL
       SELECT tblsku.skuid,
@@ -1426,6 +1135,367 @@ ActiveRecord::Schema.define(version: 2022_01_05_032328) do
        LEFT JOIN qryinventorycounts ON ((tblsku.skuid = qryinventorycounts.skuid)))
        JOIN qryinventorycountsfilter ON ((tblsku.skuid = qryinventorycountsfilter.skuid)));
   SQL
+  create_view "qryskuorderhistoryunion", sql_definition: <<-SQL
+      SELECT tblorder.orderdate,
+      tblorderitems.skuid,
+      tblpurchaseorder.splrid2,
+      tblorderitems.orderquant,
+      tblorderitems.orderpriceper,
+      tblorder.custid,
+      18 AS splrid,
+      tblpurchaseorder.poid
+     FROM (tblpurchaseorder
+       RIGHT JOIN (tblorder
+       RIGHT JOIN tblorderitems ON ((tblorder.orderid = tblorderitems.orderid))) ON ((tblpurchaseorder.poid = tblorderitems.poid)))
+  UNION
+   SELECT tblanalysisitems.aorderdate AS orderdate,
+      tblanalysisitems.skuid,
+      tblanalysisitems.splrid2,
+      tblanalysisitems.aorderquant AS orderquant,
+      tblanalysisitems.aorderpriceper AS orderpriceper,
+      tblanalysisitems.customerid AS custid,
+      tblanalysisitems.splrid,
+      0 AS poid
+     FROM tblanalysisitems
+  UNION
+   SELECT tblpreorder.preorderdate AS orderdate,
+      tblpreorderitems.skuid1 AS skuid,
+      tblpreorder.preordervendorid AS splrid2,
+      tblpreorderitems.orderquant1 AS orderquant,
+      tblpreorderitems.orderpriceper1 AS orderpriceper,
+      tblpreorder.custid,
+      tblpreorder.preordervendorid AS splrid,
+      4444 AS poid
+     FROM (tblpreorderitems
+       JOIN tblpreorder ON ((tblpreorderitems.preorderid = tblpreorder.preorderid)))
+    WHERE (tblpreorderitems.preorderitemcode = 4)
+  UNION
+   SELECT tblpreorder.preorderdate AS orderdate,
+      tblpreorderitems.skuid2 AS skuid,
+      2 AS splrid2,
+      tblpreorderitems.orderquant2 AS orderquant,
+      tblpreorderitems.orderpriceper2 AS orderpriceper,
+      tblpreorder.custid,
+      2 AS splrid,
+      5555 AS poid
+     FROM (tblpreorderitems
+       JOIN tblpreorder ON ((tblpreorderitems.preorderid = tblpreorder.preorderid)))
+    WHERE (tblpreorderitems.preorderitemcode = 5);
+  SQL
+  create_view "frm_sku_subform3", sql_definition: <<-SQL
+      SELECT qryskuorderhistoryunion.skuid,
+      qryskuorderhistoryunion.orderdate,
+      qryskuorderhistoryunion.orderquant,
+      qryskuorderhistoryunion.orderpriceper,
+      qryskuorderhistoryunion.splrid2,
+      qryskuorderhistoryunion.splrid,
+      tblcustomer.custbusinessname,
+      qryskuorderhistoryunion.custid,
+      qryskuorderhistoryunion.poid
+     FROM (qryskuorderhistoryunion
+       JOIN tblcustomer ON ((qryskuorderhistoryunion.custid = tblcustomer.custid)))
+    ORDER BY qryskuorderhistoryunion.orderdate DESC;
+  SQL
+  create_view "update_dc_inventory_counts", sql_definition: <<-SQL
+      WITH qryupdatedcorderinventorycounts AS (
+           SELECT tblsku_1.skuid,
+              sum(tblorderitems.orderquant) AS ordquant,
+              sum(tblorderitems.orderdeliveredquant) AS orddelquant
+             FROM (tblsku tblsku_1
+               JOIN tblorderitems ON ((tblsku_1.skuid = tblorderitems.skuid)))
+            GROUP BY tblsku_1.skuid
+          ), qryupdatedcpoinventorycounts AS (
+           SELECT tblsku_1.skuid,
+              sum(tblpurchaseorderitems.poorderquant) AS pototal,
+              sum(tblpurchaseorderitems.poorderrcvdquant) AS pototalrcvd
+             FROM (tblsku tblsku_1
+               JOIN tblpurchaseorderitems ON ((tblsku_1.skuid = tblpurchaseorderitems.skuid)))
+            GROUP BY tblsku_1.skuid
+          )
+   SELECT qryupdatedcpoinventorycounts.skuid,
+      s1.total,
+      s1.totalrcvd,
+      s1.dccurquant,
+      (s1.total * tblsku.skuminunits) AS totalunits,
+      (s1.total / tblsku.skuminpercs) AS totalcases,
+      tblsku.skuminpercs,
+      (s1.totalrcvd * tblsku.skuminunits) AS totalunitsrcvd,
+      (s1.totalrcvd / tblsku.skuminpercs) AS totalcasesrcvd,
+      (s1.total - s1.totalrcvd) AS totaldue,
+      COALESCE(qryupdatedcorderinventorycounts.ordquant, (0)::bigint) AS sold,
+      COALESCE(qryupdatedcpoinventorycounts.pototal, (0)::bigint) AS bought
+     FROM ((tblsku
+       JOIN qryupdatedcpoinventorycounts ON ((tblsku.skuid = qryupdatedcpoinventorycounts.skuid)))
+       LEFT JOIN qryupdatedcorderinventorycounts ON ((tblsku.skuid = qryupdatedcorderinventorycounts.skuid))),
+      LATERAL ( SELECT (qryupdatedcpoinventorycounts.pototal - COALESCE(qryupdatedcorderinventorycounts.ordquant, (0)::bigint)),
+              (qryupdatedcpoinventorycounts.pototalrcvd - COALESCE(qryupdatedcorderinventorycounts.ordquant, (0)::bigint)),
+              (qryupdatedcpoinventorycounts.pototalrcvd - COALESCE(qryupdatedcorderinventorycounts.orddelquant, (0)::bigint))) s1(total, totalrcvd, dccurquant);
+  SQL
+  create_view "pre_order_items_outstandings", sql_definition: <<-SQL
+      SELECT tblpreorderitems.skuid2,
+      tblpreorder.preorderid,
+      tblpreorder.preorderdate,
+      tblpreorderitems.preorderitemsid,
+      tblcustomer.custbusinessname,
+      tblsku.manf,
+      tblsku.itemno,
+      tblsku.skudesc,
+      tblpreorderitems.orderaupriceper,
+      tblpreorderitems.preordernotes,
+      tblpreorderitems.orderquant2,
+      update_dc_inventory_counts.dccurquant,
+      update_dc_inventory_counts.totaldue,
+      tblpreorderitems.orderpriceper2,
+      tblpreorderitems.orderpricetotal2,
+      tblpreorderitems.preorderitemcode,
+      tblpreorderitems.poid,
+      (update_dc_inventory_counts.dccurquant + update_dc_inventory_counts.totaldue) AS avail
+     FROM ((((tblsku
+       JOIN tblpreorderitems ON ((tblsku.skuid = tblpreorderitems.skuid2)))
+       JOIN tblpreorder ON ((tblpreorderitems.preorderid = tblpreorder.preorderid)))
+       JOIN tblcustomer ON ((tblpreorder.custid = tblcustomer.custid)))
+       LEFT JOIN update_dc_inventory_counts ON ((tblsku.skuid = update_dc_inventory_counts.skuid)))
+    WHERE ((tblpreorderitems.preorderitemcode < 4) AND ((tblpreorderitems.poid = 0) OR (tblpreorderitems.poid IS NULL)));
+  SQL
+  create_view "qryInventoryCounts", sql_definition: <<-SQL
+      WITH qrypoinventorycounts AS (
+           SELECT tblsku_1.skuid,
+              tblsku_1.sku,
+              tblsku_1.manf,
+              tblsku_1.itemno,
+              tblsku_1.skudesc,
+              sum(COALESCE(tblpurchaseorderitems.poorderquant, 0)) AS pototal,
+              sum(COALESCE(tblpurchaseorderitems.poorderrcvdquant, 0)) AS pototalrcvd
+             FROM (tblsku tblsku_1
+               JOIN tblpurchaseorderitems ON ((tblsku_1.skuid = tblpurchaseorderitems.skuid)))
+            GROUP BY tblsku_1.skuid, tblsku_1.sku, tblsku_1.manf, tblsku_1.itemno, tblsku_1.skudesc
+          ), qryorderinventorycounts AS (
+           SELECT tblsku_1.skuid,
+              tblsku_1.sku,
+              tblsku_1.manf,
+              tblsku_1.itemno,
+              tblsku_1.skudesc,
+              sum(COALESCE(tblorderitems.orderquant, 0)) AS ordquant,
+              sum(COALESCE(tblorderitems.orderdeliveredquant, 0)) AS orddelquant
+             FROM (tblsku tblsku_1
+               JOIN tblorderitems ON ((tblsku_1.skuid = tblorderitems.skuid)))
+            GROUP BY tblsku_1.skuid, tblsku_1.sku, tblsku_1.manf, tblsku_1.itemno, tblsku_1.skudesc
+          )
+   SELECT qrypoinventorycounts.skuid,
+      qrypoinventorycounts.sku,
+      qrypoinventorycounts.manf,
+      qrypoinventorycounts.itemno,
+      qrypoinventorycounts.skudesc,
+      s1.total,
+      (s1.total * tblsku.skuminunits) AS totalunits,
+      tblsku.skuminpercs,
+      (s1.total / tblsku.skuminpercs) AS totalcases,
+      tblsku.dcloc,
+      tblsku.categoryid,
+      s1.totalrcvd,
+      (s1.totalrcvd * tblsku.skuminunits) AS totalunitsrcvd,
+      (s1.totalrcvd / tblsku.skuminpercs) AS totalcasesrcvd,
+      (s1.total - s1.totalrcvd) AS totaldue,
+      (qrypoinventorycounts.pototalrcvd - COALESCE(qryorderinventorycounts.orddelquant, (0)::bigint)) AS dccurquant,
+      COALESCE(qryorderinventorycounts.ordquant, (0)::bigint) AS sold,
+      COALESCE(qrypoinventorycounts.pototal, (0)::bigint) AS bought
+     FROM ((tblsku
+       LEFT JOIN qryorderinventorycounts ON ((tblsku.skuid = qryorderinventorycounts.skuid)))
+       LEFT JOIN qrypoinventorycounts ON ((tblsku.skuid = qrypoinventorycounts.skuid))),
+      LATERAL ( SELECT (qrypoinventorycounts.pototal - COALESCE(qryorderinventorycounts.ordquant, (0)::bigint)),
+              (qrypoinventorycounts.pototalrcvd - COALESCE(qryorderinventorycounts.ordquant, (0)::bigint))) s1(total, totalrcvd);
+  SQL
+  create_view "qryskupohistau", sql_definition: <<-SQL
+      SELECT tblpurchaseorder.podate,
+      tblpurchaseorderitems.skuid,
+      tblpurchaseorder.splrid2,
+      tblsupplier.splrname,
+      tblpurchaseorderitems.poorderquant,
+      tblpurchaseorderitems.poorderpriceper,
+      (tblpurchaseorderitems.poordertotalper - tblpurchaseorderitems.poordertaxper) AS priceeachlesstax,
+      tblpurchaseorder.poid,
+      tblpurchaseorderitems.poorderrcvdquant,
+      (tblpurchaseorderitems.poorderquant - tblpurchaseorderitems.poorderrcvdquant) AS podiff,
+      tblpurchaseorderitems.poorderexpiration
+     FROM ((tblsupplier
+       JOIN tblpurchaseorder ON ((tblsupplier.splrid = tblpurchaseorder.splrid2)))
+       JOIN tblpurchaseorderitems ON ((tblpurchaseorder.poid = tblpurchaseorderitems.poid)));
+  SQL
+  create_view "qrySKUPOHistAU2", sql_definition: <<-SQL
+      SELECT qryskupohistau.podate,
+      qryskupohistau.skuid,
+      qryskupohistau.splrid2,
+      qryskupohistau.splrname,
+      qryskupohistau.poorderquant,
+      qryskupohistau.poorderrcvdquant,
+      qryskupohistau.podiff,
+      qryskupohistau.poorderpriceper,
+      qryskupohistau.priceeachlesstax,
+      qryskupohistau.poid,
+      sum(tblorderitems.orderquant) AS sumoforderquant,
+      sum(tblorderitems.orderdeliveredquant) AS sumoforderdeliveredquant,
+      (qryskupohistau.poorderquant - COALESCE(sum(tblorderitems.orderquant), (0)::bigint)) AS available,
+      (qryskupohistau.poorderrcvdquant - COALESCE(sum(tblorderitems.orderdeliveredquant), (0)::bigint)) AS in_dc,
+      qryskupohistau.poorderexpiration
+     FROM (qryskupohistau
+       LEFT JOIN tblorderitems ON (((qryskupohistau.poid = tblorderitems.poid) AND (qryskupohistau.skuid = tblorderitems.skuid))))
+    GROUP BY qryskupohistau.podate, qryskupohistau.skuid, qryskupohistau.splrid2, qryskupohistau.splrname, qryskupohistau.poorderquant, qryskupohistau.poorderrcvdquant, qryskupohistau.podiff, qryskupohistau.poorderpriceper, qryskupohistau.priceeachlesstax, qryskupohistau.poid, qryskupohistau.poorderexpiration;
+  SQL
+  create_view "qry_order_data_pick_list", sql_definition: <<-SQL
+      SELECT tblcustomer.custid,
+      tblcustomer.custname,
+      tblcustomer.custfirst,
+      tblcustomer.custlast,
+      tblcustomer.custsal,
+      tblcustomer.custtitle,
+      tblcustomer.custbusinessname,
+      tblcustomer.custaddress,
+      tblcustomer.custcity,
+      tblcustomer.custst,
+      tblcustomer.custzip,
+      tblcustomer.custprimarycontact1,
+      tblcustomer.custphone1,
+      tblcustomer.custphonetype1,
+      tblcustomer.custemail1,
+      tblcustomer.custprimarycontact2,
+      tblcustomer.custphone2,
+      tblcustomer.custphonetype2,
+      tblcustomer.custemail2,
+      tblcustomer.custfax,
+      tblcustomer.custtaxrate,
+      tblcustomer.custccauth,
+      tblcustomer.custcclast4,
+      tblorder.orderid,
+      tblorder.orderdate,
+      tblorder.orderbatch,
+      tblorder.ordertaxrate,
+      tblorder.ordernotes,
+      tblorder.preordercompletedate,
+      tblorderitems.orderitemsid,
+      tblorderitems.poid,
+      tblorderitems.orderdeliverycosttotal,
+      tblorderitems.ordertaxtotal,
+      tblorderitems.ordergrandtotal,
+      tblorderitems.orderquant,
+      tblorderitems.orderpriceper,
+      tblorderitems.orderpricetotal,
+      tblorderitems.orderretailtotal,
+      tblorderitems.orderitemsdelivereddate,
+      tblorderitems.orderdeliveredquant,
+      tblsku.skuid,
+      tblsku.sku,
+      tblsku.manf,
+      tblsku.itemno,
+      tblsku.skudesc,
+      tblsku.unitweight,
+      tblsku.categoryid,
+      tblsku.skuminunits,
+      tblsku.skuminunitstype,
+      tblsku.dcloc,
+      tblsku.skuminpercs,
+      s1.orderquantdue
+     FROM (((tblsku
+       JOIN tblorderitems ON ((tblorderitems.skuid = tblsku.skuid)))
+       JOIN tblorder ON ((tblorder.orderid = tblorderitems.orderid)))
+       JOIN tblcustomer ON ((tblcustomer.custid = tblorder.custid))),
+      LATERAL ( SELECT (tblorderitems.orderquant - tblorderitems.orderdeliveredquant)) s1(orderquantdue)
+    WHERE ((((tblsku.dcloc)::text <> 'N/A'::text) AND (s1.orderquantdue <> 0)) OR (s1.orderquantdue < 0));
+  SQL
+  create_view "qry_order_items_outstanding", sql_definition: <<-SQL
+      SELECT gen_random_uuid() AS id,
+      tblorder.orderid,
+      tblorder.orderdate,
+      tblorder.orderbatch,
+      tblorder.custid,
+      tblorder.ordertaxrate,
+      tblorder.orderdelivereddate,
+      tblorder.orderdeliverdfrom,
+      tblorder.orderdeliveredto,
+      tblorder.ordershipmethod,
+      tblorder.orderreceipthl,
+      tblorder.orderdateinvoiced,
+      tblorder.orderdatepaid,
+      tblorder.orderpaymentmethod,
+      tblorder.orderpaymentamount,
+      tblorder.ordernotes,
+      tblorderitems.orderitemsid,
+      tblorderitems.skuid,
+      tblorderitems.poid,
+      tblorderitems.orderquant,
+      tblorderitems.orderdeliveredquant,
+      s1.orderquantdue,
+      tblorderitems.orderpriceper,
+      tblorderitems.orderpricetotal,
+      tblorderitems.ordertaxrate AS order_item_tax_rate,
+      tblorderitems.ordertaxtotal,
+      tblorderitems.orderdeliverycosttotal,
+      tblorderitems.orderfeestotal,
+      tblorderitems.ordergrandtotal,
+      tblorderitems.orderitemsdelivereddate,
+      tblorderitems.orderretailtotal,
+      tblcustomer.custname,
+      tblcustomer.custbusinessname,
+      tblcustomer.custfirst,
+      tblcustomer.custlast,
+      tblcustomer.custsal,
+      tblcustomer.custtitle,
+      tblcustomer.custaddress,
+      tblcustomer.custcity,
+      tblcustomer.custst,
+      tblcustomer.custzip,
+      tblcustomer.custphone,
+      tblcustomer.custfax,
+      tblcustomer.custemail,
+      tblcustomer.custprimarycontact1,
+      tblcustomer.custphone1,
+      tblcustomer.custphonetype1,
+      tblcustomer.custemail1,
+      tblcustomer.custprimarycontact2,
+      tblcustomer.custphone2,
+      tblcustomer.custphonetype2,
+      tblcustomer.custemail2,
+      tblcustomer.custtaxrate,
+      tblcustomer.custnotes,
+      tblcustomer.custdatecreated,
+      tblcustomer.custdatemodified,
+      tblcustomer.custbillingbusinessname,
+      tblcustomer.custbillingfirst,
+      tblcustomer.custbillinglast,
+      tblcustomer.custbillingsal,
+      tblcustomer.custbillingtitle,
+      tblcustomer.custbillingaddress,
+      tblcustomer.custbillingcity,
+      tblcustomer.custbillingst,
+      tblcustomer.custbillingzip,
+      tblcustomer.custbillingphone,
+      tblcustomer.custbillingfax,
+      tblcustomer.custbillingemail,
+      tblcustomer.custbillingsame,
+      tblcustomer.custqbo,
+      tblsku.sku,
+      tblsku.manf,
+      tblsku.itemno,
+      tblsku.skudesc,
+      tblsku.unitweight,
+      tblsku.categoryid,
+      tblsku.skuminunits,
+      tblsku.skuminunitstype,
+      tblsku.dcloc,
+      tblsku.skuminpercs,
+      qryinventorycounts.total,
+      qryinventorycounts.totalrcvd,
+      qryinventorycounts.totaldue,
+      qryinventorycounts.dccurquant,
+      tblsku.has_issue
+     FROM ((((tblsku
+       JOIN tblorderitems ON ((tblsku.skuid = tblorderitems.skuid)))
+       JOIN tblorder ON ((tblorderitems.orderid = tblorder.orderid)))
+       JOIN tblcustomer ON ((tblcustomer.custid = tblorder.custid)))
+       LEFT JOIN qryinventorycounts ON ((tblsku.skuid = qryinventorycounts.skuid))),
+      LATERAL ( SELECT (tblorderitems.orderquant - tblorderitems.orderdeliveredquant)) s1(orderquantdue)
+    WHERE (s1.orderquantdue > 0)
+    ORDER BY tblorder.orderid;
+  SQL
   create_view "qryorderccbilldue", sql_definition: <<-SQL
       SELECT tblorder.orderid,
       tblorder.orderdate,
@@ -1448,6 +1518,60 @@ ActiveRecord::Schema.define(version: 2022_01_05_032328) do
      FROM (tblcustomer
        JOIN tblorder ON ((tblcustomer.custid = tblorder.custid)))
     WHERE ((tblorder.orderdelivereddate IS NOT NULL) AND (tblorder.orderdatepaid IS NULL) AND (tblorder.orderccdate IS NULL) AND (tblcustomer.custccauth = true));
+  SQL
+  create_view "qryorderdatashippinglist", sql_definition: <<-SQL
+      SELECT tblcustomer.custid,
+      tblcustomer.custname,
+      tblcustomer.custfirst,
+      tblcustomer.custlast,
+      tblcustomer.custsal,
+      tblcustomer.custtitle,
+      tblcustomer.custbusinessname,
+      tblcustomer.custaddress,
+      tblcustomer.custcity,
+      tblcustomer.custst,
+      tblcustomer.custzip,
+      tblcustomer.custprimarycontact1,
+      tblcustomer.custphone1,
+      tblcustomer.custphonetype1,
+      tblcustomer.custemail1,
+      tblcustomer.custprimarycontact2,
+      tblcustomer.custphone2,
+      tblcustomer.custphonetype2,
+      tblcustomer.custemail2,
+      tblcustomer.custfax,
+      tblcustomer.custtaxrate,
+      tblcustomer.custccauth,
+      tblcustomer.custcclast4,
+      tblorder.orderid,
+      tblorder.orderdate,
+      tblorder.orderbatch,
+      tblorder.ordertaxrate,
+      tblorder.ordernotes,
+      tblorder.preordercompletedate,
+      tblorderitems.skuid,
+      sum(tblorderitems.orderdeliverycosttotal) AS sumoforderdeliverycosttotal,
+      sum(tblorderitems.ordertaxtotal) AS sumofordertaxtotal,
+      sum(tblorderitems.ordergrandtotal) AS sumofordergrandtotal,
+      sum(tblorderitems.orderquant) AS sumoforderquant,
+      sum(tblorderitems.orderpricetotal) AS sumoforderpricetotal,
+      sum(tblorderitems.orderdeliveredquant) AS sumoforderdeliveredquant,
+      tblorderitems.orderpriceper,
+      tblorderitems.orderitemsdelivereddate,
+      tblsku.sku,
+      tblsku.manf,
+      tblsku.itemno,
+      tblsku.skudesc,
+      tblsku.unitweight,
+      tblsku.categoryid,
+      tblsku.skuminunits,
+      tblsku.skuminunitstype,
+      tblsku.skuminpercs
+     FROM (((tblsku
+       JOIN tblorderitems ON ((tblsku.skuid = tblorderitems.skuid)))
+       JOIN tblorder ON ((tblorder.orderid = tblorderitems.orderid)))
+       JOIN tblcustomer ON ((tblcustomer.custid = tblorder.custid)))
+    GROUP BY tblcustomer.custid, tblcustomer.custname, tblcustomer.custfirst, tblcustomer.custlast, tblcustomer.custsal, tblcustomer.custtitle, tblcustomer.custbusinessname, tblcustomer.custaddress, tblcustomer.custcity, tblcustomer.custst, tblcustomer.custzip, tblcustomer.custprimarycontact1, tblcustomer.custphone1, tblcustomer.custphonetype1, tblcustomer.custemail1, tblcustomer.custprimarycontact2, tblcustomer.custphone2, tblcustomer.custphonetype2, tblcustomer.custemail2, tblcustomer.custfax, tblcustomer.custtaxrate, tblorder.orderid, tblorder.orderdate, tblorder.orderbatch, tblorder.custid, tblorder.ordertaxrate, tblorder.ordernotes, tblorderitems.skuid, tblorderitems.orderpriceper, tblorderitems.orderitemsdelivereddate, tblsku.skuid, tblsku.sku, tblsku.manf, tblsku.itemno, tblsku.skudesc, tblsku.unitweight, tblsku.categoryid, tblsku.skuminunits, tblsku.skuminunitstype, tblsku.skuminpercs, tblcustomer.custccauth, tblcustomer.custcclast4, tblorder.preordercompletedate;
   SQL
   create_view "qryorderdatashippinglist2", sql_definition: <<-SQL
       SELECT tblcustomer.custid,
@@ -1516,23 +1640,172 @@ ActiveRecord::Schema.define(version: 2022_01_05_032328) do
        JOIN tblcustomer ON ((tblcustomer.custid = tblorder.custid)))
     GROUP BY tblcustomer.custid, tblcustomer.custname, tblcustomer.custfirst, tblcustomer.custlast, tblcustomer.custsal, tblcustomer.custtitle, tblcustomer.custbusinessname, tblcustomer.custaddress, tblcustomer.custcity, tblcustomer.custst, tblcustomer.custzip, tblcustomer.custprimarycontact1, tblcustomer.custphone1, tblcustomer.custphonetype1, tblcustomer.custemail1, tblcustomer.custprimarycontact2, tblcustomer.custphone2, tblcustomer.custphonetype2, tblcustomer.custemail2, tblcustomer.custfax, tblcustomer.custtaxrate, tblorder.orderid, tblorder.orderdate, tblorder.orderbatch, tblorder.custid, tblorder.ordertaxrate, tblorder.ordernotes, tblorderitems.skuid, tblorderitems.orderpriceper, tblorderitems.orderitemsdelivereddate, tblsku.skuid, tblsku.sku, tblsku.manf, tblsku.itemno, tblsku.skudesc, tblsku.unitweight, tblsku.categoryid, tblsku.skuminunits, tblsku.skuminunitstype, tblsku.skuminpercs, tblcustomer.custccauth, tblcustomer.custcclast4, tblorder.preordercompletedate, tblcustomer.custbillingbusinessname, tblcustomer.custbillingfirst, tblcustomer.custbillinglast, tblcustomer.custbillingsal, tblcustomer.custbillingtitle, tblcustomer.custbillingaddress, tblcustomer.custbillingcity, tblcustomer.custbillingst, tblcustomer.custbillingzip, tblcustomer.custbillingphone, tblcustomer.custbillingfax, tblcustomer.custbillingemail, tblcustomer.custbillingsame;
   SQL
-  create_view "vw_sku_basic", sql_definition: <<-SQL
-      SELECT tblsku.skuid,
-      tblsku.sku,
-      tblsku.manf,
-      tblsku.itemno,
-      tblsku.skudesc,
-      tblsku.unitweight,
-      tblsku.categoryid,
-      tblsku.skuminunits,
-      tblsku.skuminunitstype,
-      tblsku.dcloc,
-      tblsku.skuminpercs,
-      tblsku.skuclassid,
-      tblsku.skumaxtemp,
-      tblsku.skumintemp,
-      tblsku.skunotes,
-      tblsku.tsv
-     FROM tblsku;
+  create_view "qrypreorderpohistau", sql_definition: <<-SQL
+      SELECT tblpurchaseorder.podate,
+      tblpurchaseorderitems.skuid,
+      tblpurchaseorder.splrid2,
+      tblsupplier.splrname,
+      tblpurchaseorderitems.poorderquant,
+      tblpurchaseorderitems.poorderpriceper,
+      s1.priceeachlesstax,
+      tblpurchaseorder.poid,
+      tblpurchaseorderitems.poorderrcvdquant,
+      s1.podiff,
+      tblpurchaseorderitems.poorderexpiration
+     FROM ((tblsupplier
+       JOIN tblpurchaseorder ON ((tblsupplier.splrid = tblpurchaseorder.splrid2)))
+       JOIN tblpurchaseorderitems ON ((tblpurchaseorder.poid = tblpurchaseorderitems.poid))),
+      LATERAL ( SELECT (tblpurchaseorderitems.poordertotalper - tblpurchaseorderitems.poordertaxper),
+              (tblpurchaseorderitems.poorderquant - tblpurchaseorderitems.poorderrcvdquant)) s1(priceeachlesstax, podiff);
+  SQL
+  create_view "qrypreorderpohistau2", sql_definition: <<-SQL
+      SELECT qrypreorderpohistau.podate,
+      qrypreorderpohistau.skuid,
+      qrypreorderpohistau.splrid2,
+      qrypreorderpohistau.splrname,
+      qrypreorderpohistau.poorderquant,
+      qrypreorderpohistau.poorderrcvdquant,
+      qrypreorderpohistau.podiff,
+      qrypreorderpohistau.poorderpriceper,
+      qrypreorderpohistau.priceeachlesstax,
+      qrypreorderpohistau.poid,
+      sum(tblorderitems.orderquant) AS sumoforderquant,
+      sum(tblorderitems.orderdeliveredquant) AS sumoforderdeliveredquant,
+      qrypreorderpohistau.poorderexpiration
+     FROM (tblorderitems
+       RIGHT JOIN qrypreorderpohistau ON (((tblorderitems.skuid = qrypreorderpohistau.skuid) AND (tblorderitems.poid = qrypreorderpohistau.poid))))
+    GROUP BY qrypreorderpohistau.podate, qrypreorderpohistau.skuid, qrypreorderpohistau.splrid2, qrypreorderpohistau.splrname, qrypreorderpohistau.poorderquant, qrypreorderpohistau.poorderrcvdquant, qrypreorderpohistau.podiff, qrypreorderpohistau.poorderpriceper, qrypreorderpohistau.priceeachlesstax, qrypreorderpohistau.poid, qrypreorderpohistau.poorderexpiration;
+  SQL
+  create_view "qrypreordersublist", sql_definition: <<-SQL
+      SELECT tblpreorderitems.skuid1,
+      tblpreorderitems.skuid2,
+      tblcustomer.custname
+     FROM ((tblpreorderitems
+       JOIN tblpreorder ON ((tblpreorderitems.preorderid = tblpreorder.preorderid)))
+       JOIN tblcustomer ON ((tblpreorder.custid = tblcustomer.custid)))
+    GROUP BY tblpreorderitems.skuid1, tblpreorderitems.skuid2, tblcustomer.custname, tblpreorder.custid
+   HAVING (tblpreorderitems.skuid2 <> 0);
+  SQL
+  create_view "qryskupohistau2", sql_definition: <<-SQL
+      SELECT qryskupohistau.podate,
+      qryskupohistau.skuid,
+      qryskupohistau.splrid2,
+      qryskupohistau.splrname,
+      qryskupohistau.poorderquant,
+      qryskupohistau.poorderrcvdquant,
+      qryskupohistau.podiff,
+      qryskupohistau.poorderpriceper,
+      qryskupohistau.priceeachlesstax,
+      qryskupohistau.poid,
+      sum(tblorderitems.orderquant) AS sumoforderquant,
+      sum(tblorderitems.orderdeliveredquant) AS sumoforderdeliveredquant,
+      (qryskupohistau.poorderquant - COALESCE(sum(tblorderitems.orderquant), (0)::bigint)) AS available,
+      (qryskupohistau.poorderrcvdquant - COALESCE(sum(tblorderitems.orderdeliveredquant), (0)::bigint)) AS in_dc,
+      qryskupohistau.poorderexpiration
+     FROM (qryskupohistau
+       LEFT JOIN tblorderitems ON (((qryskupohistau.poid = tblorderitems.poid) AND (qryskupohistau.skuid = tblorderitems.skuid))))
+    GROUP BY qryskupohistau.podate, qryskupohistau.skuid, qryskupohistau.splrid2, qryskupohistau.splrname, qryskupohistau.poorderquant, qryskupohistau.poorderrcvdquant, qryskupohistau.podiff, qryskupohistau.poorderpriceper, qryskupohistau.priceeachlesstax, qryskupohistau.poid, qryskupohistau.poorderexpiration;
+  SQL
+  create_view "sku_export", sql_definition: <<-SQL
+      SELECT t.skuid,
+      t.manf,
+      t.itemno,
+      t.skudesc,
+      0 AS avail,
+      '0'::text AS "DC_Ord",
+      0 AS intransit,
+      ic.dccurquant AS dccur,
+      ic.bought,
+      ic.sold,
+      t.dcloc,
+      tblskuclass.skuclassdesc AS sku_class,
+      t.skuclassid AS classid,
+      t.categoryid,
+      ic.totalcases AS totalpurchcases,
+      ic.totalcasesrcvd AS totalrcvdcases,
+      t.skuminunits,
+      t.skuminunitstype,
+      t.skuminpercs,
+      t.unitweight,
+      t.sku,
+      concat_ws('_'::text, ((t.vsku01)::text || (v01.vendorabbr)::text), ((t.vsku02)::text || (v02.vendorabbr)::text), ((t.vsku03)::text || (v03.vendorabbr)::text), ((t.vsku04)::text || (v04.vendorabbr)::text), ((t.vsku05)::text || (v05.vendorabbr)::text), ((t.vsku06)::text || (v06.vendorabbr)::text), ((t.vsku07)::text || (v07.vendorabbr)::text), ((t.vsku08)::text || (v08.vendorabbr)::text), ((t.vsku09)::text || (v09.vendorabbr)::text), ((t.vsku10)::text || (v10.vendorabbr)::text)) AS vskuconcat,
+      t.skumaxtemp AS maxtemp,
+      t.skumintemp AS mintemp
+     FROM ((((((((((((tblsku t
+       LEFT JOIN tblvendor v01 ON ((v01.vendorid = t.vno01)))
+       LEFT JOIN tblvendor v02 ON ((v02.vendorid = t.vno02)))
+       LEFT JOIN tblvendor v03 ON ((v03.vendorid = t.vno03)))
+       LEFT JOIN tblvendor v04 ON ((v04.vendorid = t.vno04)))
+       LEFT JOIN tblvendor v05 ON ((v05.vendorid = t.vno05)))
+       LEFT JOIN tblvendor v06 ON ((v06.vendorid = t.vno06)))
+       LEFT JOIN tblvendor v07 ON ((v07.vendorid = t.vno07)))
+       LEFT JOIN tblvendor v08 ON ((v07.vendorid = t.vno08)))
+       LEFT JOIN tblvendor v09 ON ((v07.vendorid = t.vno09)))
+       LEFT JOIN tblvendor v10 ON ((v07.vendorid = t.vno10)))
+       LEFT JOIN tblskuclass ON ((t.skuclassid = tblskuclass.skuclassid)))
+       LEFT JOIN qryinventorycounts ic ON ((t.skuid = ic.skuid)));
+  SQL
+  create_view "sku_with_vskuconcats", sql_definition: <<-SQL
+      SELECT concat_ws('_'::text, ((t.vsku01)::text || (v01.vendorabbr)::text), ((t.vsku02)::text || (v02.vendorabbr)::text), ((t.vsku03)::text || (v03.vendorabbr)::text), ((t.vsku04)::text || (v04.vendorabbr)::text), ((t.vsku05)::text || (v05.vendorabbr)::text), ((t.vsku06)::text || (v06.vendorabbr)::text), ((t.vsku07)::text || (v07.vendorabbr)::text), ((t.vsku08)::text || (v08.vendorabbr)::text), ((t.vsku09)::text || (v09.vendorabbr)::text), ((t.vsku10)::text || (v10.vendorabbr)::text)) AS vskuconcat,
+      t.skuid,
+      t.sku,
+      t.manf,
+      t.itemno,
+      t.skudesc,
+      t.unitweight,
+      t.categoryid,
+      t.skuminunits,
+      t.skuminunitstype,
+      t.dcloc,
+      t.skuminpercs,
+      t.vno01,
+      t.vsku01,
+      t.vhl01,
+      t.vno02,
+      t.vsku02,
+      t.vhl02,
+      t.vno03,
+      t.vsku03,
+      t.vhl03,
+      t.vno04,
+      t.vsku04,
+      t.vhl04,
+      t.vno05,
+      t.vsku05,
+      t.vhl05,
+      t.vno06,
+      t.vsku06,
+      t.vhl06,
+      t.vno07,
+      t.vsku07,
+      t.vhl07,
+      t.vno08,
+      t.vsku08,
+      t.vhl08,
+      t.vno09,
+      t.vsku09,
+      t.vhl09,
+      t.vno10,
+      t.vsku10,
+      t.vhl10,
+      t.skuhighprice,
+      t.skuhighpricevno,
+      t.skuhighpricedate,
+      t.skuclassid,
+      t.skumaxtemp,
+      t.skumintemp,
+      t.skunotes,
+      t.tsv
+     FROM ((((((((((tblsku t
+       LEFT JOIN tblvendor v01 ON ((v01.vendorid = t.vno01)))
+       LEFT JOIN tblvendor v02 ON ((v02.vendorid = t.vno02)))
+       LEFT JOIN tblvendor v03 ON ((v03.vendorid = t.vno03)))
+       LEFT JOIN tblvendor v04 ON ((v04.vendorid = t.vno04)))
+       LEFT JOIN tblvendor v05 ON ((v05.vendorid = t.vno05)))
+       LEFT JOIN tblvendor v06 ON ((v06.vendorid = t.vno06)))
+       LEFT JOIN tblvendor v07 ON ((v07.vendorid = t.vno07)))
+       LEFT JOIN tblvendor v08 ON ((v07.vendorid = t.vno08)))
+       LEFT JOIN tblvendor v09 ON ((v07.vendorid = t.vno09)))
+       LEFT JOIN tblvendor v10 ON ((v07.vendorid = t.vno10)));
   SQL
 end
