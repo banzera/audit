@@ -19,6 +19,6 @@ module Audit
     config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
-    config.middleware.use PDFKit::Middleware
+    config.middleware.use PDFKit::Middleware, {}, :except => [%r[^/purchase_order_items]]
   end
 end

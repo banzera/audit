@@ -53,6 +53,8 @@ gem 'jbuilder', '~> 2.7'
 # PDF generation
 gem 'pdfkit'
 gem 'wkhtmltopdf-heroku', group: :production
+gem "prawn-rails", "~> 1.4"
+gem "prawn-svg"
 
 # XLSX parsing/generating libraries
 gem 'roo'
@@ -129,3 +131,5 @@ gem "down", "~> 5.2"
 gem "zippy", "~> 0.2.3"
 
 gem "stimulus-rails", "~> 1.0"
+
+gem "view_component", "~> 2.52"

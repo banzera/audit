@@ -1,6 +1,5 @@
 class PurchaseOrderItemsController < ApplicationController
   include DefaultCrudController
-  include HasLabel
 
   load_and_authorize_resource :purchase_order
   load_and_authorize_resource :purchase_order_item, through: :purchase_order, through_association: :items, shallow: true
@@ -14,6 +13,10 @@ class PurchaseOrderItemsController < ApplicationController
   submit :receive, 'Receive'
   on     :create, redirect: -> { purchase_order_path(resource.purchase_order) }
   on     :save,   redirect: -> { purchase_order_path(resource.purchase_order) }
+
+  def label
+    render BinLabelComponent.new(sku: @sku, po: @purchase_order)
+  end
 
   def edit
     @parent = @purchase_order_item.purchase_order
