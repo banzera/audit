@@ -19,6 +19,7 @@ class PurchaseOrderItem < ApplicationRecord
 
   def receive!
     self.update(poorderrcvddate: Time.current)
+    self.sku.resolve_issue!
   end
 
   def unfulfilled?
