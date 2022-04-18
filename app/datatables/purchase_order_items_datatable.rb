@@ -27,7 +27,8 @@ class PurchaseOrderItemsDatatable < Effective::Datatable
     col :poid,         visible: attributes[:po].blank?, partial: 'application/dt/po', label: "PO"
     col :sku,          visible: true, partial: 'application/dt/sku', label: "SKU"
     col :description do |poi| poi.sku.skudesc end
-    col :poorderprice,     search: false, label: "Order Price", as: :currency
+    # col :poorderprice,     search: false, label: "Order Price", as: :currency
+    col 'Item Number' do |poi| poi.sku.itemno end
     col :poorderquant,     search: false, label: "Order Qty"
     col :poorderrcvdquant, search: false, label: "Received Qty"
     col :diff_quant,       search: false, label: "Awaiting"
