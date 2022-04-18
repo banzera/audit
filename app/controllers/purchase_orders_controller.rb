@@ -5,6 +5,9 @@ class PurchaseOrdersController < ApplicationController
 
   load_and_authorize_resource
 
+  button :label_preview, false
+  button :label_preview, "PO Label"
+
   button :upload, false
   button :new_items, 'Add or Upload Items'
   button :receive, 'Receive', if: -> { resource.unfullfilled? }

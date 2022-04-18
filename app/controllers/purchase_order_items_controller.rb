@@ -9,13 +9,17 @@ class PurchaseOrderItemsController < ApplicationController
   page_title(only: [:new])   { "New #{resource_name.titleize}(s) for PO #{@purchase_order}" }
   page_title(only: [:label]) { "Bin Label for #{@sku.sku} / #{@purchase_order.pobatch}" }
 
+  button :label_preview, "SKU Label Preview"
+  button :label, false
+  button :print, false
+
   button :receive, 'Receive', redirect: -> { receive_purchase_order_item_path(skuid: resource.id) }
   submit :receive, 'Receive'
   on     :create, redirect: -> { purchase_order_path(resource.purchase_order) }
   on     :save,   redirect: -> { purchase_order_path(resource.purchase_order) }
 
   def label
-    render BinLabelComponent.new(sku: @sku, po: @purchase_order)
+    render BinLabelComponent.new(sku: @sku, po: @purchase_order), layout: false, content_type: Mime[:pdf].to_s
   end
 
   def edit
