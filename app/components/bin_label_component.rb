@@ -62,7 +62,7 @@ class BinLabelComponent < ViewComponent::Base
   end
 
   def manf_item_box
-    [ [0, ROW2_TOP], width: HALF_WIDTH, height: MANF_ITEM_HEIGHT ]
+    [ [0, ROW2_TOP], width: SKU_BARCODE_WIDTH, height: MANF_ITEM_HEIGHT ]
   end
 
   def temps_labels_box

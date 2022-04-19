@@ -14,7 +14,7 @@ prawn_document(DOCUMENT_OPTIONS) do |pdf|
   # manf / item
   pdf.bounding_box(*manf_item_box) do
     pdf.text "MANF: #{@sku.manf}"
-    pdf.text "ITEM: #{@sku.itemno}"
+    pdf.text "ITEM: #{@sku.itemno.truncate(24)}"
   end
 
   # temps
