@@ -16,7 +16,7 @@
       = f.input :popriceper, label: 'PO Price Per + 20%', as: :currency
       = f.input :orderpriceper,   stimulus: { target: 'pricePer', action: 'oprice#updatePrice' }, as: :decimal
       = f.input :orderpricetotal, stimulus: { target: 'priceTotal' }, calculated: true
-      = f.input :ordertaxrate,    stimulus: { target: :taxRate }, input_html: { value: @order.ordertaxrate }
+      = f.input :ordertaxrate,    stimulus: { target: 'taxRate', action: 'oprice#updateTaxRate' }, input_html: { value: @order.ordertaxrate }
       = f.input :ordertaxtotal,   stimulus: { target: 'taxTotal' }, calculated: true
       = f.input :ordergrandtotal, stimulus: { target: 'grandTotal' }, calculated: true
 
