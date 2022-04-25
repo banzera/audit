@@ -55,7 +55,7 @@ class OrdersController < ApplicationController
   end
 
   def pick_list
-    @pick_list = @order.pick_list_items.order(:orderitemsid)
+    @pick_list = @order.pick_list_items.order(:dcloc)
   end
 
   def outstanding
