@@ -83,7 +83,11 @@ Rails.application.routes.draw do
   end
 
   resources :pre_orders, concerns: [:has_items, :auditable] do
-    resources :pre_order_items, except: [:destroy], path: :items
+    resources :pre_order_items, except: [:destroy], path: :items do
+      member do
+        get :analysis
+      end
+    end
 
     member do
       post :create_order

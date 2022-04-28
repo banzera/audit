@@ -1,0 +1,5 @@
+.card.card-secondary
+  .card-header
+    %h4.card-title.w-100 SKU Order History for #{skuid}
+  .card-body
+    = render_datatable PreOrderItemHistoryDatatable.new(skuid: skuid), simple: true

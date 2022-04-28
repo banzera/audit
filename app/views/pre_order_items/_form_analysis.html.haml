@@ -1,0 +1,123 @@
+= default_resource_form([@pre_order, @pre_order_item], read_only: local_assigns[:readonly], wrapper: :vertical_form) do |f|
+  .row.post
+    .col-3
+      = f.association :sku1, as: :sku_selection, source_url: '/skus', disabled: true
+      -# = f.association :sku2, as: :sku_selection, source_url: '/skus'
+      = f.input :skuid2
+
+    .col-3
+      = f.input :orderquant1, disabled: true
+      = f.association :purchase_order, as: :sku_po_history_selection, for_sku: :skuid2
+
+    .col-3
+      = f.input :orderpriceper1, disabled: true
+    .col-3
+      = f.input :orderpricetotal1, disabled: true
+
+  .row.post
+    .col-6
+      .card.card-secondary
+        .card-header
+          %h4.card-title.w-100 Previous Subsitutions
+        .card-body
+          %table.table.table-striped.table-compact
+            %thead
+              %th SKUID
+              %th Desc
+              %th Cust
+              %th
+            %tbody
+              - @pre_order_item.substitutions.each do |sub|
+                %tr
+                  %td=link_to sub.skuid2, analysis_pre_order_pre_order_item_path(@pre_order, @pre_order_item, skuid: sub.skuid2)
+                  %td=sub.sku2.skudesc
+                  %td=sub.custname
+                  %td
+                    %button.btn.btn-sm.btn-outline-primary Select
+
+    .col-6
+      = turbo_frame_tag :sku_history do
+        .card.card-secondary
+          .card-header
+            %h4.card-title.w-100 SKU Order History for #{params[:skuid]}
+          .card-body
+            = render_datatable PreOrderItemHistoryDatatable.new(skuid: params[:skuid]),
+              pagination: true,
+              sort:       false,
+              entries:    false,
+              buttons:    false,
+              search:     false
+
+  .row.post
+    .col-12
+      = turbo_frame_tag :po_history do
+        = render_datatable SkuHistoryDatatable.new(skuid: params[:skuid]),
+          pagination: true,
+          sort:       true,
+          entries:    false,
+          buttons:    false,
+          search:     false
+
+  .row.post
+    .col-4
+      -# = f.association :purchase_order, as: :sku_po_history_selection, for_sku: :skuid2
+    .col-4
+      = f.input :orderaupriceper
+    .col-4
+      = f.input :orderdate, as: :date, wrapper: :vertical_form
+  .row
+    .col-1
+      = f.input :preorderurgent, wrapper: :vertical_form
+    .col-3
+      = f.association :code
+    .col-8
+      = f.input :notes
+
+  - unless local_assigns[:readonly]
+    .row
+      = simple_form_submit(f)
+
+- content_for :scripts do
+  :coffee
+    $(document).ready () ->
+      # new LinkedSkuPoSelects('#pre_order_item_skuid2', '#pre_order_item_poid')
+      $('#pre_order_item_skuid2').change (e) =>
+
+        console.debug "Selection change detected in #pre_order_item_skuid2"
+        debugger
+        skuid = e.target.value
+
+        url   = "/skus/" + skuid + "/po_history"
+
+        $('#pre_order_item_poid').attr disabled: false
+
+        $('#pre_order_item_poid').select2
+          minimumResultsForSearch: 0
+          allowClear:              true
+          placeholder:             'Select...'
+          quietMillis:             50
+          data:                    [
+            id: "null"
+            text: ""
+          ],
+          escapeMarkup: (m) -> m
+          ajax:
+            url:      url
+            dataType: 'json'
+            type:     'GET'
+            data:     (term) =>
+              query                = {}
+              query.search         = term
+              query.available_only = true if @available_only
+
+              query
+            processResults:    (data) -> results: data.items
+
+          templateSelection: (item) -> if(item.selection) then $(item.selection) else item.text
+          templateResult: (item) ->
+            return item.text if(!item.result)
+
+            $result = $(item.result)
+            $result.find('a').on 'mouseup', (e) -> e.stopPropagation()
+
+            $result
