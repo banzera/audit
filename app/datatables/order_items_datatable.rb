@@ -12,8 +12,9 @@ class OrderItemsDatatable < Effective::Datatable
   datatable do
     length :all
 
-    order :orderitemsid, :desc
+    order 'sku.dcloc'
 
+    col 'sku.dcloc', visible: false
     col :orderitemsid, search: false, visible: false
     col :sku,  partial: 'application/dt/sku',    label: "SKU"
     col :poid, partial: 'application/dt/po',     label: "PO"
