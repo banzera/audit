@@ -11,6 +11,19 @@ class PreOrderItem < ApplicationRecord
   belongs_to :code,           class_name: 'PreOrderCode',  foreign_key: :preorderitemcode #, optional: true
   belongs_to :purchase_order, class_name: 'PurchaseOrder', foreign_key: :poid            , optional: true
 
+  def substitutions
+    subs = PreOrderItemSubstitutionList.where(skuid1: skuid1)
+    subs
+  end
+
+  def sku1_orders
+    PreOrderItemHistory.where(skuid: skuid1)
+  end
+
+  def sku2_orders
+    PreOrderItemHistory.where(skuid: skuid2)
+  end
+
   alias_attribute :requested_qty, :orderquant1
   alias_attribute :proposed_qty,  :orderquant2
 

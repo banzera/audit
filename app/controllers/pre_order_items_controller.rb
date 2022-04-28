@@ -6,6 +6,8 @@ class PreOrderItemsController < ApplicationController
 
   before_action :load_resources, except: [:index, :new, :outstanding]
 
+  button :analysis, false
+
   page_title only: :new do
     "New #{resource_name.titleize}(s) for PreOrder #{@pre_order}"
   end
@@ -16,6 +18,10 @@ class PreOrderItemsController < ApplicationController
 
   def show
     @parent = @pre_order_item.pre_order
+  end
+
+  def analysis
+    render action: :edit
   end
 
   def outstanding
