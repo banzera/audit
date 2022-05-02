@@ -30,7 +30,7 @@
           .card-header
             %h5.m-0 Vendor Info
           .card-body
-            - v_rows = @sku.vendors.size + 2
+            - v_rows = [10, @sku.vendors.size + 2].min
             - (1..v_rows).map {|i| '%02d' % i }.each do |i|
               .row.post
                 =f.input "vno#{i}", label: 'Vendor', collection: Vendor.all

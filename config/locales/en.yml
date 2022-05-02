@@ -294,6 +294,7 @@ en:
         vhl09: Vendor URL
         vno10: Vendor Number
         vsku10: Vendor SKU
+        vhl10: Vendor URL
         skuhighprice: High Price
         skuhighpricevno: High Price Vendor Number
         skuhighpricedate: High Price Date
