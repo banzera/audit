@@ -25,9 +25,11 @@ class PreOrder < ApplicationRecord
 
   has_batch_number :preorderbatch, date: :preorderdate, prefix: 'P-', attrs: 'customer.custname' do
     PreOrder
+      .select(:preorderid, :preorderbatch)
       .where("DATE(preorderdate) = ?", self.preorderdate)
       .where(custid: self.custid)
-      .count || 0
+      .order(:preorderbatch)
+      .last&.preorderbatch
   end
 
   def create_order!

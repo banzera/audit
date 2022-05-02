@@ -28,9 +28,11 @@ class PurchaseOrder < ApplicationRecord
 
   has_batch_number :pobatch, date: :podate, attrs: 'supplier1.splrname' do |po|
     PurchaseOrder
+      .select(:poid, :pobatch)
       .where("DATE(podate) = ?", self.podate)
       .where(supplier1: self.supplier1)
-      .count || 0
+      .order(:pobatch)
+      .last&.pobatch
   end
 
   def self.ship_types

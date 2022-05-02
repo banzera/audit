@@ -40,11 +40,13 @@ class Order < ApplicationRecord
     :type => :code_39,
     :value => Proc.new { |o| o.orderid.to_s }
 
-  has_batch_number :orderbatch, attrs: 'customer.custname' do
+  has_batch_number :orderbatch, date: :orderdate, attrs: 'customer.custname' do
     Order
+      .select(:orderid, :orderbatch)
       .where("DATE(orderdate) = ?", self.orderdate)
       .where(custid: self.custid)
-      .count || 0
+      .order(:orderbatch)
+      .last&.orderbatch
   end
 
   def mark_as_billed!

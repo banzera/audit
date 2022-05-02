@@ -31,7 +31,9 @@ module HasBatch
     end
 
     def batch_serial_number
-      x = instance_exec &batch_serial_fx
+      last_batch = instance_exec(&batch_serial_fx) || '00'
+      x = last_batch[-2..].to_i
+
       BATCH_SERIAL_NUMBER_FORMAT % (x+1)
     end
 
