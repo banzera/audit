@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_21_012506) do
+ActiveRecord::Schema.define(version: 2022_05_06_145051) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -272,9 +272,12 @@ ActiveRecord::Schema.define(version: 2022_04_21_012506) do
     t.datetime "preorderanalysisdate"
     t.datetime "confirmationdate"
     t.datetime "preordercheck"
+    t.integer "splrid"
+    t.decimal "ds_tax_amount"
     t.index ["custid"], name: "index_tblpreorder_on_custid"
     t.index ["preorderbatch"], name: "index_tblpreorder_on_preorderbatch"
     t.index ["preordervendorid"], name: "index_tblpreorder_on_preordervendorid"
+    t.index ["splrid"], name: "index_tblpreorder_on_splrid"
   end
 
   create_table "tblpreordercodes", primary_key: "preordercodeid", id: :integer, default: -> { "nextval('tblpreordercodes_id_seq'::regclass)" }, force: :cascade do |t|
@@ -546,6 +549,7 @@ ActiveRecord::Schema.define(version: 2022_04_21_012506) do
   add_foreign_key "tblorderitems", "tblsku", column: "skuid", primary_key: "skuid", name: "tblorderitems_skuid_fkey"
   add_foreign_key "tblorderpmtsitems", "tblorderitems", column: "orderitemsid", primary_key: "orderitemsid", name: "tblorderpmtsitems_orderitemsid_fkey"
   add_foreign_key "tblorderpmtsitems", "tblorderpmts", column: "opmtsid", primary_key: "opmtsid", name: "tblorderpmtsitems_opmtsid_fkey"
+  add_foreign_key "tblpreorder", "tblsupplier", column: "splrid", primary_key: "splrid"
   add_foreign_key "tblpurchaseorder", "tblsupplier", column: "splrid", primary_key: "splrid", name: "tblpurchaseorder_splrid_fkey"
   add_foreign_key "tblpurchaseorderitems", "tblpurchaseorder", column: "poid", primary_key: "poid", name: "tblpurchaseorderitems_poid_fkey"
   add_foreign_key "tblpurchaseorderitems", "tblsku", column: "skuid", primary_key: "skuid", name: "tblpurchaseorderitems_skuid_fkey"
@@ -1706,6 +1710,45 @@ ActiveRecord::Schema.define(version: 2022_04_21_012506) do
        LEFT JOIN tblorderitems ON (((qryskupohistau.poid = tblorderitems.poid) AND (qryskupohistau.skuid = tblorderitems.skuid))))
     GROUP BY qryskupohistau.podate, qryskupohistau.skuid, qryskupohistau.splrid2, qryskupohistau.splrname, qryskupohistau.poorderquant, qryskupohistau.poorderrcvdquant, qryskupohistau.podiff, qryskupohistau.poorderpriceper, qryskupohistau.priceeachlesstax, qryskupohistau.poid, qryskupohistau.poorderexpiration;
   SQL
+  create_view "sku_export", sql_definition: <<-SQL
+      SELECT t.skuid,
+      t.manf,
+      t.itemno,
+      t.skudesc,
+      0 AS avail,
+      '0'::text AS "DC_Ord",
+      0 AS intransit,
+      ic.dccurquant AS dccur,
+      ic.bought,
+      ic.sold,
+      t.dcloc,
+      tblskuclass.skuclassdesc AS sku_class,
+      t.skuclassid AS classid,
+      t.categoryid,
+      ic.totalcases AS totalpurchcases,
+      ic.totalcasesrcvd AS totalrcvdcases,
+      t.skuminunits,
+      t.skuminunitstype,
+      t.skuminpercs,
+      t.unitweight,
+      t.sku,
+      concat_ws('_'::text, ((t.vsku01)::text || (v01.vendorabbr)::text), ((t.vsku02)::text || (v02.vendorabbr)::text), ((t.vsku03)::text || (v03.vendorabbr)::text), ((t.vsku04)::text || (v04.vendorabbr)::text), ((t.vsku05)::text || (v05.vendorabbr)::text), ((t.vsku06)::text || (v06.vendorabbr)::text), ((t.vsku07)::text || (v07.vendorabbr)::text), ((t.vsku08)::text || (v08.vendorabbr)::text), ((t.vsku09)::text || (v09.vendorabbr)::text), ((t.vsku10)::text || (v10.vendorabbr)::text)) AS vskuconcat,
+      t.skumaxtemp AS maxtemp,
+      t.skumintemp AS mintemp
+     FROM ((((((((((((tblsku t
+       LEFT JOIN tblvendor v01 ON ((v01.vendorid = t.vno01)))
+       LEFT JOIN tblvendor v02 ON ((v02.vendorid = t.vno02)))
+       LEFT JOIN tblvendor v03 ON ((v03.vendorid = t.vno03)))
+       LEFT JOIN tblvendor v04 ON ((v04.vendorid = t.vno04)))
+       LEFT JOIN tblvendor v05 ON ((v05.vendorid = t.vno05)))
+       LEFT JOIN tblvendor v06 ON ((v06.vendorid = t.vno06)))
+       LEFT JOIN tblvendor v07 ON ((v07.vendorid = t.vno07)))
+       LEFT JOIN tblvendor v08 ON ((v08.vendorid = t.vno08)))
+       LEFT JOIN tblvendor v09 ON ((v09.vendorid = t.vno09)))
+       LEFT JOIN tblvendor v10 ON ((v10.vendorid = t.vno10)))
+       LEFT JOIN tblskuclass ON ((t.skuclassid = tblskuclass.skuclassid)))
+       LEFT JOIN qryinventorycounts ic ON ((t.skuid = ic.skuid)));
+  SQL
   create_view "sku_with_vskuconcats", sql_definition: <<-SQL
       SELECT concat_ws('_'::text, ((t.vsku01)::text || (v01.vendorabbr)::text), ((t.vsku02)::text || (v02.vendorabbr)::text), ((t.vsku03)::text || (v03.vendorabbr)::text), ((t.vsku04)::text || (v04.vendorabbr)::text), ((t.vsku05)::text || (v05.vendorabbr)::text), ((t.vsku06)::text || (v06.vendorabbr)::text), ((t.vsku07)::text || (v07.vendorabbr)::text), ((t.vsku08)::text || (v08.vendorabbr)::text), ((t.vsku09)::text || (v09.vendorabbr)::text), ((t.vsku10)::text || (v10.vendorabbr)::text)) AS vskuconcat,
       t.skuid,
@@ -1768,44 +1811,5 @@ ActiveRecord::Schema.define(version: 2022_04_21_012506) do
        LEFT JOIN tblvendor v08 ON ((v07.vendorid = t.vno08)))
        LEFT JOIN tblvendor v09 ON ((v07.vendorid = t.vno09)))
        LEFT JOIN tblvendor v10 ON ((v07.vendorid = t.vno10)));
-  SQL
-  create_view "sku_export", sql_definition: <<-SQL
-      SELECT t.skuid,
-      t.manf,
-      t.itemno,
-      t.skudesc,
-      0 AS avail,
-      '0'::text AS "DC_Ord",
-      0 AS intransit,
-      ic.dccurquant AS dccur,
-      ic.bought,
-      ic.sold,
-      t.dcloc,
-      tblskuclass.skuclassdesc AS sku_class,
-      t.skuclassid AS classid,
-      t.categoryid,
-      ic.totalcases AS totalpurchcases,
-      ic.totalcasesrcvd AS totalrcvdcases,
-      t.skuminunits,
-      t.skuminunitstype,
-      t.skuminpercs,
-      t.unitweight,
-      t.sku,
-      concat_ws('_'::text, ((t.vsku01)::text || (v01.vendorabbr)::text), ((t.vsku02)::text || (v02.vendorabbr)::text), ((t.vsku03)::text || (v03.vendorabbr)::text), ((t.vsku04)::text || (v04.vendorabbr)::text), ((t.vsku05)::text || (v05.vendorabbr)::text), ((t.vsku06)::text || (v06.vendorabbr)::text), ((t.vsku07)::text || (v07.vendorabbr)::text), ((t.vsku08)::text || (v08.vendorabbr)::text), ((t.vsku09)::text || (v09.vendorabbr)::text), ((t.vsku10)::text || (v10.vendorabbr)::text)) AS vskuconcat,
-      t.skumaxtemp AS maxtemp,
-      t.skumintemp AS mintemp
-     FROM ((((((((((((tblsku t
-       LEFT JOIN tblvendor v01 ON ((v01.vendorid = t.vno01)))
-       LEFT JOIN tblvendor v02 ON ((v02.vendorid = t.vno02)))
-       LEFT JOIN tblvendor v03 ON ((v03.vendorid = t.vno03)))
-       LEFT JOIN tblvendor v04 ON ((v04.vendorid = t.vno04)))
-       LEFT JOIN tblvendor v05 ON ((v05.vendorid = t.vno05)))
-       LEFT JOIN tblvendor v06 ON ((v06.vendorid = t.vno06)))
-       LEFT JOIN tblvendor v07 ON ((v07.vendorid = t.vno07)))
-       LEFT JOIN tblvendor v08 ON ((v08.vendorid = t.vno08)))
-       LEFT JOIN tblvendor v09 ON ((v09.vendorid = t.vno09)))
-       LEFT JOIN tblvendor v10 ON ((v10.vendorid = t.vno10)))
-       LEFT JOIN tblskuclass ON ((t.skuclassid = tblskuclass.skuclassid)))
-       LEFT JOIN qryinventorycounts ic ON ((t.skuid = ic.skuid)));
   SQL
 end

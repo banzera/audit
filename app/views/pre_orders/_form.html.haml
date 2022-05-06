@@ -8,7 +8,12 @@
               %li.nav-item
                 %a#general-tab.nav-link.active{"aria-controls" => "general", "aria-selected" => "true", "data-toggle" => "pill", :href => "#general", :role => "tab"} General
               %li.nav-item
-                %a#notes-tab.nav-link{"aria-controls" => "notes", "aria-selected" => "false", "data-toggle" => "pill", :href => "#notes", :role => "tab"} Notes
+                %a#drop-ship-tab.nav-link{"aria-controls" => "general", "aria-selected" => "true", "data-toggle" => "pill", :href => "#drop-ship", :role => "tab"} Drop Ship
+              %li.nav-item
+                %a#notes-tab.nav-link{"aria-controls" => "notes", "aria-selected" => "false", "data-toggle" => "pill", :href => "#notes", :role => "tab"}
+                  Notes
+                  - if @resource.notes.present?
+                    %span.float-right.badge.bg-info=fa_icon 'asterisk'
           .card-body
             #tabContent.tab-content
               #general.tab-pane.fade.active.show{"aria-labelledby" => "general-tab", :role => "tabpanel"}
@@ -31,6 +36,11 @@
                           = link_to order_path(@pre_order.order), class: 'btn btn-outline-secondary', target: :blank do
                             = fa_icon 'external-link-alt', text: "Go to Order #{@pre_order.orderid}", right: true
                     = f.input :preordercheck, wrapper: :vertical_form
+              #drop-ship.tab-pane.fade{"aria-labelledby" => "drop-ship-tab", :role => "tabpanel"}
+                .row
+                  .col-4
+                    = f.input :ds_tax_amount, as: :currency
+                    = f.association :supplier, hint: 'Drop ship order paid by'
               #notes.tab-pane.fade{"aria-labelledby" => "notes-tab", :role => "tabpanel"}
                 = f.input :notes, wrapper: :vertical_form
 

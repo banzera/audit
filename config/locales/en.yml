@@ -195,6 +195,7 @@ en:
         preorderanalysisdate: Analysis Date
         confirmationdate: Confirmation Date
         preordercheck: Check Date
+        ds_tax_amount: Invoice Tax Amount
       pre_order_code:
         preordercodeid: ID
         preordercode: Code

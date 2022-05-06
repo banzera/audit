@@ -62,6 +62,8 @@ class PreOrdersController < ApplicationController
       :confirmationdate,
       :preordercheck,
       :notes,
+      :ds_tax_amount,
+      :splrid,
     ])
   end
 

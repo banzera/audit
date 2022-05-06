@@ -7,6 +7,8 @@ class PreOrder < ApplicationRecord
   belongs_to :order,    foreign_key: :orderid,          optional: true
   belongs_to :vendor,   class_name: 'Supplier', foreign_key: :preordervendorid, optional: true
 
+  belongs_to :supplier, class_name: 'Supplier', foreign_key: :splrid, optional: true
+
   has_many :items, class_name: 'PreOrderItem', foreign_key: :preorderid
 
   alias_attribute :notes, :preordernotes
