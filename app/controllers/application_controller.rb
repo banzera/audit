@@ -1,8 +1,10 @@
 class ApplicationController < ActionController::Base
   include PdfHandling
 
-  before_action :authenticate_user!
   protect_from_forgery with: :exception, unless: -> { request.format.json? }
+
+  before_action :authenticate_user!
+  before_action :set_paper_trail_whodunnit
 
   around_action :set_effective_logging_current_user
 

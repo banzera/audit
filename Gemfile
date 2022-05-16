@@ -133,3 +133,5 @@ gem "zippy", "~> 0.2.3"
 gem "stimulus-rails", "~> 1.0"
 
 gem "view_component", "~> 2.52"
+
+gem "paper_trail", "~> 12.3"
