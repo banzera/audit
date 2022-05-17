@@ -1,28 +1,32 @@
 -# Main Sidebar Container
-%aside.main-sidebar.sidebar-dark-primary.elevation-4
+%aside.main-sidebar.sidebar-dark-primary.elevation-4.main-sidebar-custom
   -# Brand Logo
   %a.brand-link{:href => root_path}
     %img.brand-image.img-circle.elevation-3{:alt => "AUDIT Logo", :src => "/img/logo.png", :style => "opacity: .8"}/
     %span.brand-text.font-weight-light AUDIT v2
   -# Sidebar
   .sidebar
-
     -# Sidebar Menu
     %nav.mt-2
-      %ul.nav.nav-pills.nav-sidebar.nav-flat.flex-column{"data-accordion" => "false", "data-widget" => "treeview", :role => "menu"}
-        =sidebar_link_to(home_path, icon: 'fa-tachometer-alt', label: 'Dashboard')
-        =sidebar_link_to(Customer, icon: 'fa-certificate')
-        =sidebar_link_to(PurchaseOrder, icon: 'fa-file')
-        =sidebar_link_to(Order, icon: 'fa-star')
-        =sidebar_link_to(PreOrder, icon: 'fa-star fa-inverse')
-        =sidebar_link_to(Supplier, icon: 'fa-suitcase')
-        =sidebar_link_to(Sku, icon: 'fa-barcode')
-        =sidebar_link_to(Vendor, icon: 'fa-truck')
-        =sidebar_link_to(OrderPayment, icon: 'fa-dollar-sign')
+      %ul.nav.nav-pills.nav-sidebar.nav-flat.flex-column{data: {accordion: false, widget: :treeview}, role: :menu}
+        =sidebar_link_to(home_path, icon: 'tachometer-alt', label: 'Dashboard')
+        =sidebar_link_to(Customer, icon: 'certificate')
+        =sidebar_link_to(PurchaseOrder, icon: 'file')
+        =sidebar_link_to(Order, icon: 'star')
+        =sidebar_link_to(PreOrder, icon: 'star')
+        =sidebar_link_to(Supplier, icon: 'suitcase')
+        =sidebar_link_to(Sku, icon: 'barcode')
+        =sidebar_link_to(Vendor, icon: 'truck')
+        =sidebar_link_to(OrderPayment, icon: 'dollar-sign')
 
-        =sidebar_dropdown('Meta', 'fa-th', expanded: true, active: true) do
-          =sidebar_link_to(Category, icon: 'fa-bolt')
-          =sidebar_link_to(SkuCustInfo, icon: 'fa-crosshairs')
-          =sidebar_link_to(SkuClass, icon: 'fa-crosshairs')
-          =sidebar_link_to(PreOrderCode, icon: 'fa-cog')
-          =sidebar_link_to(InventoryScanOperation, icon: 'fa-barcode')
+        =sidebar_dropdown('Meta', 'th', expanded: true) do
+          =sidebar_link_to(Category, icon: 'bolt')
+          =sidebar_link_to(SkuCustInfo, icon: 'crosshairs')
+          =sidebar_link_to(SkuClass, icon: 'crosshairs')
+          =sidebar_link_to(PreOrderCode, icon: 'cog')
+          =sidebar_link_to(InventoryScanOperation, icon: 'barcode')
+
+  -#.sidebar-custom
+  -#  %a.btn.btn-link{:href => "#"}
+  -#    %i.fas.fa-cogs
+  -#  %a.btn.btn-secondary.hide-on-collapse.pos-right{:href => "#"} Help

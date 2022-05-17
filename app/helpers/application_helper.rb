@@ -53,13 +53,17 @@ module ApplicationHelper
 
     icon_class = opts[:icon]  || 'fa-circle'
     label      = opts[:label] || object.model_name.human(count: 2)
+    strict     = opts[:strict]
 
-    classes = %w[nav-link]
-    classes << 'active' if request.fullpath.include?(href)
+    active = strict ? (request.fullpath == href) : request.fullpath.include?(href)
 
     content_tag(:li, class: 'nav-item' ) do
-      link_to href, { class: classes.join(' ') } do
-        block_given? ? yield : "<i class='nav-icon fa fa-icon #{icon_class}'></i> #{label}".html_safe
+      link_to href, { class: (active ? 'nav-link active' : 'nav-link') } do
+        if block_given?
+          yield
+        else
+          fa_icon(icon_class, class: 'nav-icon') + content_tag(:p, label)
+        end
       end
     end
   end
