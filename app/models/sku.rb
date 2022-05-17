@@ -24,6 +24,7 @@ class Sku < ApplicationRecord
 
   pg_search_scope :search,
                   against: :everything,
+                  order_within_rank: "skuid asc",
                   using:  {
                     tsearch: {
                       dictionary:      'english',

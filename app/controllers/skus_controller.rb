@@ -18,7 +18,7 @@ class SkusController < ApplicationController
       format.csv  { send_data SkuExport.to_csv, filename: "skus-#{DateTime.now.strftime("%d%m%Y%H%M")}.csv"}
       format.json {
         @skus = @skus.search(select2_search_term) if select2_search_term?
-        @skus = @skus.limit(10)
+        @skus = @skus.limit(10).to_a.sort
       }
     end
   end
