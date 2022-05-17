@@ -10,8 +10,8 @@ class OrderItemOutstanding < ApplicationRecord
   # scope :outstanding, -> { all }
 
   scope :no_issues,        -> { where.not(has_issue: true) }
-  scope :known_location,   -> { where.not(dcloc: 'N/A') }
-  scope :unknown_location, -> { where(dcloc: 'N/A') }
+  scope :known_location,   -> { where.not(dcloc: Sku::DC_LOC_NONE) }
+  scope :unknown_location, -> { where(dcloc: Sku::DC_LOC_NONE) }
   scope :in_stock,         -> { where('dccurquant > 0') }
   scope :for_customer,     -> custid { where(custid: custid) }
 

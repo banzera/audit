@@ -62,7 +62,7 @@
                     %td=i.orderquantdue
                     %td=i.dccurquant
                     %td{class: i.totaldue.zero? ? 'bg-danger' : '' }=i.totaldue
-                    %td{class: i.dcloc == 'N/A' ? 'bg-danger' : '' }=i.dcloc
+                    %td{class: i.dcloc == Sku::DC_LOC_NONE ? 'bg-danger' : '' }=i.dcloc
 
 - content_for :scripts do
   :coffee
