@@ -1,38 +1,24 @@
-/ Navbar
+-# Navbar
 %nav.main-header.navbar.navbar-expand.navbar-dark
-  / Left navbar links
+  -# Left navbar links
   %ul.navbar-nav
-    %li.nav-item
-      %a.nav-link{"data-widget" => "pushmenu", :href => "#", :role => "button"}
-        %i.fas.fa-bars
-    = render partial: 'layouts/receiving_menu'
-    = render partial: 'layouts/shipping_menu'
-    = render partial: 'layouts/sku_issues_menu'
-    = render partial: 'layouts/billing_menu'
-    = render partial: 'layouts/analysis_menu'
-  / Right navbar links
+    = nav_link_to fa_icon('bars'), '#', 'data-widget': :pushmenu, role: :button
+    = render partial: 'layouts/nav/menu_receiving'
+    = render partial: 'layouts/nav/menu_shipping'
+    = render partial: 'layouts/nav/menu_sku_issues'
+    = render partial: 'layouts/nav/menu_billing'
+    = render partial: 'layouts/nav/menu_analysis'
+  -# Right navbar links
   %ul.navbar-nav.ml-auto
-    -#= render partial: 'layouts/nav_search'
-    -#= render partial: 'layouts/nav_messages'
-    -#= render partial: 'layouts/nav_notifications'
-    = render partial: 'layouts/nav_user'
-    %li.nav-item.dropdown.d-none.d-sm-inline-block
-      %a.nav-link{"data-toggle" => "dropdown", :href => "#"}
-        %i.fas.fa-cog
+    -#= render partial: 'layouts/nav/search'
+    -#= render partial: 'layouts/nav/messages'
+    -#= render partial: 'layouts/nav/notifications'
+    = render partial: 'layouts/nav/user'
 
-      .dropdown-menu.dropdown-menu-lg
-        %a.dropdown-item{href: export_dashboard_index_path, data: { remote: true, method: :post, confirm: 'Really export the tables?'} }
-          =fa_icon 'database', text: 'Export Tables'
-        .dropdown-divider
-        %a.dropdown-item{href: effective_logging.admin_logs_path }
-          =fa_icon 'key', text: 'Application Logs'
-        .dropdown-divider
+    = nav_dropdown(fa_icon('cog'), right: true) do
+      = nav_link_to fa_icon('database', text: 'Export Tables'), export_dashboard_index_path, data: { remote: true, method: :post, confirm: 'Really export the tables?'}
+      = nav_divider
+      = nav_link_to fa_icon('key', text: 'Application Logs'), effective_logging.admin_logs_path
 
-
-    %li.nav-item
-      %a.nav-link{"data-widget" => "fullscreen", :href => "#", :role => "button"}
-        %i.fas.fa-expand-arrows-alt
-    %li.nav-item
-      %a#control-sidebar.nav-link{"data-slide" => "true", "data-widget" => "control-sidebar", :href => "#", :role => "button"}
-        %i.fas.fa-adjust
-
+    = nav_link_to fa_icon('expand-arrows-alt'), '#', 'data-widget': :fullscreen, role: :button
+    = nav_link_to fa_icon('adjust'), '#', id: 'control-sidebar', data: {slide: true, widget: "control-sidebar"}, role: :button
