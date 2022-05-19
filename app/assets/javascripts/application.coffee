@@ -74,6 +74,7 @@ $(document).ready () ->
 
 $(document).on 'turbolinks:load', ->
   $('select').not('.select2-hidden-accessible').select2()
+  $.fn['PushMenu'].call $('[data-widget="pushmenu"]')
 
   $('#control-sidebar').click ->
     $('body').toggleClass('dark-mode')
