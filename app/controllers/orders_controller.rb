@@ -29,6 +29,14 @@ class OrdersController < ApplicationController
                                                 confirm: "Really mark @resource as billed?"
                                               }
 
+  def new
+    # Orders created via web-UI are stand-alone and dont' have an associated pre-order, but
+    # we use the pre-order date to mark workflow progress, so we'll pre-set the pre-order date
+    # here on creation
+    # See https://trello.com/c/KQVETBa8
+    @order.preordercompletedate = Time.current
+  end
+
   def invoice
     @pdf_options['orientation']  = 'Portrait'
   end
