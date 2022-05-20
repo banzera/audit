@@ -49,6 +49,11 @@ class Order < ApplicationRecord
       .last&.orderbatch
   end
 
+  def autocalc_delivered_date!
+    odd = outstanding_items_count.zero? ? items.maximum(:orderitemsdelivereddate) : nil
+    update(orderdelivereddate: odd)
+  end
+
   def mark_as_billed!
     update(orderccdate: Date.today)
   end

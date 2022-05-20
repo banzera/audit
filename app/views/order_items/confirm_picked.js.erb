@@ -1,0 +1,14 @@
+<% resource = (@_effective_resource || Effective::Resource.new(controller_path)) %>
+<% @resource = instance_variable_get('@' + resource.name) if resource.name %>
+
+EffectiveForm.remote_form_payload = "<%= j render_resource_form(@resource, action: :confirm_picked, safe: true) %>";
+EffectiveForm.remote_form_commit = "<%= params[:commit] %>";
+EffectiveForm.remote_form_flash = <%= raw flash.to_json %>;
+
+<% if @resource.order.outstanding_items_count.zero? %>
+  Turbolinks.visit("<%= url_for(@resource.order) %>")
+<% end %>
+
+<% if !request.get? && @resource.respond_to?(:refresh_datatables) && @resource.refresh_datatables.present? %>
+  EffectiveForm.remote_form_refresh_datatables = <%= raw Array(@resource.refresh_datatables).uniq.compact.map(&:to_s) %>;
+<% end %>

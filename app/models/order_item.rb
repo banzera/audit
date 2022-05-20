@@ -16,6 +16,12 @@ class OrderItem < ApplicationRecord
 
   attr_accessor :popriceper
 
+  after_save :update_order_delivered_date
+
+  def update_order_delivered_date
+    order.autocalc_delivered_date!
+  end
+
   def unfulfilled?
     orderquant != orderdeliveredquant
   end
