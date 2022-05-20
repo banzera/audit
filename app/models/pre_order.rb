@@ -41,7 +41,7 @@ class PreOrder < ApplicationRecord
       ordertaxrate: customer.custtaxrate
       )
 
-    save
+    save && order_update!
   end
 
   def set_order_confirmed_date
@@ -131,9 +131,9 @@ class PreOrder < ApplicationRecord
   end
 
   def order_update!
-    transaction do
-      create_order! unless order.present?
+    return unless order.present?
 
+    transaction do
       # create order items
       PreOrder.connection.execute create_order_items_sql
 

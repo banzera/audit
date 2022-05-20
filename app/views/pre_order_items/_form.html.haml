@@ -34,3 +34,23 @@
 - content_for :scripts do
   :coffee
     $(document).ready () -> new LinkedSkuPoSelects('#pre_order_item_skuid2', '#pre_order_item_poid')
+
+    $('#pre_order_item_skuid1, #pre_order_item_skuid2').on 'select2:select', (e) =>
+        $sku1 = $('#pre_order_item_skuid1')
+        $sku2 = $('#pre_order_item_skuid2')
+
+        id1 = $sku1.select2('data')[0].id
+        id2 = $sku2.select2('data')[0].id
+
+        $code = $('#pre_order_item_preorderitemcode')
+
+        val = if id1 == id2 then 1 else 2
+
+        $code.val(val).trigger 'change'
+
+        $s = $code.parent().find('span.select2-selection__rendered')
+
+        $s.addClass('bg-info')
+        setTimeout ->
+          $s.removeClass('bg-info')
+        , 750

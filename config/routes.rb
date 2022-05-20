@@ -86,7 +86,7 @@ Rails.application.routes.draw do
     resources :pre_order_items, except: [:destroy], path: :items
 
     member do
-      post :order_update
+      post :create_order
       post :resend_confirmation
 
       get :confirmation

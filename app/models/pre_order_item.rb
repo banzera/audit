@@ -35,6 +35,12 @@ class PreOrderItem < ApplicationRecord
   scope :outstanding, -> { where(preorderitemcode: [PreOrderCode::EXACT, PreOrderCode::SUB, PreOrderCode::NEW]).
                            where('poid isnull or poid=0') }
 
+  after_save :update_pre_order
+
+  def update_pre_order
+    parent.order_update!
+  end
+
   def diff_quant
     self.poorderquant - self.poorderrcvdquant
   end

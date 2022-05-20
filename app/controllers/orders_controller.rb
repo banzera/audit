@@ -20,6 +20,7 @@ class OrdersController < ApplicationController
   button :shipping_label_preview, 'Shipping Label'
   button :pick_list,              'Pick List'
   button :edit, 'Edit', default: true
+  button :destroy, 'Delete', unless: -> { resource.items.any? }
 
   on     :mark_as_billed, redirect: -> { billing_due_path }
   button :mark_as_billed, 'Bill Credit Card', if: -> { resource.billable? },
