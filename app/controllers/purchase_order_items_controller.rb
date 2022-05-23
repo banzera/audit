@@ -13,10 +13,14 @@ class PurchaseOrderItemsController < ApplicationController
   button :label, false
   button :print, false
 
+  button :destroy, 'Delete', unless: -> { resource.has_payment? }
+
   button :receive, 'Receive', redirect: -> { receive_purchase_order_item_path(skuid: resource.id) }
   submit :receive, 'Receive'
+
   on     :create, redirect: -> { purchase_order_path(resource.purchase_order) }
   on     :save,   redirect: -> { purchase_order_path(resource.purchase_order) }
+  on     :destroy,redirect: -> { purchase_order_path(resource.purchase_order) }
 
   def label
     render BinLabelComponent.new(sku: @sku, po: @purchase_order), layout: false, content_type: Mime[:pdf].to_s

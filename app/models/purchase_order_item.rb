@@ -8,6 +8,8 @@ class PurchaseOrderItem < ApplicationRecord
   belongs_to :purchase_order, class_name: 'PurchaseOrder', foreign_key: :poid, inverse_of: :items
   belongs_to :sku,            class_name: 'Sku',           foreign_key: :skuid
 
+  has_many :supplier_payments, class_name: 'SupplierPaymentItem', foreign_key: :poitemsid
+
   scope :unfulfilled, -> { where('poorderquant != poorderrcvdquant') }
 
   scope :with_sku_fuzzy, -> (term) {
@@ -20,6 +22,10 @@ class PurchaseOrderItem < ApplicationRecord
   def receive!
     self.update(poorderrcvddate: Time.current)
     self.sku.resolve_issue!
+  end
+
+  def has_payment?
+    supplier_payments.any?
   end
 
   def unfulfilled?
