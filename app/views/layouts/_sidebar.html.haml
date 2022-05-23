@@ -10,6 +10,7 @@
     %nav.mt-2
       %ul.nav.nav-pills.nav-sidebar.nav-flat.flex-column{data: {accordion: false, widget: :treeview}, role: :menu}
         =sidebar_link_to(home_path, icon: 'tachometer-alt', label: 'Dashboard')
+        =sidebar_link_to(Prospect, icon: 'seedling')
         =sidebar_link_to(Customer, icon: 'certificate')
         =sidebar_link_to(PurchaseOrder, icon: 'file')
         =sidebar_link_to(Order, icon: 'star')

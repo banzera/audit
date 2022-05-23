@@ -10,11 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_16_150923) do
+ActiveRecord::Schema.define(version: 2022_05_23_135757) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
+
+  create_table "addresses", id: :serial, force: :cascade do |t|
+    t.string "addressable_type"
+    t.integer "addressable_id"
+    t.string "category", limit: 64
+    t.string "full_name"
+    t.string "address1"
+    t.string "address2"
+    t.string "address3"
+    t.string "city"
+    t.string "state_code"
+    t.string "country_code"
+    t.string "postal_code"
+    t.string "phone_pri"
+    t.string "phone_alt"
+    t.datetime "updated_at"
+    t.datetime "created_at"
+    t.index ["addressable_id"], name: "index_addresses_on_addressable_id"
+    t.index ["addressable_type", "addressable_id"], name: "index_addresses_on_addressable_type_and_addressable_id"
+  end
+
+  create_table "clinic_types", force: :cascade do |t|
+    t.string "name"
+  end
+
+  create_table "contacts", force: :cascade do |t|
+  end
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
@@ -63,6 +90,45 @@ ActiveRecord::Schema.define(version: 2022_05_16_150923) do
     t.index ["associated_type", "associated_id"], name: "index_logs_on_associated_type_and_associated_id"
     t.index ["parent_id"], name: "index_logs_on_parent_id"
     t.index ["user_id"], name: "index_logs_on_user_id"
+  end
+
+  create_table "prospects", force: :cascade do |t|
+    t.string "office_name"
+    t.integer "clinic_type_id"
+    t.string "status"
+    t.integer "assigned_to_id"
+    t.string "contact_phone"
+    t.string "alt_phone"
+    t.text "doctors_names"
+    t.text "notes"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "task_types", comment: "Defines the various categories which can be applied to a Task", force: :cascade do |t|
+    t.string "name", limit: 150
+    t.bigint "user_group_id"
+    t.boolean "is_system_task", default: false
+    t.boolean "is_completed_by_system", default: false
+    t.string "default_text", limit: 250
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_group_id"], name: "index_task_types_on_user_group_id"
+  end
+
+  create_table "tasks", comment: "Lists To Do items associated to a system object such as a quote or order", force: :cascade do |t|
+    t.integer "item_id"
+    t.string "item_type", limit: 255
+    t.text "text"
+    t.bigint "user_id"
+    t.bigint "user_group_id"
+    t.datetime "completed_at"
+    t.string "type"
+    t.boolean "is_completed_by_system", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_group_id"], name: "index_tasks_on_user_group_id"
+    t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
   create_table "tblanalysis", primary_key: "analysisid", id: :integer, default: -> { "nextval('tblanalysis_id_seq'::regclass)" }, force: :cascade do |t|
@@ -504,6 +570,25 @@ ActiveRecord::Schema.define(version: 2022_05_16_150923) do
   create_table "tblvendor", primary_key: "vendorid", id: :integer, default: -> { "nextval('tblvendor_id_seq'::regclass)" }, force: :cascade do |t|
     t.string "vendorname", limit: 255
     t.string "vendorabbr", limit: 255
+  end
+
+  create_table "user_groups", comment: "Defines the various security and departmental groups", force: :cascade do |t|
+    t.string "name", limit: 150
+    t.string "description", limit: 500
+    t.datetime "deleted_at"
+    t.bigint "created_by_id"
+    t.bigint "updated_by_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["created_by_id"], name: "index_user_groups_on_created_by_id"
+    t.index ["updated_by_id"], name: "index_user_groups_on_updated_by_id"
+  end
+
+  create_table "user_groups_users", force: :cascade do |t|
+    t.bigint "user_group_id"
+    t.bigint "user_id"
+    t.index ["user_group_id"], name: "index_user_groups_users_on_user_group_id"
+    t.index ["user_id"], name: "index_user_groups_users_on_user_id"
   end
 
   create_table "users", comment: "Contains all the user login/profile information", force: :cascade do |t|
@@ -1822,5 +1907,19 @@ ActiveRecord::Schema.define(version: 2022_05_16_150923) do
        LEFT JOIN tblvendor v08 ON ((v07.vendorid = t.vno08)))
        LEFT JOIN tblvendor v09 ON ((v07.vendorid = t.vno09)))
        LEFT JOIN tblvendor v10 ON ((v07.vendorid = t.vno10)));
+  SQL
+  create_view "user_relevant_tasks", sql_definition: <<-SQL
+      SELECT u.id AS user_id,
+      t.id AS task_id,
+      ((t.user_id = u.id) OR (t.user_id IS NULL)) AS assigned_or_available
+     FROM ((users u
+       JOIN user_groups_users ugu ON ((u.id = ugu.user_id)))
+       JOIN tasks t ON ((ugu.user_group_id = t.user_group_id)))
+  UNION ALL
+   SELECT t.user_id,
+      t.id AS task_id,
+      true AS assigned_or_available
+     FROM tasks t
+    WHERE (t.user_id IS NOT NULL);
   SQL
 end

@@ -102,6 +102,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :prospects
+
   resources :purchase_orders, concerns: [:has_label, :has_items, :auditable, :receivable] do
     resources :purchase_order_items, except: [:destroy], path: :items
   end

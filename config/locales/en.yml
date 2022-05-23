@@ -56,6 +56,9 @@ en:
       pre_order_item:
         one: Pre-Order Item
         other: Pre-Order Items
+      prospect:
+        one: Prospect
+        other: Prospects
       purchase_order:
         one: PO
         other: POs

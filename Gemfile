@@ -135,3 +135,7 @@ gem "stimulus-rails", "~> 1.0"
 gem "view_component", "~> 2.52"
 
 gem "paper_trail", "~> 12.3"
+
+gem "effective_addresses", "~> 1.9"
+
+gem "seedbank", "~> 0.5.0"
