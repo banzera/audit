@@ -20,6 +20,36 @@ module ApplicationHelper
     return flash_key
   end
 
+  def auxiliary_save_button
+    content_tag(:button, class: 'btn btn-sm btn-outline-secondary', id: 'auxilary-save-btn') do
+      fa_icon :save
+    end
+  end
+
+  def cancel_button(to = nil, resource = nil)
+    resource ||= Effective::Resource.new(controller_path)
+    classes = 'cancel btn btn-outline-secondary'
+
+    # default 'to' should be the parent if exists, or the index,
+    # or if a symbole resolve the action, or if a string assume a valid path
+    #
+    to ||= @resource.respond_to?(:parent) ? url_for(@resource.parent) : :index
+
+    path = if to.is_a? Symbol
+      resource.action_path(to, @resource)
+    else
+      to
+    end
+
+    unless block_given?
+      link_to 'Cancel', path, class: classes
+    else
+      link_to path, class: classes do
+        yield
+      end
+    end
+  end
+
   def sidebar_dropdown(label, icon, expanded: false, active: false, &block)
     raise 'expected a block' unless block_given?
 

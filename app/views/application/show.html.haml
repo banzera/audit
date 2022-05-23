@@ -10,11 +10,11 @@
       .card
         .card-header
           - if @resource.respond_to?(:parent)
-            = link_to url_for(@resource.parent), class: 'btn btn-primary' do
+            = cancel_button do
               = fa_icon 'backward'
               Back to #{@resource.parent}
           - else
-            = link_to (resource.action_path(:index) || root_path), class: 'btn btn-primary' do
+            = cancel_button do
               = fa_icon 'table'
               Back to #{resource.klass.model_name.human} Listing
 

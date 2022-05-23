@@ -8,9 +8,11 @@
   .col-12
     .card
       .card-header
-        %h3.card-title=@page_title
+        %h3.card-title
+          =@page_title
+          =auxiliary_save_button
         .card-tools
-          = render_resource_buttons(@resource, show: false)
+          = cancel_button
 
       .card-body
         = render_resource_form(@resource, action: action_name)

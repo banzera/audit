@@ -71,6 +71,9 @@
 
 $(document).ready () ->
   $('[data-toggle="tooltip"]').tooltip()
+  $(document).keyup (e) ->
+    el = $('.cancel')[0]
+    el.click() if e.keyCode == 27 if el
 
 $(document).on 'turbolinks:load', ->
   $.fn['PushMenu'].call $('[data-widget="pushmenu"]')
@@ -78,3 +81,5 @@ $(document).on 'turbolinks:load', ->
   $('#control-sidebar').click ->
     $('body').toggleClass('dark-mode')
     $('.main-header.navbar').toggleClass('navbar-dark')
+
+  $('#auxilary-save-btn').click -> $('form').submit()
