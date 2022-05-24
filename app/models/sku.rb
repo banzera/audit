@@ -20,7 +20,7 @@ class Sku < ApplicationRecord
 
   scope :in_dc,      -> { where(skuid: InventoryCounts.in_dc.pluck(:skuid)) }
   scope :in_transit, -> { where(skuid: InventoryCounts.in_transit.pluck(:skuid)) }
-  scope :has_issue,  -> { where(has_issue: true) }
+  scope :has_issue,  -> { where(has_issue: true).or(Sku.where(skuid: InventoryCounts.in_dc.no_location.pluck(:skuid))) }
 
   pg_search_scope :search,
                   against: :everything,

@@ -8,5 +8,6 @@ class InventoryCounts < ApplicationRecord
   scope :in_transit, -> { where('totaldue > 0') }
 
   scope :no_stock,     -> { where('dccurquant <= 0') }
+  scope :no_location,  -> { where(dcloc: Sku::DC_LOC_NONE) }
   scope :has_location, -> { where.not(dcloc: Sku::DC_LOC_NONE ) }
 end

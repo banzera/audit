@@ -20,7 +20,7 @@ class SkuIssuesDatatable < Effective::Datatable
     col :category,         visible: false
     col :skuminunits,      visible: false
     col :skuminunitstype,  visible: false, search: { as: :select, collection: Sku.select(:skuminunitstype).distinct.pluck(:skuminunitstype) }
-    col :dcloc,            visible: false
+    col :dcloc,            visible: true
     col :skuminpercs,      visible: false
     col :skuhighprice,     visible: false, as: :currency
     col :skuhighpricevno,  visible: false
