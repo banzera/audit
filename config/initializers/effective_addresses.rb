@@ -36,16 +36,6 @@ EffectiveAddresses.setup do |config|
   config.simple_form_options = {
     :html => {:class => ['form-vertical']},
     :wrapper => :vertical_form,
-
+    input_html: { class: 'form-control', autocomplete: 'off', onfocus: "$(this).attr('autocomplete', 'no')" }
   }
-
-  # config.simple_form_options = {
-  #   :html => {:class => ['form-horizontal']},
-  #   :wrapper => :horizontal_form,
-  #   :wrapper_mappings => {
-  #     :boolean => :horizontal_boolean,
-  #     :check_boxes => :horizontal_radio_and_checkboxes,
-  #     :radio_buttons => :horizontal_radio_and_checkboxes
-  #   }
-  # }
 end

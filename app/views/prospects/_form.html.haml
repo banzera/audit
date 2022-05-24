@@ -1,5 +1,7 @@
 .content
-  = simple_form_for @prospect, html: {novalidate: true}, defaults: { disabled: local_assigns[:readonly], wrapper: :vertical_form } do |f|
+  = simple_form_for @prospect, html: {novalidate: true},
+    builder: NoAutocompleteFormBuilder,
+    defaults: { disabled: local_assigns[:readonly], wrapper: :vertical_form } do |f|
     .row
       .col-12
         .card.card-primary.card-outline.card-tabs
