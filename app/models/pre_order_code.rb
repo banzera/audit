@@ -7,6 +7,7 @@ class PreOrderCode < ApplicationRecord
   NEW    = 3
   DIRECT = 4
   SCHEIN = 5
+  CRAZY  = 6
 
   def to_s
     "(#{preordercode}) #{preordercodedesc}"  || '<blank>'

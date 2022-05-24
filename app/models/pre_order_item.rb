@@ -46,7 +46,15 @@ class PreOrderItem < ApplicationRecord
   def incomplete?
     # expr from access
     # =Sum(IIf(IsNull([OrderDate]) And   ([SKUID2]<>0) And   ([PreOrderItemCode]<4) ,1,0))
-    orderdate.blank? && skuid2 != 0 && preorderitemcode.present? && preorderitemcode < 4
+    orderdate.blank? &&
+    skuid2 != 0 &&
+    preorderitemcode.present? &&
+    preorderitemcode.in?([
+      PreOrderCode::EXACT,
+      PreOrderCode::SUB,
+      PreOrderCode::NEW,
+      PreOrderCode::CRAZY,
+    ])
   end
 
 end

@@ -3,6 +3,7 @@ window.formatRow = () ->
     $v = $(v)
 
     colClass = switch $v.html()
+      when '6', 'C' then 'bg-orange'    # orange
       when '5', 'H' then 'bg-highlight' # highlight-yellow
       when '4', 'D' then 'bg-danger'    # maroon
       when '3', 'N' then 'bg-success'   # green
