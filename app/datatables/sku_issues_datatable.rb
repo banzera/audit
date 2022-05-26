@@ -1,17 +1,14 @@
 class SkuIssuesDatatable < Effective::Datatable
 
   collection do
-    scope = if attributes[:search]
-      Sku.search attributes[:search]
-    else
-      Sku.has_issue
-    end
+    Sku.needing_attention
   end
 
   datatable do
+    length 25
     order :skuid, :desc
 
-    col :skuid
+    col :skuid, partial: 'skus/dt/sku'
     col :sku,              visible: false
     col :manf
     col :itemno
@@ -30,6 +27,6 @@ class SkuIssuesDatatable < Effective::Datatable
     col :skumintemp,       visible: false
     col :skunotes,         visible: false
 
-    actions_col only: [:resolve_issue]
+    actions_col only: [:resolve_issue], resolve_issue: { if: -> { resource.has_issue? } }
   end
 end

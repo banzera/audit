@@ -9,6 +9,9 @@ class SkusController < ApplicationController
   button :po_history, "PO History"
   button :export, "Export CSV", path: '/skus.csv'
 
+  buttons['Mark Has Issue'][:if] = ->{ !resource.has_issue? }
+  buttons['Resolve Issue'][:if] = -> { resource.has_issue? }
+
   page_title(only: [:index]) { resource_klass.model_name.human(count: 2) }
   page_title(only: [:label]) { "SKU Location Label for #{@sku}" }
 

@@ -13,6 +13,8 @@ class Sku < ApplicationRecord
 
   has_many :cust_info, class_name: SkuCustInfo.name, foreign_key: :skuid
 
+  has_one :inventory_count, class_name: 'InventoryCounts', foreign_key: :skuid
+
   has_barcode :barcode,
     :outputter => :svg,
     :type => :code_39,
@@ -21,6 +23,8 @@ class Sku < ApplicationRecord
   scope :in_dc,      -> { where(skuid: InventoryCounts.in_dc.pluck(:skuid)) }
   scope :in_transit, -> { where(skuid: InventoryCounts.in_transit.pluck(:skuid)) }
   scope :has_issue,  -> { where(has_issue: true).or(Sku.where(skuid: InventoryCounts.in_dc.no_location.pluck(:skuid))) }
+
+  scope :needing_attention, -> { has_issue.where(categoryid: 3) }
 
   pg_search_scope :search,
                   against: :everything,

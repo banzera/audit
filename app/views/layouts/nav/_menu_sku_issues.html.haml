@@ -1,6 +1,6 @@
 - link = capture_haml do
   = fa_icon('barcode', text: 'Sku Issues')
-  - if (count = Sku.has_issue.count).positive?
+  - if (count = Sku.needing_attention.count).positive?
     %span.badge.badge-danger.navbar-badge=count
 
 = nav_link_to link, with_issues_skus_path

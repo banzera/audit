@@ -1,0 +1,5 @@
+- skuid = resource.skuid
+- btn_class = resource.has_issue? ? ' bg-danger' : ''
+
+- if resource.has_issue?
+  = link_to 'Resolve', sku_path(skuid), title: 'Resolve', class: 'btn btn-sm btn-outline-secondary'

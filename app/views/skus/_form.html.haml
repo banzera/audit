@@ -22,7 +22,6 @@
               =f.association :category
               =f.input :skuminunits
               =f.input :skuminunitstype
-              =f.input :dcloc
               =f.input :skuminpercs
 
               =f.association :sku_class
@@ -30,6 +29,38 @@
               =f.input :skumintemp
               =f.input :skunotes
       .col-lg-6
+        .card.card-outline.card-secondary
+          .card-header
+            %h3.card-title Inventory
+            .card-tools
+              .button.btn.btn-tool{type: :button, 'data-card-widget': :collapse, title: :collapse}
+                %i.fas.fa-minus
+          .card-body
+            %p.card-text
+              =f.input :dcloc
+              - inv = @sku.inventory_count
+              %table.table.table-sm
+                %thead
+                  %tr
+                    %th DC Current Qty
+                    %th=inv&.dccurquant
+                %tbody
+                  %tr
+                    %td Total Received
+                    %td=inv&.totalrcvd
+                  %tr
+                    %td Total Cases Received
+                    %td=inv&.totalcasesrcvd
+                  %tr
+                    %td Total Units Received
+                    %td=inv&.totalunitsrcvd
+                  %tr
+                    %td Bought
+                    %td=inv&.bought
+                  %tr
+                    %td Sold
+                    %td=inv&.sold
+
         .card.card-outline.card-secondary
           .card-header
             %h5.card-title.m-0 Vendor Info
