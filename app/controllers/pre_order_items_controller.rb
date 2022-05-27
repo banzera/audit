@@ -21,6 +21,7 @@ class PreOrderItemsController < ApplicationController
   end
 
   def analysis
+    @pre_order = @pre_order_item.pre_order
     render action: :edit
   end
 
