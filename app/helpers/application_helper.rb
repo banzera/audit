@@ -32,8 +32,12 @@ module ApplicationHelper
 
     # default 'to' should be the parent if exists, or the index,
     # or if a symbole resolve the action, or if a string assume a valid path
-    #
-    to ||= @resource.respond_to?(:parent) ? url_for(@resource.parent) : :index
+
+    to = if @resource.respond_to?(:parent)
+      url_for(@resource.parent)
+    else
+      to || :index
+    end
 
     path = if to.is_a? Symbol
       resource.action_path(to, @resource)
@@ -41,10 +45,15 @@ module ApplicationHelper
       to
     end
 
+    opts = {
+      'class': classes,
+      'data-confirm': 'Discard Changes?'
+    }
+
     unless block_given?
-      link_to 'Cancel', path, class: classes
+      link_to 'Cancel', path, opts
     else
-      link_to path, class: classes do
+      link_to path, opts do
         yield
       end
     end
