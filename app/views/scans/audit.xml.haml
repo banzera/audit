@@ -1,0 +1,12 @@
+!!! XML
+%xml
+  %message
+    - if @sku.present?
+      %status 1
+      %text
+        %html
+          = render partial: 'skus/scan'
+    - else
+      %status 0
+      %text
+        SKU not found

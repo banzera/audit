@@ -100,6 +100,11 @@ Rails.application.routes.draw do
     collection do
       get :outstanding
     end
+
+    member do
+      get :analysis
+    end
+
   end
 
   resources :purchase_orders, concerns: [:has_label, :has_items, :auditable, :receivable] do
@@ -145,6 +150,8 @@ Rails.application.routes.draw do
   end
 
   post 'scan', to: 'scans#post'
+  post 'scan/audit', to: 'scans#audit'
+
   resources :inventory_scan_operations, only: [:index, :show]
 
   root to: 'dashboard#home'
