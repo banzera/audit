@@ -1,6 +1,6 @@
 class PreOrderPoHistory < ApplicationRecord
   include HasBatch
-  self.table_name  = 'qryPreOrderPOHistAU2'
+  self.table_name  = 'qrypreorderpohistau2'
   self.primary_key = 'preorderid'
 
   belongs_to :customer, foreign_key: :custid
