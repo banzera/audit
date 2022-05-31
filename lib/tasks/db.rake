@@ -79,6 +79,18 @@ namespace :heroku do
 end
 
 namespace :db do
+  desc 'Load the schema if the DB is empty, otherwise run migrations'
+  task load_or_migrate: :environment do
+    if ApplicationRecord.connection.tables.present?
+      puts 'Running migrations'
+      Rake::Task['db:migrate'].invoke
+    else
+      puts 'Loading Schema'
+      Rake::Task['db:schema:load'].invoke
+      Rake::Task['db:seed'].invoke
+    end
+  end
+
   desc "Print active DB URL components"
   task :details do
     puts LegacyDb.parse_database_url
