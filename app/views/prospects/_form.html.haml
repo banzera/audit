@@ -14,13 +14,14 @@
                   .col-3
                     = f.association :clinic_type
                   .col-6
-                    = f.input :status
+                    = f.input :status, as: :select, collection: [:green, :yellow, :red]
                   .col-6
                     = f.association :assigned_to
                 .row.post
                   .col-4.offset-1
                     = effective_address_fields(f, :primary_address, field_order: [:address1, :address2, :city, :state_code, :postal_code, :country_code])
                   .col-4.offset-1
+                    = f.input :primary_contact
                     = f.input :contact_phone
                     = f.input :alt_phone
 
