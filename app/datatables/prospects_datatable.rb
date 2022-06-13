@@ -6,11 +6,12 @@ class ProspectsDatatable < Effective::Datatable
 
   datatable do
     col :office_name
-    col :clinic_type
-
+    col :doctors_name
+    col :clinic_type, visible: false
+    col :city do |p| p.primary_address&.city end
     col :assigned_to
-
-    col :status
+    col :status, search: { as: :select, collection: Prospect::STATUS }
+    col :updated_at, as: :date
 
     actions_col
   end
