@@ -14,7 +14,7 @@
                   .col-3
                     = f.association :clinic_type
                   .col-6
-                    = f.input :status, as: :select, collection: [:green, :yellow, :red]
+                    = f.input :status, collection: Prospect::STATUS
                   .col-6
                     = f.association :assigned_to
                 .row.post

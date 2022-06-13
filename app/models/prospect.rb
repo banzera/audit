@@ -7,6 +7,10 @@ class Prospect < ApplicationRecord
 
   # has_many :contacts
 
+  STATUS = [
+    :red, :yellow, :green,
+  ]
+
   def to_s
     "Prospect: #{office_name}"
   end
