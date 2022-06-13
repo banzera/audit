@@ -35,6 +35,8 @@ class PreOrder < ApplicationRecord
   end
 
   def create_order!
+    return if order.present?
+
     create_order(
       orderdate:    self.preorderdate,
       custid:       self.custid,
