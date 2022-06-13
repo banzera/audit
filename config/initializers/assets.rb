@@ -25,4 +25,5 @@ Rails.application.config.assets.precompile += %w(
   purchase_order_items_datatable.js
   pre_order_items_datatable.js
   pre_order_items_outstanding_datatable.js
+  prospects_datatable.js
 )
