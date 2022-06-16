@@ -7,7 +7,7 @@ class Order < ApplicationRecord
 
   belongs_to :customer, foreign_key: :custid
 
-  has_many :items,           class_name: 'OrderItem',         foreign_key: :orderid
+  has_many :items,           class_name: 'OrderItem',         foreign_key: :orderid, dependent: :destroy
   has_many :pick_list_items, class_name: 'OrderDataPickList', foreign_key: :orderid
   has_many :ship_list_items, class_name: 'OrderDataShipList', foreign_key: :orderid
 

@@ -37,13 +37,15 @@ class PreOrder < ApplicationRecord
   def create_order!
     return if order.present?
 
-    create_order(
-      orderdate:    self.preorderdate,
-      custid:       self.custid,
-      ordertaxrate: customer.custtaxrate
-      )
+    transaction do
+      create_order(
+        orderdate:    self.preorderdate,
+        custid:       self.custid,
+        ordertaxrate: customer.custtaxrate
+        )
 
-    save && order_update!
+      save && order_update!
+    end
   end
 
   def set_order_confirmed_date
@@ -142,7 +144,10 @@ class PreOrder < ApplicationRecord
       # update dates on pre-order items
       PreOrder.connection.execute update_pre_order_item_date_sql
 
-      # update dates on pre-order and order
+      # reload so rails has updated in-memory representation for accurate
+      # completeness check
+      self.reload
+
       if pre_order_complete?
         t = Time.current
         self.ordercreatedate = t
