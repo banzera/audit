@@ -2,32 +2,7 @@
   = simple_form_for @purchase_order, html: {novalidate: true}, defaults: { disabled: local_assigns[:readonly], wrapper: :vertical_form } do |f|
     .row
       .col-12
-        .card.card-primary.card-outline.card-tabs
-          .card-header.p-0.pt-1.border-botton-0
-            %ul#tab.nav.nav-tabs{:role => "tablist"}
-              %li.nav-item
-                %a#general-tab.nav-link.active{"aria-controls" => "general", "aria-selected" => "true", "data-toggle" => "pill", :href => "#general", :role => "tab"} General
-          .card-body
-            #tabContent.tab-content
-              #general.tab-pane.fade.active.show{"aria-labelledby" => "general-tab", :role => "tabpanel"}
-                .row.post
-                  .col-4
-                    = f.input :pobatch, disabled: true
-                    = f.input :podate
-                  .col-4
-                    = f.association :supplier1
-                    = f.association :supplier2
-                  .col-4
-                    = f.input :posplrorderno
-                .row
-                  .col-6
-                    = f.input :invoice_nontax
-                    = f.input :invoice_sh
-                    = f.input :invoice_fees
-                  .col-6
-                    = f.input :invoice_subtotal
-                    = f.input :invoice_tax
-                    = f.input :invoice_total
+        = render partial: 'general_tab', locals: { f: f }
 
     - unless local_assigns[:readonly]
       .row

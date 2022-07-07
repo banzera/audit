@@ -1,0 +1,14 @@
+.row
+  .col-2
+    = f.input :pobatch, disabled: true
+    = f.input :podate
+  .col-3
+    = f.association :supplier1
+  .col-3
+    = f.association :supplier2
+    = f.input :posplrorderno
+  .col-2.offset-1
+    = f.input :invoice_subtotal, as: :currency
+    = f.input :invoice_sh,       as: :currency
+    = f.input :invoice_tax,      as: :currency
+    = f.input :invoice_total,    as: :currency

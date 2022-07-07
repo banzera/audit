@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_31_211032) do
+ActiveRecord::Schema.define(version: 2022_07_07_011811) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -388,10 +388,8 @@ ActiveRecord::Schema.define(version: 2022_05_31_211032) do
     t.text "ponotes"
     t.string "posplrorderno", limit: 255
     t.datetime "pochecksentdate"
-    t.decimal "invoice_nontax"
     t.decimal "invoice_tax"
     t.decimal "invoice_sh"
-    t.decimal "invoice_fees"
     t.decimal "invoice_subtotal"
     t.decimal "invoice_total"
     t.index ["poamountpaid"], name: "index_tblpurchaseorder_on_poamountpaid"

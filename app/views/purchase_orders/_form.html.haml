@@ -2,67 +2,19 @@
   = simple_form_for @purchase_order, defaults: { disabled: local_assigns[:readonly] }, wrapper: :vertical_form do |f|
     .row
       .col-12
-        .card.card-primary.card-outline.card-tabs
-          .card-header.p-0.pt-1.border-botton-0
-            %ul#tab.nav.nav-tabs{:role => "tablist"}
-              %li.nav-item
-                %a#general-tab.nav-link.active{"aria-controls" => "general", "aria-selected" => "true", "data-toggle" => "pill", :href => "#general", :role => "tab"} General
-              %li.nav-item
-                %a#shipping-tab.nav-link{"aria-controls" => "shipping", "aria-selected" => "false", "data-toggle" => "pill", :href => "#shipping", :role => "tab"} Shipping
-              %li.nav-item
-                %a#payment-tab.nav-link{"aria-controls" => "payment", "aria-selected" => "false", "data-toggle" => "pill", :href => "#payment", :role => "tab"} Payment
-              %li.nav-item
-                %a#notes-tab.nav-link{"aria-controls" => "payment", "aria-selected" => "false", "data-toggle" => "pill", :href => "#notes", :role => "tab"} Notes
-          .card-body
-            #tabContent.tab-content
-              #general.tab-pane.fade.active.show{"aria-labelledby" => "general-tab", :role => "tabpanel"}
-                .row.post
-                  .col-4
-                    = f.input :pobatch, wrapper: :vertical_form, disabled: true
-                    = f.input :podate, wrapper: :vertical_form
-                  .col-4
-                    = f.association :supplier1, wrapper: :vertical_form
-                    = f.association :supplier2, wrapper: :vertical_form
-                  .col-4
-                    = f.input :posplrorderno, wrapper: :vertical_form
-                .row
-                  .col-6
-                    = f.input :invoice_nontax
-                    = f.input :invoice_sh
-                    = f.input :invoice_fees
-                  .col-6
-                    = f.input :invoice_subtotal
-                    = f.input :invoice_tax
-                    = f.input :invoice_total
-              #shipping.tab-pane.fade{"aria-labelledby" => "shipping-tab", :role => "tabpanel"}
-                .row
-                  .col-4
-                    = f.input :poshipdate, wrapper: :vertical_form
-                    = f.input :poshiptype, wrapper: :vertical_form
-                  .col-4
-                    = f.input :potrackingno, wrapper: :vertical_form
-                    = f.input :porcvdby, wrapper: :vertical_form
-              #payment.tab-pane.fade{"aria-labelledby" => "payment-tab", :role => "tabpanel"}
-                .row
-                  .col-4
-                    = f.input :podatepaid, wrapper: :vertical_form
-                    = f.input :pochecksentdate, wrapper: :vertical_form
-                  .col-4
-                    = f.input :pomethodpaid, wrapper: :vertical_form
-                    = f.input :popaymentno, wrapper: :vertical_form
-                  .col-4
-                    = f.input :poamountpaid, wrapper: :input_group, prepend: 'fas fa-dollar-sign'
-              #notes.tab-pane.fade{"aria-labelledby" => "notes-tab", :role => "tabpanel"}
-                = f.input :ponotes, wrapper: :vertical_form
+        = card_with_tabs style: [:primary, :outline] do
+          = tab 'General' do
+            = render partial: 'general_tab', locals: { f: f }
+          = tab fa_icon('sticky-note', text: 'Notes') do
+            = f.input :ponotes, wrapper: :vertical_form
 
         - if action_name == 'show'
-          .card.card-primary-card-outline
-            .card-header
+          .card.card-secondary.card-outline
+            .card-header.border-bottom-0
               %h2.card-title PO Items
               .card-tools
                 %a.btn.btn-tool{href: new_purchase_order_purchase_order_item_path(@purchase_order)}
-                  = fa_icon 'plus'
-                  Add Item
+                  = fa_icon 'plus', text: 'Add Item'
 
             .card.body
               = render_datatable PurchaseOrderItemsDatatable.new(po: @purchase_order),

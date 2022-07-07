@@ -23,7 +23,7 @@ export default class extends Controller
 
   checkValues: ->
     p = currency(this.priceTarget.value).intValue
-    it = currency(this.invoiceNontaxTarget.value).intValue
+    it = currency(this.invoiceSubtotalTarget.value).intValue
     $(this.priceTarget).toggleClass('is-invalid', p > it)
 
   updatePrices: (e) ->
@@ -44,35 +44,30 @@ export default class extends Controller
       currency(this.priceTarget.value)
       currency(this.taxTarget.value)
       currency(this.shTarget.value)
-      currency(this.feesTarget.value)
       ], (sum, n) -> sum.add n
 
     this.totalPerTarget.value = _.reduce [
       currency(this.pricePerTarget.value)
       currency(this.taxPerTarget.value)
       currency(this.shPerTarget.value)
-      currency(this.feesPerTarget.value)
     ], (sum, n) -> sum.add n
 
     this.invoiceTotalTarget.value = _.reduce [
-      currency(this.invoiceNontaxTarget.value)
+      currency(this.invoiceSubtotalTarget.value)
       currency(this.invoiceTaxTarget.value)
       currency(this.invoiceShTarget.value)
-      currency(this.invoiceFeesTarget.value)
     ], (sum, n) -> sum.add n
 
   updateCalculatedFields: (e) ->
     console.log "Update to calculated fields triggered by: ", (e.target.id if e != undefined)
 
-    pct_of_order = Number(this.priceTarget.value) / Number(this.invoiceNontaxTarget.value)
+    pct_of_order = Number(this.priceTarget.value) / Number(this.invoiceSubtotalTarget.value)
 
     this.taxTarget.value   = currency(Number(this.invoiceTaxTarget.value)  * pct_of_order)
     this.shTarget.value    = currency(Number(this.invoiceShTarget.value)   * pct_of_order)
-    this.feesTarget.value  = currency(Number(this.invoiceFeesTarget.value) * pct_of_order)
 
     this.taxPerTarget.value  = currency(Number(this.taxTarget.value)  / this.qtyValue)
     this.shPerTarget.value   = currency(Number(this.shTarget.value)   / this.qtyValue)
-    this.feesPerTarget.value = currency(Number(this.feesTarget.value) / this.qtyValue)
 
     this.updateTotals()
     this.flashFields('.calculated')
@@ -86,9 +81,8 @@ export default class extends Controller
 
   @targets: [
     "qty"
-    "invoiceNontax", "price", "pricePer"
-    "invoiceTax",    "tax",   "taxPer"
-    "invoiceSh",     "sh",    "shPer"
-    "invoiceFees",   "fees",  "feesPer"
-    "invoiceTotal",  "total", "totalPer"
+    "invoiceSubtotal", "price", "pricePer"
+    "invoiceTax",      "tax",   "taxPer"
+    "invoiceSh",       "sh",    "shPer"
+    "invoiceTotal",    "total", "totalPer"
   ]
