@@ -33,3 +33,9 @@ en:
       defaults:
         email: Email
         password: Password
+
+    hints:
+      purchase_order:
+        supplier1: Supplier 1 is the purchaser
+        supplier2: Supplier 2 is the vendor
+        posplrorderno: "Vendor's Order Number"

@@ -237,9 +237,13 @@ en:
         ponotes: Notes
         posplrorderno: Supplier Order Number
         pochecksentdate: Check Sent Date
+        invoice_subtotal: Invoice Subtotal
+        invoice_sh: Invoice Shipping
+        invoice_tax: Invoice Tax
+        invoice_total: Invoice Total
       purchase_order_item:
         sku: SKU
-        poorderquant: Qty
+        poorderquant: Ordered Qty
         poorderprice: Price
         poordertax:  Tax
         poordershipping: Shipping
@@ -252,11 +256,14 @@ en:
         poordertotalper: Total Per
         poorderrcvddate: Received Date
         poorderrcvdquant: Received Qty
-        poorderexpiration: Expiration
+        poorderexpiration: Expiration Date
         poorderrebatedeadline: Rebate Deadline
         poorderrebatesubmitted: Rebate Submitted
         poorderrebate: Rebate
         poorderrebatenotes: Rebate Notes
+        poordersplit: Split
+        poorderissue: Issue
+
       sku:
         skuid: ID
         sku: SKU
