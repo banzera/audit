@@ -77,3 +77,18 @@ table.dataTable > thead tr th {
 .bg-peach {
   background-color: #f9e6d7 !important;
 }
+
+input.currency {
+  text-align: right;
+}
+
+/* For Firefox */
+input.currency[type='number'] {
+    -moz-appearance:textfield;
+}
+/* Webkit browsers like Safari and Chrome */
+input.currency[type=number]::-webkit-inner-spin-button,
+input.currency[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
