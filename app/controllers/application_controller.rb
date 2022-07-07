@@ -20,4 +20,18 @@ class ApplicationController < ActionController::Base
       format.any { render :text => 'Access Denied', :status => 403 }
     end
   end
+
+  rescue_from ActiveRecord::RecordNotFound, :with => :not_found
+
+  def not_found
+    logger.info "Bad route caught by #{controller_path} controller..."
+    error    = {code: 404, message: Rack::Utils::HTTP_STATUS_CODES[404]}
+
+    respond_to do |format|
+      format.html { render 'application/404', :status => :not_found }
+      format.xml  { render :xml  => error.to_xml(root: :error), :status => :not_found }
+      format.json { render :json => {error: error},             :status => :not_found }
+      format.all  { head :not_found }
+    end
+  end
 end

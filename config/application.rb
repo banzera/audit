@@ -20,5 +20,15 @@ module Audit
     # config.eager_load_paths << Rails.root.join("lib")
 
     config.middleware.use PDFKit::Middleware, {}, :except => [%r[^/purchase_order_items]]
+
+    # 404 catch all route
+    config.after_initialize do |app|
+      # must reload routes or doesn't work in Rails.env.development?
+      Rails.application.reload_routes!
+
+      app.routes.append do
+        match "*bad_routes", :to => "application#not_found", :via => :all
+      end
+    end
   end
 end
