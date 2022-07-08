@@ -8,6 +8,7 @@ module ApplicationHelper
     required = read_only ? { required: false } : {}
 
     simple_form_for (resource || @resource),
+      builder: NoAutocompleteFormBuilder,
       defaults: { disabled: read_only }.merge(required),
       wrapper: wrapper do |f|
         yield f if block_given?
