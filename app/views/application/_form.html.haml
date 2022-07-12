@@ -1,17 +1,11 @@
 .content
   = default_resource_form(read_only: local_assigns[:readonly]) do |f|
     .row
-      .col-lg-10
-        .card.card-primary.card-outline
-          .card-header
-            %h3.card-title General
-            .card-tools
-              .button.btn.btn-tool{type: :button, 'data-card-widget': :collapse, title: :collapse}
-                %i.fas.fa-minus
-          .card-body
-            %p.card-text
-              - @resource.default_attributes.keys.each do |a|
-                = f.input a
+      .col-lg-8.offset-2
+        = lte_card title: 'General', style: [:primary, :outline] do
+          %p.card-text
+            - @resource.default_attributes.keys.each do |a|
+              = f.input a
 
     - unless local_assigns[:readonly]
       .row

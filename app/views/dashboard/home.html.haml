@@ -39,61 +39,16 @@
 
     .row
       .col-lg-6
-        .card.card-primary.card-outline
-          .card-header
-            %h5.card-title Order Volume by Week
-            .card-tools
-              %a.btn.btn-primary.btn-tool{:href => orders_path} Go to Orders
-              %button.btn.btn-tool{"data-card-widget" => "collapse", :type => "button"}
-                %i.fas.fa-minus
-              .btn-group
-                %button.btn.btn-tool.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", :type => "button"}
-                  %i.fas.fa-wrench
-                .dropdown-menu.dropdown-menu-right{:role => "menu", :style => ""}
-                  %a.dropdown-item{:href => "#"} Action
-                  %a.dropdown-item{:href => "#"} Another action
-                  %a.dropdown-item{:href => "#"} Something else here
-                  %a.dropdown-divider
-                  %a.dropdown-item{:href => "#"} Separated link
-              %button.btn.btn-tool{"data-card-widget" => "remove", :type => "button"}
-                %i.fas.fa-times
-          .card-body
-            = line_chart Order.group_by_week(:orderdate).count
+        = lte_card title: 'Order Volume by Week', tools: :maximize do |tools|
+          - content_for tools do
+            %a.btn.btn-primary.btn-tool{:href => orders_path} Go to Orders
+          = line_chart Order.group_by_week(:orderdate).count
       .col-lg-6
-        .card.card-primary.card-outline
-          .card-header
-            %h5.card-title Pre-Order Volume by Week
-            .card-tools
-              %a.btn.btn-primary.btn-tool{:href => pre_orders_path} Go to Pre-Orders
-              %button.btn.btn-tool{"data-card-widget" => "collapse", :type => "button"}
-                %i.fas.fa-minus
-              .btn-group
-                %button.btn.btn-tool.dropdown-toggle{"aria-expanded" => "false", "data-toggle" => "dropdown", :type => "button"}
-                  %i.fas.fa-wrench
-                .dropdown-menu.dropdown-menu-right{:role => "menu", :style => ""}
-              %button.btn.btn-tool{"data-card-widget" => "remove", :type => "button"}
-                %i.fas.fa-times
-          .card-body
-            = line_chart PreOrder.group_by_week(:preorderdate).count
+        = lte_card title: 'Pre-Order Volume by Week', tools: [:collapse, :maximize] do |tools|
+          - content_for tools do
+            %a.btn.btn-primary.btn-tool{:href => pre_orders_path} Go to Pre-Orders
+          = line_chart PreOrder.group_by_week(:preorderdate).count
     .row
       .col-lg-6
-        .card
-          .card-body
-            %h5.card-title Credit Card Billing Volume (Prev 30 days)
-            = line_chart Order.where("orderccdate > ?", 30.days.ago).group_by_day(:orderccdate).count
-
-      .col-lg-6
-        .card
-          .card-header
-            %h5.m-0 Order Flow
-          .card-body
-            %h6.card-title Special title treatment
-            %p.card-text With supporting text below as a natural lead-in to additional content.
-            %a.btn.btn-primary{:href => "#"} Go somewhere
-        .card.card-primary.card-outline
-          .card-header
-            %h5.m-0 Featured
-          .card-body
-            %h6.card-title Special title treatment
-            %p.card-text With supporting text below as a natural lead-in to additional content.
-            %a.btn.btn-primary{:href => "#"} Go somewhere
+        = lte_card title: 'Credit Card Billing Volume (Prev 30 days)' do
+          = line_chart Order.where("orderccdate > ?", 30.days.ago).group_by_day(:orderccdate).count
