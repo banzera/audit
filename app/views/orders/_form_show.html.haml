@@ -2,32 +2,19 @@
   .row
     .col-12
       = render 'form', readonly: readonly
-      .card.card-outline.card-secondary
-        .card-header.border-bottom-0
-          %h2.card-title
-            %a.btn.btn-tool.btn-outline-secondary{href: new_order_order_item_path(@order)}
-              = fa_icon 'plus', text: 'Add Item'
+      - title = capture do
+        %a.btn.btn-tool.btn-outline-secondary{href: new_order_order_item_path(@order)}
+          = fa_icon 'plus', text: 'Add Item'
+      = lte_card title: title, style: [:outline, :secondary] do |tools|
+        - content_for tools do
+          = simple_form_for @order do |f|
+            = f.input :ship_date, as: :date,
+                                  wrapper: :horizontal_date,
+                                  label: 'Target Ship Date:',
+                                  label_html: { class: 'text-right' },
+                                  input_html: { value: Date.today }
 
-          .card-tools
-            .row
-              %label.col-sm-6.col-form-label.date.optional.text-right{:for => "ship_date"} Target Ship Date:
-              .col-sm-6
-                #dp_ship_date.input-group.date{"data-target-input" => "nearest"}
-                  %input#ship_date.form-control.date.optional.datetimepicker-input{"data-target" => "#dp_ship_date", :name => "target_ship_date", :type => "text", :value => Date.today}
-                  .input-group-append{data: {target: "#dp_ship_date", toggle: "datetimepicker"} }
-                    .input-group-text
-                      %i.fa.fa-calendar
-
-        .card.body
-          = render_datatable OrderItemsDatatable.new(order: @order), simple: true
+        = render_datatable OrderItemsDatatable.new(order: @order), simple: true
 
 - content_for :scripts do
   = javascript_include_tag 'order_items_datatable'
-
-  :coffee
-    $(document).ready () ->
-      $('#dp_ship_date').datetimepicker
-        format: "L"
-        extraFormats: ["YYYY-MM-DD HH:mm::ss z"]
-
-
