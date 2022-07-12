@@ -38,7 +38,8 @@ class OrderItemsController < ApplicationController
   private
 
   def load_resources
-    @sku = @order_item.sku
+    @order = @order_item.order
+    @sku   = @order_item.sku
   end
 
   def order_item_params

@@ -1,30 +1,35 @@
-= default_resource_form([@order, @order_item], read_only: local_assigns[:readonly], wrapper: :horizontal_form) do |f|
-  .row.post
-    .col-6
-      = f.association :sku, as: :sku_selection
-      = f.association :purchase_order, as: :sku_po_history_selection, available_only: true
-      = f.input :orderitemsdelivereddate, as: :date
-      .row
-        .col-5
-          = f.input :orderquant, wrapper: :vertical_form
-        .col-5
-          = f.input :orderdeliveredquant, wrapper: :vertical_form
-        .col-2
-          = f.input :orderitemsurgent, wrapper: :vertical_form
-    .col-6
-      = f.input :orderpriceper, as: :currency
-      = f.input :orderpricetotal, as: :currency
-      = f.input :ordertaxrate
-      = f.input :ordertaxtotal, as: :currency
-      = f.input :orderdeliverycosttotal, as: :currency
-      = f.input :orderfeestotal, as: :currency
-      = f.input :ordergrandtotal, as: :currency
-      = f.input :orderretailtotal, as: :currency
-
-  - unless local_assigns[:readonly]
+.row.post
+  .col-6
+    = f.association :sku, as: :sku_selection
+    = f.association :purchase_order, as: :sku_po_history_selection, for_sku: :skuid
     .row
-      = simple_form_submit(f)
+      .col-5
+        = f.input :orderquant, wrapper: :vertical_form, stimulus: {target: :qty, action: 'oprice#updateQty'}
+      .col-2
+        = f.input :orderitemsurgent, wrapper: :vertical_form
+      .col-5
+        = f.input :orderdeliveredquant, wrapper: :vertical_form
+    .row
+      .col-5
+        = f.input :orderitemsdelivereddate, as: :date
+
+  .col-6
+    = f.input :popriceper, label: 'PO Price Per + 20%', as: :currency
+    = f.input :orderpriceper,   stimulus: { target: 'pricePer', action: 'oprice#updatePrice' }, as: :currency
+    = f.input :orderpricetotal, stimulus: { target: 'priceTotal' }, calculated: true
+    = f.input :ordertaxrate,    stimulus: { target: 'taxRate', action: 'oprice#updateTaxRate' }, input_html: { value: @order.ordertaxrate }
+    = f.input :ordertaxtotal,   stimulus: { target: 'taxTotal' }, calculated: true
+    = f.input :ordergrandtotal, stimulus: { target: 'grandTotal' }, calculated: true
+
+- unless local_assigns[:readonly]
+  .row
+    = simple_form_submit(f)
 
 - content_for :scripts do
   :coffee
-    $(document).ready () -> new LinkedSkuPoSelects('#order_item_skuid', '#order_item_poid')
+    $(document).ready () ->
+      new LinkedSkuPoSelects('#order_item_skuid', '#order_item_poid', false)
+
+      $('#order_item_poid').on 'select2:select', (e) ->
+        price = currency(e.params.data.price)
+        $('#order_item_popriceper').val(price.multiply(1.2)).flash()
