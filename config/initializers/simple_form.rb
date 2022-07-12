@@ -181,6 +181,18 @@ SimpleForm.setup do |config|
     end
   end
 
+  # horizontal input for date
+  config.wrappers :horizontal_date, tag: 'div', class: 'form-group row', error_class: 'form-group-invalid', valid_class: 'form-group-valid' do |b|
+    b.use :html5
+    b.optional :readonly
+    b.use :label, class: 'col-sm-6 col-form-label'
+    b.wrapper :grid_wrapper, tag: 'div', class: 'col-sm-6' do |ba|
+      ba.use :input, class: 'form-control', error_class: 'is-invalid', valid_class: ''
+      ba.use :full_error, wrap_with: { tag: 'div', class: 'invalid-feedback' }
+      ba.use :hint, wrap_with: { tag: 'small', class: 'form-text text-muted' }
+    end
+  end
+
   # horizontal input for radio buttons and check boxes
   config.wrappers :horizontal_collection, item_wrapper_class: 'form-check', item_label_class: 'form-check-label', tag: 'div', class: 'form-group row', error_class: 'form-group-invalid', valid_class: 'form-group-valid' do |b|
     b.use :html5

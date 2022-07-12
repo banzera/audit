@@ -1,7 +1,0 @@
-= simple_form_for [@order, @order_item],
-  html: { 'data-controller' => 'oprice' },
-  defaults: { disabled: local_assigns[:readonly], stimulus: {controller: 'oprice'} },
-  wrapper: :horizontal_form do |f|
-
-  = render partial: 'form', locals: { f: f }
-

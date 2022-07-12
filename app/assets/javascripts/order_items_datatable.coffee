@@ -25,7 +25,7 @@ $(document).on 'ajax:before', (event) ->
     _datatable_id:                         $table.attr('id')
     _datatable_attributes:                 $table.data('attributes')
     _datatable_action:                     true
-    'order_item[orderitemsdelivereddate]': $('#ship_date').val()
+    'order_item[orderitemsdelivereddate]': $('#order_ship_date').val()
 
   $action.attr('data-params', $params)
   true

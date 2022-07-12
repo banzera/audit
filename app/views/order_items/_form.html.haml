@@ -1,29 +1,34 @@
-.row.post
-  .col-6
-    = f.association :sku, as: :sku_selection
-    = f.association :purchase_order, as: :sku_po_history_selection, for_sku: :skuid
-    .row
-      .col-5
-        = f.input :orderquant, wrapper: :vertical_form, stimulus: {target: :qty, action: 'oprice#updateQty'}
-      .col-2
-        = f.input :orderitemsurgent, wrapper: :vertical_form
-      .col-5
-        = f.input :orderdeliveredquant, wrapper: :vertical_form
-    .row
-      .col-5
-        = f.input :orderitemsdelivereddate, as: :date
+= simple_form_for [@order, @order_item],
+    html: { 'data-controller' => 'oprice' },
+    defaults: { disabled: local_assigns[:readonly], stimulus: {controller: 'oprice'} },
+    wrapper: :horizontal_form do |f|
 
-  .col-6
-    = f.input :popriceper, label: 'PO Price Per + 20%', as: :currency
-    = f.input :orderpriceper,   stimulus: { target: 'pricePer', action: 'oprice#updatePrice' }, as: :currency
-    = f.input :orderpricetotal, stimulus: { target: 'priceTotal' }, calculated: true
-    = f.input :ordertaxrate,    stimulus: { target: 'taxRate', action: 'oprice#updateTaxRate' }, input_html: { value: @order.ordertaxrate }
-    = f.input :ordertaxtotal,   stimulus: { target: 'taxTotal' }, calculated: true
-    = f.input :ordergrandtotal, stimulus: { target: 'grandTotal' }, calculated: true
+  .row.post
+    .col-6
+      = f.association :sku, as: :sku_selection
+      = f.association :purchase_order, as: :sku_po_history_selection, for_sku: :skuid
+      .row
+        .col-5
+          = f.input :orderquant, wrapper: :vertical_form, stimulus: {target: :qty, action: 'oprice#updateQty'}
+        .col-2
+          = f.input :orderitemsurgent, wrapper: :vertical_form
+        .col-5
+          = f.input :orderdeliveredquant, wrapper: :vertical_form
+      .row
+        .col-5
+          = f.input :orderitemsdelivereddate, as: :date
 
-- unless local_assigns[:readonly]
-  .row
-    = simple_form_submit(f)
+    .col-6
+      = f.input :popriceper, label: 'PO Price Per + 20%', as: :currency
+      = f.input :orderpriceper,   stimulus: { target: 'pricePer', action: 'oprice#updatePrice' }, as: :currency
+      = f.input :orderpricetotal, stimulus: { target: 'priceTotal' }, calculated: true
+      = f.input :ordertaxrate,    stimulus: { target: 'taxRate', action: 'oprice#updateTaxRate' }
+      = f.input :ordertaxtotal,   stimulus: { target: 'taxTotal' }, calculated: true
+      = f.input :ordergrandtotal, stimulus: { target: 'grandTotal' }, calculated: true
+
+  - unless local_assigns[:readonly]
+    .row
+      = simple_form_submit(f)
 
 - content_for :scripts do
   :coffee

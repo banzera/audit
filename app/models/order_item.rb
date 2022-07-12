@@ -16,6 +16,11 @@ class OrderItem < ApplicationRecord
 
   attr_accessor :popriceper
 
+  def orderid=(newval)
+    super
+    self.ordertaxrate ||= parent.ordertaxrate
+  end
+
   after_save :update_order_delivered_date
 
   def update_order_delivered_date
