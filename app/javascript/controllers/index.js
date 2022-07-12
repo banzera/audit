@@ -9,3 +9,6 @@ application.register("price", PriceController)
 
 import OrderPriceController from "./order_price_controller.coffee"
 application.register("oprice", OrderPriceController)
+
+import PreOrderPriceController from "./pre_order_price_controller.coffee"
+application.register("preorderprice", PreOrderPriceController)

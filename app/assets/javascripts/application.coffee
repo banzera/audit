@@ -83,3 +83,10 @@ $(document).on 'turbolinks:load', ->
     $('.main-header.navbar').toggleClass('navbar-dark')
 
   $('#auxilary-save-btn').click -> $('form').submit()
+
+$.fn.flash = ->
+  this.addClass('bg-info')
+  setTimeout =>
+    this.removeClass('bg-info')
+  , 750
+  this

@@ -96,7 +96,7 @@ Rails.application.routes.draw do
   end
 
   resources :pre_order_codes
-  resources :pre_order_items, only: [:destroy], concerns: [:auditable] do
+  resources :pre_order_items, only: [:destroy, :show], concerns: [:auditable] do
     collection do
       get :outstanding
     end

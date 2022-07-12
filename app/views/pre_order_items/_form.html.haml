@@ -1,27 +1,44 @@
-= default_resource_form([@pre_order, @pre_order_item], read_only: local_assigns[:readonly], wrapper: :vertical_form) do |f|
-  .row.post
-    .col-3
+= simple_form_for [@pre_order, @pre_order_item],
+    builder: NoAutocompleteFormBuilder,
+    defaults: { disabled: local_assigns[:readonly], stimulus: {controller: 'preorderprice'} },
+    wrapper: :vertical_form do |f|
+
+  .row{ 'data-controller' => 'preorderprice' }
+    .col-6
       = f.association :sku1, as: :sku_selection, source_url: '/skus'
-      = f.association :sku2, as: :sku_selection, source_url: '/skus', required: !creating_resource?
-    .col-3
-      = f.input :orderquant1
-      = f.input :orderquant2
-    .col-3
-      = f.input :orderpriceper1
-      = f.input :orderpriceper2
-    .col-3
-      = f.input :orderpricetotal1
-      = f.input :orderpricetotal2
+    .col-2
+      = f.input :orderquant1, stimulus: { target: :qty, action: 'preorderprice#calculate' }
+    .col-2
+      = f.input :orderpriceper1, stimulus: { target: :pricePer, action: 'preorderprice#calculate' }, as: :currency
+    .col-2
+      = f.input :orderpricetotal1, stimulus: { target: :priceTotal }, as: :currency, calculated: true
+
+  .row.post{ 'data-controller' => 'preorderprice' }
+    .col-6
+      = f.association :sku2, as: :sku_selection, source_url: '/skus'
+    .col-2
+      = f.input :orderquant2, stimulus: { target: :qty, action: 'preorderprice#calculate' }
+    .col-2
+      = f.input :orderpriceper2, stimulus: { target: :pricePer, action: 'preorderprice#calculate' }, as: :currency
+    .col-2
+      = f.input :orderpricetotal2, stimulus: { target: :priceTotal }, as: :currency, calculated: true
+
   .row.post
-    .col-4
+    .col-6
       = f.association :purchase_order, as: :sku_po_history_selection, for_sku: :skuid2
-    .col-4
-      = f.input :orderaupriceper
-    .col-4
-      = f.input :orderdate, as: :date, wrapper: :vertical_form
+    .col-2
+      = f.input :orderaupriceper, as: :currency
+    .col-2
+      .row
+        .col-10
+          = f.input :suggested_price, label: 'PO Price/Per + 20%', as: :currency
+        .col-2
+          %button.btn.btn-small.btn-outline#accept-suggested-price= fa_icon 'arrow-up'
+    .col-2
+      = f.input :orderdate, as: :date
   .row
     .col-1
-      = f.input :preorderurgent, wrapper: :vertical_form
+      = f.input :preorderurgent
     .col-3
       = f.association :code
     .col-8
@@ -35,22 +52,34 @@
   :coffee
     $(document).ready () -> new LinkedSkuPoSelects('#pre_order_item_skuid2', '#pre_order_item_poid')
 
+    $('#accept-suggested-price').click (e) ->
+      e.preventDefault()
+      $el = $('#pre_order_item_orderpriceper2')
+      $el.val($('#pre_order_item_suggested_price').val()).flash()
+
+      window.Stimulus.controllers[1].calculate($el[0])
+
+    $('#pre_order_item_poid').on 'select2:select', (e) =>
+      price = currency(e.params.data.price)
+      $('#pre_order_item_orderaupriceper').val(price).flash()
+      $('#pre_order_item_suggested_price').val(price.multiply(1.2)).flash()
+
+    # check for same/different SKU selection and update code and proposed qty as appropriate
     $('#pre_order_item_skuid1, #pre_order_item_skuid2').on 'select2:select', (e) =>
-        $sku1 = $('#pre_order_item_skuid1')
-        $sku2 = $('#pre_order_item_skuid2')
+      id1 = $('#pre_order_item_skuid1').select2('data')[0].id
+      id2 = $('#pre_order_item_skuid2').select2('data')[0].id
 
-        id1 = $sku1.select2('data')[0].id
-        id2 = $sku2.select2('data')[0].id
+      if id1 == id2
+        newVal = $('#pre_order_item_orderquant1').val()
+        $el = $('#pre_order_item_orderquant2').val(newVal).flash()
 
-        $code = $('#pre_order_item_preorderitemcode')
+        window.Stimulus.controllers[1].calculate($el[0])
 
+      if id2
         val = if id1 == id2 then 1 else 2
 
+        $code = $('#pre_order_item_preorderitemcode')
         $code.val(val).trigger 'change'
 
-        $s = $code.parent().find('span.select2-selection__rendered')
+        $s = $code.parent().find('span.select2-selection__rendered').flash()
 
-        $s.addClass('bg-info')
-        setTimeout ->
-          $s.removeClass('bg-info')
-        , 750
