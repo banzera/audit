@@ -4,8 +4,8 @@
 
 import { application } from "./application"
 
-import PriceController from "./price_controller.coffee"
-application.register("price", PriceController)
+import POPriceController from "./po_price_controller.coffee"
+application.register("price", POPriceController)
 
 import OrderPriceController from "./order_price_controller.coffee"
 application.register("oprice", OrderPriceController)
