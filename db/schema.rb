@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_07_011811) do
+ActiveRecord::Schema.define(version: 2022_07_12_180037) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -291,7 +291,7 @@ ActiveRecord::Schema.define(version: 2022_07_07_011811) do
     t.integer "skuid"
     t.integer "poid"
     t.integer "orderid"
-    t.integer "orderquant"
+    t.integer "orderquant", default: 0
     t.float "orderpriceper", default: 0.0
     t.float "orderpricetotal", default: 0.0
     t.float "ordertaxrate"
