@@ -7,6 +7,8 @@ class Order < ApplicationRecord
 
   belongs_to :customer, foreign_key: :custid
 
+  has_one :pre_order,    foreign_key: :orderid
+
   has_many :items,           class_name: 'OrderItem',         foreign_key: :orderid, dependent: :destroy
   has_many :pick_list_items, class_name: 'OrderDataPickList', foreign_key: :orderid
   has_many :ship_list_items, class_name: 'OrderDataShipList', foreign_key: :orderid
@@ -52,7 +54,11 @@ class Order < ApplicationRecord
   end
 
   def autocalc_delivered_date!
-    odd = outstanding_items_count.zero? ? items.maximum(:orderitemsdelivereddate) : nil
+    odd = if outstanding_items_count.zero?
+      # if there are items, use the latest date, if no items exist (e.g. all
+      # items were drop-shipped) then use today's date
+      items.maximum(:orderitemsdelivereddate) || Date.today
+    end
     update(orderdelivereddate: odd)
   end
 

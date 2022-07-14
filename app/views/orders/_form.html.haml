@@ -12,7 +12,13 @@
           = f.input :orderdelivereddate
       .row
         .col-4
-          = f.input :preordercompletedate
+          .row
+            .col-9
+              = f.input :preordercompletedate
+            .col-3.text-right.align-bottom
+              - if @order.pre_order.present?
+                = link_to @order.pre_order, class: 'btn btn-outline-secondary', target: :blank do
+                  = fa_icon 'external-link-alt', text: "Go to Pre-Order #{@order.pre_order.preorderid}", right: true
         .col-4
           = f.input :orderconfirmdate
         .col-4

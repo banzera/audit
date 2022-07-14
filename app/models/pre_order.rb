@@ -153,7 +153,7 @@ class PreOrder < ApplicationRecord
         self.ordercreatedate = t
         self.order.preordercompletedate = t
 
-        save && order.save
+        save && order.autocalc_delivered_date!
       end
     end
   end
