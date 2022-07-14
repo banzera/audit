@@ -74,6 +74,9 @@ en:
       supplier:
         one: Supplier
         other: Suppliers
+      tax_jurisdiction:
+        one: Tax Jurisdiction
+        other: Tax Jurisdictions
       vendor:
         one: Vendor
         other: Vendors
@@ -263,7 +266,6 @@ en:
         poorderrebatenotes: Rebate Notes
         poordersplit: Split
         poorderissue: Issue
-
       sku:
         skuid: ID
         sku: SKU
@@ -348,6 +350,12 @@ en:
         splrtaxid: Tax ID
         splrqbo: QBO
         splrnotes: Notes
+      tax_jurisdiction:
+        jurisdictioncode: Code
+        jurisdictionname: Name
+        rateeffdate: Effective Date
+        taxrate: Rate
+
       vendor:
         vendorname: Name
         vendorabbr: Abbreviation

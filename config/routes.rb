@@ -139,6 +139,7 @@ Rails.application.routes.draw do
 
   resources :sku_po_histories, only: [:index]
 
+  resources :tax_jurisdictions
   resources :vendors
 
   scope 'receive' do
