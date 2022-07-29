@@ -20,7 +20,7 @@
         N/A
   .col-2
     %span
-      = number_to_currency(po.poorderpriceper)
+      = number_to_currency(po.priceeachlesstax)
   .col-2
     .text-right
       %a.btn.btn-blocka.btn-sm.btn-secondary{:href => purchase_order_path(po.poid), :target => "_po"}
