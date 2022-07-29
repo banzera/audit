@@ -5,6 +5,7 @@ class PurchaseOrderItemsController < ApplicationController
   load_and_authorize_resource :purchase_order_item, through: :purchase_order, through_association: :items, shallow: true
 
   before_action :load_resources, except: [:index, :new]
+  before_action :check_po_pricing, only: [:show, :edit, :new]
 
   page_title(only: [:new])   { "New #{resource_name.titleize}(s) for PO #{@purchase_order}" }
   page_title(only: [:label]) { "Bin Label for #{@sku.sku} / #{@purchase_order.pobatch}" }
@@ -61,6 +62,12 @@ class PurchaseOrderItemsController < ApplicationController
   def load_resources
     @sku = @purchase_order_item.sku
     @purchase_order ||= @purchase_order_item.purchase_order
+  end
+
+  # needed for legacy PO's that don't have pricing data saved, which
+  # upon editing, the item's auto-price-calcs would set incorrect values
+  def check_po_pricing
+    redirect_to(url_for(@purchase_order), flash: {error: "Invoice values must be present before adding/editing an item"}) if @purchase_order.missing_invoice_values?
   end
 
   def purchase_order_item_params

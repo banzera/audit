@@ -4,6 +4,7 @@ module PurchaseOrderItemsHelper
     simple_fields_for @purchase_order,
         wrapper: :vertical_form,
         defaults: { disabled: local_assigns[:readonly],
+                    required: false,
                     stimulus: {controller: 'price' }
                   } do |ff|
           yield ff

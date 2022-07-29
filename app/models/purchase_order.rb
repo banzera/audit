@@ -24,7 +24,11 @@ class PurchaseOrder < ApplicationRecord
   validates_presence_of :supplier1,
                         :supplier2,
                         :posplrorderno,
-                        :podate
+                        :podate,
+                        :invoice_tax,
+                        :invoice_sh,
+                        :invoice_subtotal,
+                        :invoice_total
 
   has_batch_number :pobatch, date: :podate, attrs: 'supplier1.splrname' do |po|
     PurchaseOrder
@@ -41,6 +45,15 @@ class PurchaseOrder < ApplicationRecord
 
   def self.paid_methods
     select(:pomethodpaid).distinct.pluck(:pomethodpaid).compact
+  end
+
+  def missing_invoice_values?
+    [
+      invoice_tax,
+      invoice_sh,
+      invoice_subtotal,
+      invoice_total,
+    ].map(&:blank?).any?
   end
 
   def unfullfilled?
