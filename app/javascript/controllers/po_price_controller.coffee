@@ -61,7 +61,7 @@ export default class extends Controller
   updateCalculatedFields: (e) ->
     console.log "Update to calculated fields triggered by: ", (e.target.id if e != undefined)
 
-    pct_of_order = Number(this.priceTarget.value) / Number(this.invoiceSubtotalTarget.value)
+    pct_of_order = Number(this.priceTarget.value) / Number(this.invoiceSubtotalTarget.value) || 0
 
     this.taxTarget.value   = currency(Number(this.invoiceTaxTarget.value)  * pct_of_order)
     this.shTarget.value    = currency(Number(this.invoiceShTarget.value)   * pct_of_order)
