@@ -5,7 +5,7 @@ class PurchaseOrderItemsController < ApplicationController
   load_and_authorize_resource :purchase_order_item, through: :purchase_order, through_association: :items, shallow: true
 
   before_action :load_resources, except: [:index, :new]
-  before_action :check_po_pricing, only: [:show, :edit, :new]
+  before_action :check_po_pricing, only: [:edit, :update, :new, :create]
 
   page_title(only: [:new])   { "New #{resource_name.titleize}(s) for PO #{@purchase_order}" }
   page_title(only: [:label]) { "Bin Label for #{@sku.sku} / #{@purchase_order.pobatch}" }
