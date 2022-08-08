@@ -1,0 +1,7 @@
+.btn-group
+  %a.btn.btn-sm.btn-secondary{href: label_preview_purchase_order_item_path(resource)}
+    = fa_icon 'print'
+  = dropdown variation: :dropright do
+    = dropdown_link_to 'Show', url_for(resource)
+    = dropdown_link_to 'Edit', edit_purchase_order_item_path(resource)
+    = dropdown_link_to 'Receive', receive_purchase_order_item_path(resource)
