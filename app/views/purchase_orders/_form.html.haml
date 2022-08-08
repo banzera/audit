@@ -5,6 +5,24 @@
         = card_with_tabs style: [:primary, :outline] do
           = tab 'General' do
             = render partial: 'general_tab', locals: { f: f }
+          = tab 'Shipping' do
+            .row
+              .col-4
+                = f.input :poshipdate
+                = f.input :poshiptype
+              .col-4
+                = f.input :potrackingno
+                = f.input :porcvdby
+          = tab 'Payment' do
+            .row
+              .col-4
+                = f.input :podatepaid
+                = f.input :pochecksentdate
+              .col-4
+                = f.input :pomethodpaid
+                = f.input :popaymentno
+              .col-4
+                = f.input :poamountpaid, as: :currency
           = tab fa_icon('sticky-note', text: 'Notes') do
             = f.input :ponotes, wrapper: :vertical_form
 
