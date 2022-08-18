@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_12_180037) do
+ActiveRecord::Schema.define(version: 2022_08_18_160503) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -422,6 +422,7 @@ ActiveRecord::Schema.define(version: 2022_07_12_180037) do
     t.string "poorderrebatenotes", limit: 255
     t.boolean "poordersplit", default: false, null: false
     t.boolean "poorderissue", default: false, null: false
+    t.index ["poid", "skuid"], name: "index_tblpurchaseorderitems_on_poid_and_skuid", unique: true
   end
 
   create_table "tblpurchasetype", primary_key: "purchasetypeid", id: :integer, force: :cascade do |t|

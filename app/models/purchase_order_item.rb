@@ -18,6 +18,7 @@ class PurchaseOrderItem < ApplicationRecord
   }
 
   validates_presence_of :poorderquant, :poorderrcvdquant
+  validates_uniqueness_of :sku, scope: [:poid], message: 'is already on this PO'
 
   def self.most_recent_for_sku(skuid)
     self.where(skuid: skuid)
