@@ -3,6 +3,8 @@ class SkusDatatable < Effective::Datatable
   collection do
     scope = if attributes[:search]
       Sku.search attributes[:search]
+    elsif attributes[:skus]
+      Sku.where(id: attributes[:skus])
     else
       Sku.all
     end

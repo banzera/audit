@@ -67,6 +67,16 @@ class Sku < ApplicationRecord
     skumintemp.zero?
   end
 
+  def most_recent_po
+    PurchaseOrderItem.where(skuid: skuid)
+                     .includes(:purchase_order)
+                     .joins(:purchase_order)
+                     .order(podate: :desc)
+                     .limit(1)
+                     .first
+
+  end
+
   class VendorDetail < OpenStruct ; end
 
   def vendors

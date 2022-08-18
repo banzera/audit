@@ -19,6 +19,13 @@ class PurchaseOrderItem < ApplicationRecord
 
   validates_presence_of :poorderquant, :poorderrcvdquant
 
+  def self.most_recent_for_sku(skuid)
+    self.where(skuid: skuid)
+        .includes(:purchase_order)
+        .joins(:purchase_order)
+        .maximum(:podate)
+  end
+
   def receive!
     self.update(poorderrcvddate: Time.current)
     self.sku.resolve_issue!
