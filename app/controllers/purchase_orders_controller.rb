@@ -11,6 +11,7 @@ class PurchaseOrdersController < ApplicationController
   button :upload, false
   button :new_items, 'Add or Upload Items'
   button :receive, 'Receive', if: -> { resource.unfullfilled? }
+  button :destroy, 'Delete', unless: -> { resource.items.any? }
 
   def index
     respond_to do |format|
