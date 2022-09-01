@@ -64,6 +64,23 @@ class PurchaseOrder < ApplicationRecord
     "Purchase Order #{poid}"
   end
 
+  VOID_POID = 0
+  VOID = begin
+    find_or_create_by(poid: VOID_POID) do |po|
+      po.podate           = 20.years.ago
+      po.supplier1        = Supplier::NONE
+      po.supplier2        = Supplier::NONE
+      po.posplrorderno    = 'VOIDPO'
+      po.invoice_tax      = 0.0
+      po.invoice_sh       = 0.0
+      po.invoice_subtotal = 0.0
+      po.invoice_total    = 0.0
+    end.tap do |po|
+      po.update(pobatch: 'VOIDPO')
+      po.readonly!
+    end
+  end
+
   private
 
 end

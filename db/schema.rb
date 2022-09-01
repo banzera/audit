@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_18_160503) do
+ActiveRecord::Schema.define(version: 2022_08_26_155653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -646,6 +646,7 @@ ActiveRecord::Schema.define(version: 2022_08_18_160503) do
   add_foreign_key "tblorderpmtsitems", "tblorderitems", column: "orderitemsid", primary_key: "orderitemsid", name: "tblorderpmtsitems_orderitemsid_fkey"
   add_foreign_key "tblorderpmtsitems", "tblorderpmts", column: "opmtsid", primary_key: "opmtsid", name: "tblorderpmtsitems_opmtsid_fkey"
   add_foreign_key "tblpreorder", "tblsupplier", column: "splrid", primary_key: "splrid"
+  add_foreign_key "tblpreorderitems", "tblpurchaseorder", column: "poid", primary_key: "poid"
   add_foreign_key "tblpurchaseorder", "tblsupplier", column: "splrid", primary_key: "splrid", name: "tblpurchaseorder_splrid_fkey"
   add_foreign_key "tblpurchaseorderitems", "tblpurchaseorder", column: "poid", primary_key: "poid", name: "tblpurchaseorderitems_poid_fkey"
   add_foreign_key "tblpurchaseorderitems", "tblsku", column: "skuid", primary_key: "skuid", name: "tblpurchaseorderitems_skuid_fkey"
