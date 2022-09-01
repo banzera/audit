@@ -39,6 +39,8 @@ class Sku < ApplicationRecord
                     }
                   }
 
+  validates :itemno, uniqueness: true
+
   def to_s
     "SKU #{id} (#{skudesc&.truncate(20) || '<no description>'})"
   end
