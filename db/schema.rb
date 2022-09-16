@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_26_155653) do
+ActiveRecord::Schema.define(version: 2022_09_16_002642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -1442,66 +1442,6 @@ ActiveRecord::Schema.define(version: 2022_08_26_155653) do
        LEFT JOIN tblorderitems ON (((qryskupohistau.poid = tblorderitems.poid) AND (qryskupohistau.skuid = tblorderitems.skuid))))
     GROUP BY qryskupohistau.podate, qryskupohistau.skuid, qryskupohistau.splrid2, qryskupohistau.splrname, qryskupohistau.poorderquant, qryskupohistau.poorderrcvdquant, qryskupohistau.podiff, qryskupohistau.poorderpriceper, qryskupohistau.priceeachlesstax, qryskupohistau.poid, qryskupohistau.poorderexpiration;
   SQL
-  create_view "qry_order_data_pick_list", sql_definition: <<-SQL
-      SELECT tblcustomer.custid,
-      tblcustomer.custname,
-      tblcustomer.custfirst,
-      tblcustomer.custlast,
-      tblcustomer.custsal,
-      tblcustomer.custtitle,
-      tblcustomer.custbusinessname,
-      tblcustomer.custaddress,
-      tblcustomer.custcity,
-      tblcustomer.custst,
-      tblcustomer.custzip,
-      tblcustomer.custprimarycontact1,
-      tblcustomer.custphone1,
-      tblcustomer.custphonetype1,
-      tblcustomer.custemail1,
-      tblcustomer.custprimarycontact2,
-      tblcustomer.custphone2,
-      tblcustomer.custphonetype2,
-      tblcustomer.custemail2,
-      tblcustomer.custfax,
-      tblcustomer.custtaxrate,
-      tblcustomer.custccauth,
-      tblcustomer.custcclast4,
-      tblorder.orderid,
-      tblorder.orderdate,
-      tblorder.orderbatch,
-      tblorder.ordertaxrate,
-      tblorder.ordernotes,
-      tblorder.preordercompletedate,
-      tblorderitems.orderitemsid,
-      tblorderitems.poid,
-      tblorderitems.orderdeliverycosttotal,
-      tblorderitems.ordertaxtotal,
-      tblorderitems.ordergrandtotal,
-      tblorderitems.orderquant,
-      tblorderitems.orderpriceper,
-      tblorderitems.orderpricetotal,
-      tblorderitems.orderretailtotal,
-      tblorderitems.orderitemsdelivereddate,
-      tblorderitems.orderdeliveredquant,
-      tblsku.skuid,
-      tblsku.sku,
-      tblsku.manf,
-      tblsku.itemno,
-      tblsku.skudesc,
-      tblsku.unitweight,
-      tblsku.categoryid,
-      tblsku.skuminunits,
-      tblsku.skuminunitstype,
-      tblsku.dcloc,
-      tblsku.skuminpercs,
-      s1.orderquantdue
-     FROM (((tblsku
-       JOIN tblorderitems ON ((tblorderitems.skuid = tblsku.skuid)))
-       JOIN tblorder ON ((tblorder.orderid = tblorderitems.orderid)))
-       JOIN tblcustomer ON ((tblcustomer.custid = tblorder.custid))),
-      LATERAL ( SELECT (tblorderitems.orderquant - tblorderitems.orderdeliveredquant)) s1(orderquantdue)
-    WHERE ((((tblsku.dcloc)::text <> 'N/A'::text) AND (s1.orderquantdue <> 0)) OR (s1.orderquantdue < 0));
-  SQL
   create_view "qry_order_items_outstanding", sql_definition: <<-SQL
       SELECT gen_random_uuid() AS id,
       tblorder.orderid,
@@ -1909,18 +1849,65 @@ ActiveRecord::Schema.define(version: 2022_08_26_155653) do
        LEFT JOIN tblvendor v09 ON ((v07.vendorid = t.vno09)))
        LEFT JOIN tblvendor v10 ON ((v07.vendorid = t.vno10)));
   SQL
-  create_view "user_relevant_tasks", sql_definition: <<-SQL
-      SELECT u.id AS user_id,
-      t.id AS task_id,
-      ((t.user_id = u.id) OR (t.user_id IS NULL)) AS assigned_or_available
-     FROM ((users u
-       JOIN user_groups_users ugu ON ((u.id = ugu.user_id)))
-       JOIN tasks t ON ((ugu.user_group_id = t.user_group_id)))
-  UNION ALL
-   SELECT t.user_id,
-      t.id AS task_id,
-      true AS assigned_or_available
-     FROM tasks t
-    WHERE (t.user_id IS NOT NULL);
+  create_view "qry_order_data_pick_list", sql_definition: <<-SQL
+      SELECT tblcustomer.custid,
+      tblcustomer.custname,
+      tblcustomer.custfirst,
+      tblcustomer.custlast,
+      tblcustomer.custsal,
+      tblcustomer.custtitle,
+      tblcustomer.custbusinessname,
+      tblcustomer.custaddress,
+      tblcustomer.custcity,
+      tblcustomer.custst,
+      tblcustomer.custzip,
+      tblcustomer.custprimarycontact1,
+      tblcustomer.custphone1,
+      tblcustomer.custphonetype1,
+      tblcustomer.custemail1,
+      tblcustomer.custprimarycontact2,
+      tblcustomer.custphone2,
+      tblcustomer.custphonetype2,
+      tblcustomer.custemail2,
+      tblcustomer.custfax,
+      tblcustomer.custtaxrate,
+      tblcustomer.custccauth,
+      tblcustomer.custcclast4,
+      tblorder.orderid,
+      tblorder.orderdate,
+      tblorder.orderbatch,
+      tblorder.ordertaxrate,
+      tblorder.ordernotes,
+      tblorder.preordercompletedate,
+      tblorderitems.orderitemsid,
+      tblorderitems.poid,
+      tblorderitems.orderdeliverycosttotal,
+      tblorderitems.ordertaxtotal,
+      tblorderitems.ordergrandtotal,
+      tblorderitems.orderquant,
+      tblorderitems.orderpriceper,
+      tblorderitems.orderpricetotal,
+      tblorderitems.orderretailtotal,
+      tblorderitems.orderitemsdelivereddate,
+      tblorderitems.orderdeliveredquant,
+      tblsku.skuid,
+      tblsku.sku,
+      tblsku.manf,
+      tblsku.itemno,
+      tblsku.skudesc,
+      tblsku.unitweight,
+      tblsku.categoryid,
+      tblsku.skuminunits,
+      tblsku.skuminunitstype,
+      tblsku.dcloc,
+      tblsku.skuminpercs,
+      tblsku.has_issue,
+      s1.orderquantdue
+     FROM (((tblsku
+       JOIN tblorderitems ON ((tblorderitems.skuid = tblsku.skuid)))
+       JOIN tblorder ON ((tblorder.orderid = tblorderitems.orderid)))
+       JOIN tblcustomer ON ((tblcustomer.custid = tblorder.custid))),
+      LATERAL ( SELECT (tblorderitems.orderquant - tblorderitems.orderdeliveredquant)) s1(orderquantdue)
+    WHERE ((((tblsku.dcloc)::text <> 'N/A'::text) AND (s1.orderquantdue <> 0) AND (tblsku.has_issue = false)) OR (s1.orderquantdue < 0));
   SQL
 end
