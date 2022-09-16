@@ -106,33 +106,7 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.string "primary_contact"
   end
 
-  create_table "task_types", comment: "Defines the various categories which can be applied to a Task", force: :cascade do |t|
-    t.string "name", limit: 150
-    t.bigint "user_group_id"
-    t.boolean "is_system_task", default: false
-    t.boolean "is_completed_by_system", default: false
-    t.string "default_text", limit: 250
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_group_id"], name: "index_task_types_on_user_group_id"
-  end
-
-  create_table "tasks", comment: "Lists To Do items associated to a system object such as a quote or order", force: :cascade do |t|
-    t.integer "item_id"
-    t.string "item_type", limit: 255
-    t.text "text"
-    t.bigint "user_id"
-    t.bigint "user_group_id"
-    t.datetime "completed_at"
-    t.string "type"
-    t.boolean "is_completed_by_system", default: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_group_id"], name: "index_tasks_on_user_group_id"
-    t.index ["user_id"], name: "index_tasks_on_user_id"
-  end
-
-  create_table "tblanalysis", primary_key: "analysisid", id: :integer, force: :cascade do |t|
+  create_table "tblanalysis", primary_key: "analysisid", id: :integer, default: -> { "nextval('tblanalysis_id_seq'::regclass)" }, force: :cascade do |t|
     t.integer "customerid"
     t.datetime "analysisdate"
     t.datetime "startanalysisdate"
@@ -142,7 +116,7 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.index ["customerid"], name: "index_tblanalysis_on_customerid"
   end
 
-  create_table "tblanalysisitems", primary_key: "analysisitemsid", id: :integer, force: :cascade do |t|
+  create_table "tblanalysisitems", primary_key: "analysisitemsid", id: :integer, default: -> { "nextval('tblanalysisitems_id_seq'::regclass)" }, force: :cascade do |t|
     t.integer "skuid"
     t.datetime "aorderdate"
     t.integer "aorderquant"
@@ -157,7 +131,7 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.index ["splrid"], name: "index_tblanalysisitems_on_splrid"
   end
 
-  create_table "tblbank", primary_key: "bankid", id: :integer, force: :cascade do |t|
+  create_table "tblbank", primary_key: "bankid", id: :integer, default: -> { "nextval('tblbank_id_seq'::regclass)" }, force: :cascade do |t|
     t.string "bankname", limit: 255
     t.string "bankbusinessname", limit: 255
     t.string "bankfirst", limit: 255
@@ -186,11 +160,11 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.index ["bankname"], name: "index_tblbank_on_bankname"
   end
 
-  create_table "tblcategory", primary_key: "categoryid", id: :integer, force: :cascade do |t|
+  create_table "tblcategory", primary_key: "categoryid", id: :integer, default: -> { "nextval('tblcategory_id_seq'::regclass)" }, force: :cascade do |t|
     t.string "categorydesc", limit: 255
   end
 
-  create_table "tblcustomer", primary_key: "custid", id: :integer, force: :cascade do |t|
+  create_table "tblcustomer", primary_key: "custid", id: :integer, default: -> { "nextval('tblcustomer_id_seq'::regclass)" }, force: :cascade do |t|
     t.string "custname", limit: 255
     t.string "custbusinessname", limit: 255
     t.string "custfirst", limit: 255
@@ -248,7 +222,7 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.index ["custtaxjurisid"], name: "index_tblcustomer_on_custtaxjurisid"
   end
 
-  create_table "tbldclocupdate", primary_key: "dclocupdateid", id: :integer, force: :cascade do |t|
+  create_table "tbldclocupdate", primary_key: "dclocupdateid", id: :integer, default: -> { "nextval('tbldclocupdate_id_seq'::regclass)" }, force: :cascade do |t|
     t.string "username", limit: 255
     t.integer "skuid"
     t.string "timestampscanned", limit: 255
@@ -257,7 +231,7 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.index ["skuid"], name: "index_tbldclocupdate_on_skuid"
   end
 
-  create_table "tblorder", primary_key: "orderid", id: :integer, force: :cascade do |t|
+  create_table "tblorder", primary_key: "orderid", id: :integer, default: -> { "nextval('tblorder_id_seq'::regclass)" }, force: :cascade do |t|
     t.datetime "orderdate"
     t.string "orderbatch", limit: 255
     t.integer "custid"
@@ -281,13 +255,13 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.index ["orderdatepaid"], name: "index_tblorder_on_orderdatepaid"
   end
 
-  create_table "tblorderdeposit", primary_key: "odepositid", id: :integer, force: :cascade do |t|
+  create_table "tblorderdeposit", primary_key: "odepositid", id: :integer, default: -> { "nextval('tblorderdeposit_id_seq'::regclass)" }, force: :cascade do |t|
     t.datetime "odepositdate"
     t.string "odepositbatch", limit: 255
     t.index ["odepositbatch"], name: "index_tblorderdeposit_on_odepositbatch"
   end
 
-  create_table "tblorderitems", primary_key: "orderitemsid", id: :integer, force: :cascade do |t|
+  create_table "tblorderitems", primary_key: "orderitemsid", id: :integer, default: -> { "nextval('tblorderitems_id_seq'::regclass)" }, force: :cascade do |t|
     t.integer "skuid"
     t.integer "poid"
     t.integer "orderid"
@@ -308,13 +282,13 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.index ["skuid"], name: "index_tblorderitems_on_skuid"
   end
 
-  create_table "tblorderpmts", primary_key: "opmtsid", id: :integer, force: :cascade do |t|
+  create_table "tblorderpmts", primary_key: "opmtsid", id: :integer, default: -> { "nextval('tblorderpmts_id_seq'::regclass)" }, force: :cascade do |t|
     t.datetime "opmtsdate"
     t.string "opmtsbatch", limit: 255
     t.index ["opmtsbatch"], name: "index_tblorderpmts_on_pobatch"
   end
 
-  create_table "tblorderpmtsitems", primary_key: "opmtsitemsid", id: :integer, force: :cascade do |t|
+  create_table "tblorderpmtsitems", primary_key: "opmtsitemsid", id: :integer, default: -> { "nextval('tblorderpmtsitems_id_seq'::regclass)" }, force: :cascade do |t|
     t.integer "opmtsid"
     t.integer "orderitemsid"
     t.float "opmtstotal"
@@ -326,7 +300,7 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
   create_table "tblpercent", primary_key: "percent", id: :float, force: :cascade do |t|
   end
 
-  create_table "tblpreorder", primary_key: "preorderid", id: :integer, force: :cascade do |t|
+  create_table "tblpreorder", primary_key: "preorderid", id: :integer, default: -> { "nextval('tblpreorder_id_seq'::regclass)" }, force: :cascade do |t|
     t.datetime "preorderdate"
     t.string "preorderbatch", limit: 255
     t.integer "custid"
@@ -347,13 +321,13 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.index ["splrid"], name: "index_tblpreorder_on_splrid"
   end
 
-  create_table "tblpreordercodes", primary_key: "preordercodeid", id: :integer, force: :cascade do |t|
+  create_table "tblpreordercodes", primary_key: "preordercodeid", id: :integer, default: -> { "nextval('tblpreordercodes_id_seq'::regclass)" }, force: :cascade do |t|
     t.string "preordercode", limit: 255
     t.string "preordercodedesc", limit: 255
     t.index ["preordercode"], name: "index_tblpreordercodes_on_preordercode"
   end
 
-  create_table "tblpreorderitems", primary_key: "preorderitemsid", id: :integer, force: :cascade do |t|
+  create_table "tblpreorderitems", primary_key: "preorderitemsid", id: :integer, default: -> { "nextval('tblpreorderitems_id_seq'::regclass)" }, force: :cascade do |t|
     t.integer "preorderid"
     t.integer "poid"
     t.integer "skuid1"
@@ -372,7 +346,7 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.index ["preorderitemcode"], name: "index_tblpreorderitems_on_preorderitemcode"
   end
 
-  create_table "tblpurchaseorder", primary_key: "poid", id: :integer, force: :cascade do |t|
+  create_table "tblpurchaseorder", primary_key: "poid", id: :integer, default: -> { "nextval('tblpurchaseorder_id_seq'::regclass)" }, force: :cascade do |t|
     t.datetime "podate"
     t.string "pobatch", limit: 255
     t.integer "splrid"
@@ -399,7 +373,7 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.index ["splrid"], name: "index_tblpurchaseorder_on_splrid"
   end
 
-  create_table "tblpurchaseorderitems", primary_key: "poitemsid", id: :integer, force: :cascade do |t|
+  create_table "tblpurchaseorderitems", primary_key: "poitemsid", id: :integer, default: -> { "nextval('tblpurchaseorderitems_id_seq'::regclass)" }, force: :cascade do |t|
     t.integer "poid"
     t.integer "skuid"
     t.integer "poorderquant"
@@ -425,11 +399,11 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.index ["poid", "skuid"], name: "index_tblpurchaseorderitems_on_poid_and_skuid", unique: true
   end
 
-  create_table "tblpurchasetype", primary_key: "purchasetypeid", id: :integer, force: :cascade do |t|
+  create_table "tblpurchasetype", primary_key: "purchasetypeid", id: :integer, default: -> { "nextval('tblpurchasetype_id_seq'::regclass)" }, force: :cascade do |t|
     t.string "purchasetype", limit: 255
   end
 
-  create_table "tblshipper", primary_key: "shipid", id: :integer, force: :cascade do |t|
+  create_table "tblshipper", primary_key: "shipid", id: :integer, default: -> { "nextval('tblshipper_id_seq'::regclass)" }, force: :cascade do |t|
     t.string "shipname", limit: 255
     t.string "shipfirst", limit: 255
     t.string "shiplast", limit: 255
@@ -447,7 +421,7 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.string "shipprimarycontact2", limit: 255
   end
 
-  create_table "tblsku", primary_key: "skuid", id: :integer, force: :cascade do |t|
+  create_table "tblsku", primary_key: "skuid", id: :integer, default: -> { "nextval('tblsku_id_seq'::regclass)" }, force: :cascade do |t|
     t.string "sku", limit: 255
     t.string "manf", limit: 255
     t.string "itemno", limit: 255
@@ -502,11 +476,11 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.index ["skuclassid"], name: "index_tblsku_on_skuclassid"
   end
 
-  create_table "tblskuclass", primary_key: "skuclassid", id: :integer, force: :cascade do |t|
+  create_table "tblskuclass", primary_key: "skuclassid", id: :integer, default: -> { "nextval('tblskuclass_id_seq'::regclass)" }, force: :cascade do |t|
     t.string "skuclassdesc", limit: 255
   end
 
-  create_table "tblskucustinfo", primary_key: "skucustinfoid", id: :integer, force: :cascade do |t|
+  create_table "tblskucustinfo", primary_key: "skucustinfoid", id: :integer, default: -> { "nextval('tblskucustinfo_id_seq'::regclass)" }, force: :cascade do |t|
     t.integer "skuid"
     t.integer "custid"
     t.boolean "skuonly"
@@ -518,7 +492,7 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.index ["skuid"], name: "index_tblskucustinfo_on_skuid"
   end
 
-  create_table "tblsupplier", primary_key: "splrid", id: :integer, force: :cascade do |t|
+  create_table "tblsupplier", primary_key: "splrid", id: :integer, default: -> { "nextval('tblsupplier_id_seq'::regclass)" }, force: :cascade do |t|
     t.string "splrname", limit: 255
     t.string "splrfirst", limit: 255
     t.string "splrlast", limit: 255
@@ -543,20 +517,20 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.index ["splrtaxid"], name: "index_tblsupplier_on_splrtaxid"
   end
 
-  create_table "tblsupplierpmts", primary_key: "spmtid", id: :integer, force: :cascade do |t|
+  create_table "tblsupplierpmts", primary_key: "spmtid", id: :integer, default: -> { "nextval('tblsupplierpmts_id_seq'::regclass)" }, force: :cascade do |t|
     t.datetime "spmtdate"
     t.string "spmtbatch", limit: 255
     t.index ["spmtbatch"], name: "index_tblsupplierpmts_on_spmtbatch", unique: true
   end
 
-  create_table "tblsupplierpmtsitems", primary_key: "spmtsitemsid", id: :integer, force: :cascade do |t|
+  create_table "tblsupplierpmtsitems", primary_key: "spmtsitemsid", id: :integer, default: -> { "nextval('tblsupplierpmtsitems_id_seq'::regclass)" }, force: :cascade do |t|
     t.integer "spmtsid"
     t.integer "poitemsid"
     t.float "spmtstotal"
     t.index ["poitemsid"], name: "index_tblsupplierpmtsitems_on_poitemsid"
   end
 
-  create_table "tbltaxjurisdiction", primary_key: "tjid", id: :integer, force: :cascade do |t|
+  create_table "tbltaxjurisdiction", primary_key: "tjid", id: :integer, default: -> { "nextval('tbltaxjurisdiction_id_seq'::regclass)" }, force: :cascade do |t|
     t.string "jurisdictioncode", limit: 255
     t.string "jurisdictionname", limit: 255
     t.datetime "rateeffdate"
@@ -564,31 +538,12 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.index ["jurisdictioncode"], name: "index_tbltaxjurisdiction_on_jurisdictioncode"
   end
 
-  create_table "tblupdatena", primary_key: "skuid", id: :integer, force: :cascade do |t|
+  create_table "tblupdatena", primary_key: "skuid", id: :integer, default: -> { "nextval('tblupdatena_id_seq'::regclass)" }, force: :cascade do |t|
   end
 
-  create_table "tblvendor", primary_key: "vendorid", id: :integer, force: :cascade do |t|
+  create_table "tblvendor", primary_key: "vendorid", id: :integer, default: -> { "nextval('tblvendor_id_seq'::regclass)" }, force: :cascade do |t|
     t.string "vendorname", limit: 255
     t.string "vendorabbr", limit: 255
-  end
-
-  create_table "user_groups", comment: "Defines the various security and departmental groups", force: :cascade do |t|
-    t.string "name", limit: 150
-    t.string "description", limit: 500
-    t.datetime "deleted_at"
-    t.bigint "created_by_id"
-    t.bigint "updated_by_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["created_by_id"], name: "index_user_groups_on_created_by_id"
-    t.index ["updated_by_id"], name: "index_user_groups_on_updated_by_id"
-  end
-
-  create_table "user_groups_users", force: :cascade do |t|
-    t.bigint "user_group_id"
-    t.bigint "user_id"
-    t.index ["user_group_id"], name: "index_user_groups_users_on_user_group_id"
-    t.index ["user_id"], name: "index_user_groups_users_on_user_id"
   end
 
   create_table "users", comment: "Contains all the user login/profile information", force: :cascade do |t|
