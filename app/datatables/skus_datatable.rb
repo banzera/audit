@@ -21,6 +21,7 @@ class SkusDatatable < Effective::Datatable
     col :sku,              visible: false
     col :manf
     col :itemno
+    col :has_expiration_date
     col :skudesc,          search: { as: :string, fuzzy: true }
     col :unitweight,       visible: false
     col :category,         visible: false

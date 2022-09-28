@@ -1,5 +1,9 @@
-window.open('<%= label_purchase_order_item_path(format: :pdf) %>', '_label')
-<% if @purchase_order_item.sku.has_location? %>
-  window.open('<%= label_sku_path(@purchase_order_item.sku, format: :pdf) %>', '_sku_label')
+<% if @purchase_order_item.errors.present? %>
+  flashToast(<%= raw flash.to_json %>)
+<% else %>
+  window.open('<%= label_purchase_order_item_path(format: :pdf) %>', '_label')
+  <% if @purchase_order_item.sku.has_location? %>
+     window.open('<%= label_sku_path(@purchase_order_item.sku, format: :pdf) %>', '_sku_label')
+  <% end %>
+  window.location = '<%= purchase_order_path(@purchase_order_item.purchase_order) %>'
 <% end %>
-window.location = '<%= purchase_order_path(@purchase_order_item.purchase_order) %>'

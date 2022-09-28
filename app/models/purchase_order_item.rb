@@ -20,6 +20,8 @@ class PurchaseOrderItem < ApplicationRecord
   validates_presence_of :poorderquant, :poorderrcvdquant
   validates_uniqueness_of :sku, scope: [:poid], message: 'is already on this PO'
 
+  validates_presence_of :poorderexpiration, if: :expiring_sku
+
   def self.most_recent_for_sku(skuid)
     self.where(skuid: skuid)
         .includes(:purchase_order)
@@ -28,8 +30,7 @@ class PurchaseOrderItem < ApplicationRecord
   end
 
   def receive!
-    self.update(poorderrcvddate: Time.current)
-    self.sku.resolve_issue!
+    update(poorderrcvddate: Time.current) and sku.resolve_issue!
   end
 
   def has_payment?
@@ -41,6 +42,10 @@ class PurchaseOrderItem < ApplicationRecord
   end
 
   accepts_nested_attributes_for :sku, update_only: true
+
+  def expiring_sku
+    sku.has_expiration_date?
+  end
 
   def diff_quant
     self.poorderquant - self.poorderrcvdquant

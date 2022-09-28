@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_16_002642) do
+ActiveRecord::Schema.define(version: 2022_09_28_135252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -471,6 +471,7 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.text "skunotes"
     t.tsvector "tsv"
     t.boolean "has_issue", default: false
+    t.boolean "has_expiration_date", default: false
     t.index ["itemno"], name: "index_tblsku_on_itemno", unique: true
     t.index ["sku"], name: "index_tblsku_on_sku", unique: true
     t.index ["skuclassid"], name: "index_tblsku_on_skuclassid"
@@ -488,6 +489,11 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.datetime "skuonlydate"
     t.datetime "skuneverdate"
     t.text "skucustnotes"
+    t.integer "par_level", default: 0
+    t.string "location"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
+    t.index ["custid", "skuid"], name: "index_tblskucustinfo_on_custid_and_skuid", unique: true
     t.index ["custid"], name: "index_tblskucustinfo_on_custid"
     t.index ["skuid"], name: "index_tblskucustinfo_on_skuid"
   end
@@ -605,6 +611,8 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
   add_foreign_key "tblpurchaseorder", "tblsupplier", column: "splrid", primary_key: "splrid", name: "tblpurchaseorder_splrid_fkey"
   add_foreign_key "tblpurchaseorderitems", "tblpurchaseorder", column: "poid", primary_key: "poid", name: "tblpurchaseorderitems_poid_fkey"
   add_foreign_key "tblpurchaseorderitems", "tblsku", column: "skuid", primary_key: "skuid", name: "tblpurchaseorderitems_skuid_fkey"
+  add_foreign_key "tblskucustinfo", "tblcustomer", column: "custid", primary_key: "custid"
+  add_foreign_key "tblskucustinfo", "tblsku", column: "skuid", primary_key: "skuid"
   add_foreign_key "tblsupplierpmtsitems", "tblpurchaseorderitems", column: "poitemsid", primary_key: "poitemsid", name: "tblsupplierpmtsitems_poitemsid_fkey"
   add_foreign_key "tblsupplierpmtsitems", "tblsupplierpmts", column: "spmtsid", primary_key: "spmtid", name: "tblsupplierpmtsitems_spmtsid_fkey"
   create_function :db_to_csv, sql_definition: <<-SQL

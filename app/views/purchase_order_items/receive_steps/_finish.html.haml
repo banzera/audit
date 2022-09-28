@@ -32,7 +32,7 @@
 
   .row
     .offset-4.col-md-4
-      %button#finish-button.btn.btn-block.btn-success.btn-lg{type: :submit, name: :commit, value: "Receive", 'data-disable-with': "Save & Print" }
+      %button#finish-button.btn.btn-block.btn-success.btn-lg{type: :submit, name: :commit, value: "Receive", 'data-disable-with': "Save & Print", formnovalidate: true }
         Save & Print
 
 - content_for :scripts do

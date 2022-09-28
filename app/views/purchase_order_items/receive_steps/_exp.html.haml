@@ -2,6 +2,8 @@
   .row
     .offset-3
       %h3 Enter the expiration date (if any)
-      = f.input :poorderexpiration, label: false, wrapper: :vertical_form
+      - hint = @sku.has_expiration_date? ? 'This is an <i>expiring</i> SKU. An expiration date is required.' : ''
+
+      = f.input :poorderexpiration, label: false, wrapper: :vertical_form, hint: hint.html_safe
 
   = step_nav_buttons
