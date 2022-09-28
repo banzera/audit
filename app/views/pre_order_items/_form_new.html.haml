@@ -5,8 +5,9 @@
       = card_with_tabs style: [:primary, :outline] do
         = tab 'Single' do
           = render partial: 'form'
-        = tab 'From Upload' do
-          = render partial: 'drop_zone'
+        - unless @pre_order.order.present?
+          = tab 'From Upload' do
+            = render partial: 'drop_zone'
 
 - content_for :scripts do
   :coffee
