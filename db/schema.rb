@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_16_002642) do
+ActiveRecord::Schema.define(version: 2022_10_04_202148) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -244,7 +244,7 @@ ActiveRecord::Schema.define(version: 2022_09_16_002642) do
     t.datetime "orderdateinvoiced"
     t.datetime "orderdatepaid"
     t.string "orderpaymentmethod", limit: 255
-    t.float "orderpaymentamount", default: 0.0
+    t.float "orderpaymentamount"
     t.text "ordernotes"
     t.datetime "orderccdate"
     t.datetime "preordercompletedate"
