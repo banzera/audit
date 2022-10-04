@@ -34,4 +34,9 @@ class ApplicationController < ActionController::Base
       format.all  { head :not_found }
     end
   end
+
+  def require_blazer_admin
+    # depending on your auth, something like...
+    redirect_to '/' unless current_user && current_user.is_admin?
+  end
 end

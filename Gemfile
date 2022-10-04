@@ -139,3 +139,5 @@ gem "paper_trail", "~> 12.3"
 gem "effective_addresses", "~> 1.9"
 
 gem "seedbank", "~> 0.5.0"
+
+gem "blazer", "~> 2.5"

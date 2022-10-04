@@ -150,5 +150,7 @@ Rails.application.routes.draw do
   post 'scan', to: 'scans#post'
   resources :inventory_scan_operations, only: [:index, :show]
 
+  mount Blazer::Engine, at: "blazer"
+
   root to: 'dashboard#home'
 end
