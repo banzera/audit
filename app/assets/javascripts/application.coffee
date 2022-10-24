@@ -78,7 +78,7 @@ $(document).ready () ->
 $(document).on 'turbolinks:load', ->
   $.fn['PushMenu'].call $('[data-widget="pushmenu"]')
 
-  $('#control-sidebar').click ->
+  $('#dark-mode-toggle').click ->
     $('body').toggleClass('dark-mode')
     $('.main-header.navbar').toggleClass('navbar-dark')
 
