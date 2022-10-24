@@ -51,6 +51,9 @@ class Sku < ApplicationRecord
   alias_attribute :max_temp, :skumaxtemp
   alias_attribute :description, :skudesc
 
+  def duplicate!
+  end
+
   def mark_has_issue!
     update(has_issue: true)
   end

@@ -9,10 +9,29 @@
               .button.btn.btn-tool{type: :button, 'data-card-widget': :collapse, title: :collapse}
                 %i.fas.fa-minus
           .card-body
+            .btn-group.btn-group-toggle{"data-toggle" => "buttons"}
+              %label.btn.btn-info.active
+                %input.prefixer{data: {prefix: ''}, type: "radio", checked: "checked"}
+                (N)ormal
+              %label.btn.btn-info
+                %input.prefixer{data: {prefix: 'E'}, type: "radio"}
+                (E)xpired
+              %label.btn.btn-info
+                %input.prefixer{data: {prefix: 'O'}, type: "radio"}
+                (O)pen
+              %label.btn.btn-info
+                %input.prefixer{data: {prefix: 'U'}, type: "radio"}
+                (U)sed
+              %label.btn.btn-info
+                %input.prefixer{data: {prefix: 'R'}, type: "radio"}
+                (R)efurbished
+
             %p.card-text
               =f.input :sku
+              =hidden_field_tag :sku_val, @sku.sku
               =f.input :manf
               =f.input :itemno
+              =hidden_field_tag :itemno_val, @sku.itemno
               =f.input :skudesc
               =f.input :unitweight
               =f.association :category
@@ -41,3 +60,18 @@
     - unless local_assigns[:readonly]
       .row
         = simple_form_submit(f)
+
+- content_for :scripts do
+  :coffee
+    prefixFieldWith = (prefix, val) ->
+      return val if prefix == ''
+      "(\#{prefix}) \#{val}"
+
+    $('.prefixer').click (e) ->
+      prefix = $(e.target).data().prefix
+
+      sku = prefixFieldWith prefix, $('#sku_val').val()
+      $('#sku_sku').val(sku)
+
+      itemno = prefixFieldWith prefix, $('#itemno_val').val()
+      $('#sku_itemno').val(itemno)

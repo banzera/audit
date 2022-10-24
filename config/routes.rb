@@ -131,6 +131,7 @@ Rails.application.routes.draw do
     end
 
     member do
+      post :duplicate
       get :po_history
       post :resolve_issue
       post :mark_has_issue

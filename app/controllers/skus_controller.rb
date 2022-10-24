@@ -6,6 +6,8 @@ class SkusController < ApplicationController
   load_and_authorize_resource
 
   submit :receive, 'Receive Items', only: :show, redirect: -> { receive_skus_path(skuid: resource.id) }
+  submit :duplicate, 'Duplicate', only: :show, redirect: -> { new_sku_path(duplicate_id: resource.id) }
+
   button :po_history, "PO History"
   button :export, "Export CSV", path: '/skus.csv'
 
@@ -67,6 +69,13 @@ class SkusController < ApplicationController
   end
 
   private
+
+  def duplicate_resource(resource)
+    resource_klass.new(resource.attributes).tap do|r|
+      r.dcloc = Sku::DC_LOC_NONE
+      r.valid? # run validators to highlight fields that need to change
+    end
+  end
 
   def sku_params
     params.require(:sku).permit([
