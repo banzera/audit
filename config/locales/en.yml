@@ -71,6 +71,9 @@ en:
       sku_cust_info:
         one: SKU Customer Info
         other: SKU Customer Infos
+      sku_substitution:
+        one: SKU Substitution
+        other: SKU Substitutions
       supplier:
         one: Supplier
         other: Suppliers
@@ -312,6 +315,7 @@ en:
         skuhighpricevno: High Price Vendor Number
         skuhighpricedate: High Price Date
         skuclassid: Class
+        sku_class: Class
         skumaxtemp: Maximum Temperature
         skumintemp: Minimum Temperature
         skunotes: Notes

@@ -11,6 +11,9 @@ class Sku < ApplicationRecord
   belongs_to :sku_class, foreign_key: :skuclassid, optional: true
   belongs_to :high_price_vendor, class_name: 'Vendor', foreign_key: :skuhighpricevno, optional: true
 
+  belongs_to :house_brand_for, class_name: 'Sku', primary_key: :skuid, optional: true
+
+  has_many :subs, class_name: 'SkuSubstitution', foreign_key: :house_brand_id
   has_many :cust_info, class_name: SkuCustInfo.name, foreign_key: :skuid
 
   has_one :inventory_count, class_name: 'InventoryCounts', foreign_key: :skuid
@@ -80,7 +83,20 @@ class Sku < ApplicationRecord
                      .order(podate: :desc)
                      .limit(1)
                      .first
+  end
 
+  def all_subs
+    # sss = if is_house_brand?
+    #   subs
+    # else
+      ss  = SkuSubstitution.where(sub_id: self.skuid)
+      sss = SkuSubstitution.where(house_brand_id: ss.pluck(:house_brand_id))
+    # end
+    # Sku.where(skuid: sss.pluck(:sub_id))
+  end
+
+  def is_house_brand?
+    house_brand_for.present?
   end
 
   class VendorDetail < OpenStruct ; end

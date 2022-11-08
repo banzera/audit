@@ -6,60 +6,77 @@
           .callout.callout-danger
             %h5 This SKU currently is in ISSUE status
       .col-lg-6
-        .card.card-primary.card-outline
-          .card-header
-            %h3.card-title General
-            .card-tools
-              .button.btn.btn-tool{type: :button, 'data-card-widget': :collapse, title: :collapse}
-                %i.fas.fa-minus
-          .card-body
-            %p.card-text
-              =f.input :sku
-              =f.input :manf
-              =f.input :itemno
-              =f.input :skudesc
-              =f.input :unitweight
-              =f.association :category
-              =f.input :skuminunits
-              =f.input :skuminunitstype
-              =f.input :skuminpercs
-
-              =f.association :sku_class
-              =f.input :skumaxtemp
-              =f.input :skumintemp
-              =f.input :skunotes
+        = lte_card title: 'General', tools: [:collapse] do
+          =f.input :sku
+          =f.input :manf
+          =f.input :itemno
+          =f.input :skudesc
+          %hr
+          =f.association :category
+          =f.association :sku_class
+          %hr
+          .row
+            .col-lg-4=f.input :skuminunits,     wrapper: :vertical_form
+            .col-lg-4=f.input :skuminunitstype, wrapper: :vertical_form
+            .col-lg-4=f.input :skuminpercs,     wrapper: :vertical_form
+          %hr
+          .row
+            .col-lg-4=f.input :skumaxtemp, wrapper: :vertical_form
+            .col-lg-4=f.input :skumintemp, wrapper: :vertical_form
+            .col-lg-4=f.input :unitweight, wrapper: :vertical_form
+          %hr
+          =f.input :skunotes
       .col-lg-6
-        .card.card-outline.card-secondary
-          .card-header
-            %h3.card-title Inventory
-            .card-tools
-              .button.btn.btn-tool{type: :button, 'data-card-widget': :collapse, title: :collapse}
-                %i.fas.fa-minus
-          .card-body
-            %p.card-text
-              =f.input :dcloc
-              - inv = @sku.inventory_count
-              %table.table.table-sm
-                %thead
-                  %tr
-                    %th DC Current Qty
-                    %th=inv&.dccurquant
-                %tbody
-                  %tr
-                    %td Total Received
-                    %td=inv&.totalrcvd
-                  %tr
-                    %td Total Cases Received
-                    %td=inv&.totalcasesrcvd
-                  %tr
-                    %td Total Units Received
-                    %td=inv&.totalunitsrcvd
-                  %tr
-                    %td Bought
-                    %td=inv&.bought
-                  %tr
-                    %td Sold
-                    %td=inv&.sold
+        = lte_card title: 'Substitutions', style: [:outline, :secondary], collapsed: false, tools: [:collapse, :maximize] do
+          %p.card-text=@deleted
+          - if @sku.is_house_brand?
+            = f.input :house_brand_for
+          - else
+            House Brand(s):
+            - SkuSubstitution.where(sub_id: @sku.skuid).each do |ss|
+              = render SkuButtonComponent.new(sku: ss.house_brand)
+          %table.table.table-sm
+            %thead
+              %tr
+                %th Manf
+                %th Link
+                %th Desc
+                %th=fa_icon 'plus', text: 'Add'
+            %tbody
+              - @sku.all_subs.each do |skusub|
+                %tr
+                  %td=skusub.sub.manf
+                  %td=render SkuButtonComponent.new(sku: skusub.sub)
+                  %td=skusub.sub.skudesc
+                  %td
+                    =link_to sku_substitution_path(skusub), remote: true, method: :delete, 'data-confirm': 'Really?' do
+                      =fa_icon 'trash', class: 'text-danger'
+
+        = lte_card title: "Inventory (#{@sku.dcloc})", style: [:outline, :secondary], collapsed: true, tools: :collapse do
+          %p.card-text
+            =f.input :dcloc
+            - inv = @sku.inventory_count
+            %table.table.table-sm
+              %thead
+                %tr
+                  %th DC Current Qty
+                  %th=inv&.dccurquant
+              %tbody
+                %tr
+                  %td Total Received
+                  %td=inv&.totalrcvd
+                %tr
+                  %td Total Cases Received
+                  %td=inv&.totalcasesrcvd
+                %tr
+                  %td Total Units Received
+                  %td=inv&.totalunitsrcvd
+                %tr
+                  %td Bought
+                  %td=inv&.bought
+                %tr
+                  %td Sold
+                  %td=inv&.sold
 
         .card.card-outline.card-secondary
           .card-header

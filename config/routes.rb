@@ -140,6 +140,8 @@ Rails.application.routes.draw do
 
   resources :sku_po_histories, only: [:index]
 
+  resources :sku_substitutions
+
   resources :tax_jurisdictions
   resources :vendors
 

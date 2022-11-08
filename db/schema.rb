@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_04_202148) do
+ActiveRecord::Schema.define(version: 2022_11_08_153653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -160,6 +160,15 @@ ActiveRecord::Schema.define(version: 2022_10_04_202148) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "primary_contact"
+  end
+
+  create_table "sku_substitutions", force: :cascade do |t|
+    t.bigint "house_brand_id"
+    t.bigint "sub_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["house_brand_id"], name: "index_sku_substitutions_on_house_brand_id"
+    t.index ["sub_id"], name: "index_sku_substitutions_on_sub_id"
   end
 
   create_table "tblanalysis", primary_key: "analysisid", id: :integer, default: -> { "nextval('tblanalysis_id_seq'::regclass)" }, force: :cascade do |t|
@@ -528,6 +537,7 @@ ActiveRecord::Schema.define(version: 2022_10_04_202148) do
     t.tsvector "tsv"
     t.boolean "has_issue", default: false
     t.boolean "has_expiration_date", default: false
+    t.bigint "house_brand_for_id"
     t.index ["itemno"], name: "index_tblsku_on_itemno", unique: true
     t.index ["sku"], name: "index_tblsku_on_sku", unique: true
     t.index ["skuclassid"], name: "index_tblsku_on_skuclassid"
@@ -656,6 +666,8 @@ ActiveRecord::Schema.define(version: 2022_10_04_202148) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "sku_substitutions", "tblsku", column: "house_brand_id", primary_key: "skuid"
+  add_foreign_key "sku_substitutions", "tblsku", column: "sub_id", primary_key: "skuid"
   add_foreign_key "tblorder", "tblcustomer", column: "custid", primary_key: "custid", name: "tblorder_custid_fkey"
   add_foreign_key "tblorderitems", "tblorder", column: "orderid", primary_key: "orderid", name: "tblorderitems_orderid_fkey"
   add_foreign_key "tblorderitems", "tblpurchaseorder", column: "poid", primary_key: "poid", name: "tblorderitems_poid_fkey"
