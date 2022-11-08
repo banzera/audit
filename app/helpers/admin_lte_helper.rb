@@ -1,9 +1,15 @@
 module AdminLTEHelper
+  def unique_id
+    # Set the first unique value
+    @_unique_id ||= Time.zone.now.usec
+    # Everytime we access this function make a new one
+    @_unique_id += 1
+  end
 
-  def lte_card(title: nil, list: {}, style: [:primary, :outline], tools: [], &block)
+  def lte_card(title: nil, list: {}, style: [:primary, :outline], collapsed: false, tools: [], &block)
     raise 'expected a block' unless block_given?
 
-    tool_id = effective_bootstrap_unique_id
+    tool_id = unique_id
 
     captured = capture(tool_id, &block)
 
@@ -14,13 +20,23 @@ module AdminLTEHelper
     when :none then Array.new
     else Array(tools)
     end
+
+    if collapsed
+      classes << 'collapsed-card'
+      tools.delete(:collapse)
+      tools << :'collapse-alt'
+    end
+
     content_tag(:div, class: classes.join(' ')) do
       title = content_tag(:h3, title, class: 'card-title') if title.present?
 
       tools = if tools.any? || content_for?(tool_id)
         content_tag(:div, class: 'card-tools') do
-          content_for(tool_id) +
-          tools.map {|t| card_tool(t) }.join.html_safe
+          custom = content_for(tool_id) || ''
+
+          standard = tools.map {|t| card_tool(t) }.join.html_safe
+
+          (custom + standard).html_safe
         end
       end
 
@@ -37,14 +53,17 @@ module AdminLTEHelper
   end
 
   TOOL_ICON_MAP = {
-    refresh:  'sync-alt',
-    maximize: :expand,
-    collapse: :minus,
-    remove:   :times,
+    refresh:   'sync-alt',
+    maximize:  :expand,
+    collapse:  :minus,
+    'collapse-alt': :plus,
+    remove:    :times,
   }
 
   def card_tool(widget, data: {})
     icon = TOOL_ICON_MAP[widget] || :tools
+
+    widget = widget.to_s.gsub!('-alt','')
 
     data.reverse_merge!('card-widget' => widget )
     content_tag(:button, fa_icon(icon), type: :button, class: 'btn btn-tool', data: data)
