@@ -12,10 +12,8 @@ prawn_document(DOCUMENT_OPTIONS) do |pdf|
   end
 
   # manf / item
-  pdf.bounding_box(*manf_item_box) do
-    pdf.text "MANF: #{@sku.manf}"
-    pdf.text "ITEM: #{@sku.itemno.truncate(24)}"
-  end
+  text = "MANF: #{@sku.manf}\nITEM: #{@sku.itemno}"
+  pdf.text_box(text, shrink_opts.merge(manf_item_box))
 
   # temps
   pdf.bounding_box(*temps_labels_box) do
@@ -29,13 +27,7 @@ prawn_document(DOCUMENT_OPTIONS) do |pdf|
   end
 
   # desc
-  opts = {
-    overflow:             :shrink_to_fit,
-    min_font_size:        8,
-    disable_wrap_by_char: true
-  }.merge desc_box
-
-  pdf.text_box @sku.skudesc, opts
+  pdf.text_box @sku.skudesc, shrink_opts.merge(desc_box)
 
   # logo
   pdf.bounding_box(*logo_box) do

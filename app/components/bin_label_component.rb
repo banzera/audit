@@ -53,6 +53,14 @@ class BinLabelComponent < ViewComponent::Base
       ]
   }
 
+  def shrink_opts
+    {
+      overflow:             :shrink_to_fit,
+      min_font_size:        8,
+      disable_wrap_by_char: true
+    }
+  end
+
   def sku_barcode_box
     [ [0, ROW1_TOP], { width: SKU_BARCODE_WIDTH, height: SKUID_HEIGHT } ]
   end
@@ -63,6 +71,11 @@ class BinLabelComponent < ViewComponent::Base
 
   def manf_item_box
     [ [0, ROW2_TOP], width: SKU_BARCODE_WIDTH, height: MANF_ITEM_HEIGHT ]
+    {
+      at:    [0, ROW2_TOP],
+      width: SKU_BARCODE_WIDTH,
+      height: MANF_ITEM_HEIGHT,
+    }
   end
 
   def temps_labels_box
