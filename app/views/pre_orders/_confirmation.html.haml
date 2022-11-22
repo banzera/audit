@@ -2,13 +2,7 @@
   %table.table.table-sm.m-0.table-borderles
     %tr
       %td.wpc30(rowspan=2)
-        %strong Accelerate United
-        %br
-        10 East 9th Street, Suite G
-        %br
-        Lawrence, KS 66044
-        %br
-        Phone: (785) 748-0871
+        = render OfficeAddressComponent.new
         %p
         %strong TO:
         = @pre_order.customer.full_name
