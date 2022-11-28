@@ -4,44 +4,44 @@
     wrapper: :vertical_form do |f|
 
   .row{ 'data-controller' => 'preorderprice' }
-    .col-6
+    .col-md-12.col-lg-6
       = f.association :sku1, as: :sku_selection, source_url: '/skus'
-    .col-2
+    .col-md-4.col-lg-2
       = f.input :orderquant1, stimulus: { target: :qty, action: 'preorderprice#calculate' }
-    .col-2
+    .col-md-4.col-lg-2
       = f.input :orderpriceper1, stimulus: { target: :pricePer, action: 'preorderprice#calculate' }, as: :currency
-    .col-2
+    .col-md-4.col-lg-2
       = f.input :orderpricetotal1, stimulus: { target: :priceTotal }, as: :currency, calculated: true
 
   .row.post{ 'data-controller' => 'preorderprice' }
-    .col-6
+    .col-md-12.col-lg-6
       = f.association :sku2, as: :sku_selection, source_url: '/skus'
-    .col-2
+    .col-md-4.col-lg-2
       = f.input :orderquant2, stimulus: { target: :qty, action: 'preorderprice#calculate' }
-    .col-2
+    .col-md-4.col-lg-2
       = f.input :orderpriceper2, stimulus: { target: :pricePer, action: 'preorderprice#calculate' }, as: :currency
-    .col-2
+    .col-md-4.col-lg-2
       = f.input :orderpricetotal2, stimulus: { target: :priceTotal }, as: :currency, calculated: true
 
   .row.post
-    .col-6
+    .col-md-12.col-lg-6
       = f.association :purchase_order, as: :sku_po_history_selection, for_sku: :skuid2
-    .col-2
+    .col-md-4.col-lg-2
       = f.input :orderaupriceper, as: :currency
-    .col-2
+    .col-md-4.col-lg-2
       .row
         .col-10
           = f.input :suggested_price, label: 'PO Price/Per + 20%', as: :currency
         .col-2
           %button.btn.btn-small.btn-outline#accept-suggested-price= fa_icon 'arrow-up'
-    .col-2
+    .col-md-4.col-lg-2
       = f.input :orderdate, as: :date
   .row
-    .col-1
+    .col-lg-1.col-md-1
       = f.input :preorderurgent
-    .col-3
+    .col-lg-3.col-md-3
       = f.association :code
-    .col-8
+    .col-lg-8.col-md-12
       = f.input :notes
 
   - unless local_assigns[:readonly]
