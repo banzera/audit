@@ -51,6 +51,17 @@ class Sku < ApplicationRecord
   alias_attribute :max_temp, :skumaxtemp
   alias_attribute :description, :skudesc
 
+  before_validation :cleanup_sku_and_itemno
+
+  def cleanup_sku_and_itemno
+    self.itemno = self.itemno.upcase
+    self.sku    = self.sku.presence || "AU#{itemno_cleaned}"
+  end
+
+  def itemno_cleaned
+    self.itemno.gsub(/[_\W]/, '').upcase
+  end
+
   def duplicate!
   end
 
