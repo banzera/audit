@@ -19,7 +19,7 @@ class PreOrder < ApplicationRecord
   scope :checked,           -> { where.not(preordercheck: nil)}
   scope :not_checked,       -> { where(preordercheck: nil)}
 
-  scope :awaiting_analysis, -> { confirmed.where.not(preorderanalysisdate: nil) }
+  scope :awaiting_analysis, -> { confirmed.where(preorderanalysisdate: nil) }
 
   validates :preorderdate, presence: true
 

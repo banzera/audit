@@ -4,6 +4,11 @@ class CustomersDatatable < Effective::Datatable
     scope = Customer.all
   end
 
+  filters do
+    scope :all, default: true
+    scope :active
+  end
+
   datatable do
     col :custname
     col :custbusinessname,        visible: true

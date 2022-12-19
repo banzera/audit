@@ -1,7 +1,9 @@
 class PreOrdersDatatable < Effective::Datatable
 
   collection do
-    scope = PreOrder.includes(:customer).includes(:vendor).includes(:order)
+    PreOrder.includes(:customer)
+            .includes(:vendor)
+            .includes(:order)
   end
 
   filters do

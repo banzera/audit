@@ -13,7 +13,7 @@ class Order < ApplicationRecord
   has_many :pick_list_items, class_name: 'OrderDataPickList', foreign_key: :orderid
   has_many :ship_list_items, class_name: 'OrderDataShipList', foreign_key: :orderid
 
-  scope :awaiting_confirmation, -> { where(orderconfirmdate: nil).where.not(preordercompletedate: nil) }
+  scope :awaiting_confirmation, -> { where(orderconfirmdate: nil).where(preordercompletedate: nil) }
   scope :outstanding, -> { where(orderid: OrderItem.unfulfilled.pluck(:orderid)) }
 
   scope :billed_on, -> (on) { where("DATE(orderccdate) = ?", on.to_date) }

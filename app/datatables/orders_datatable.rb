@@ -7,6 +7,7 @@ class OrdersDatatable < Effective::Datatable
   filters do
     scope :all, default: true
     scope :outstanding
+    scope :awaiting_confirmation
   end
 
   datatable do

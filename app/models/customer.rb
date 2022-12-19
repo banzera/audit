@@ -2,6 +2,8 @@ class Customer < ApplicationRecord
   self.table_name  = 'tblcustomer'
   self.primary_key = 'custid'
 
+  scope :active, -> { where(discontinued: false) }
+
   validates :custname, presence: true
   validates :custbusinessname, presence: true
   validates :custfirst, presence: true
