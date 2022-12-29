@@ -1,5 +1,5 @@
 - link = capture_haml do
-  = fa_icon('barcode', text: 'Sku Issues')
+  = fa_icon('barcode', text: 'SKU Issues')
   - if (count = Sku.needing_attention.count).positive?
     %span.badge.badge-danger.navbar-badge=count
 

@@ -1,5 +1,5 @@
 - link = capture_haml do
-  = fa_icon('star', text: 'Outstanding Orders')
+  = fa_icon('star', text: 'Pickables')
   - order_count = OrderItemOutstanding.known_location.no_issues.select(:orderid).distinct(:orderid).count
   - if order_count.positive?
     %span.badge.badge-danger.navbar-badge=order_count

@@ -2,14 +2,24 @@
   .container-fluid
     .row
       .col-12.col-sm-6.col-md-3
+        = link_to orders_path(scope: :outstanding) do
+          .info-box.mb-3
+            %span.info-box-icon.bg-warning.elevation-1
+              = fa_icon 'star'
+            .info-box-content
+              %span.info-box-text Outstanding Orders
+              %span.info-box-number= Order.outstanding.count
+
+      .col-12.col-sm-6.col-md-3
         = link_to orders_path(scope: :awaiting_confirmation) do
           .info-box
             %span.info-box-icon.bg-info.elevation-1
               = fa_icon 'star'
             .info-box-content
               %span.info-box-text Orders Awaiting Confirmation
-              %span.info-box-number
-                = Order.awaiting_confirmation.count
+              %span.info-box-number= Order.awaiting_confirmation.count
+
+      .clearfix.hidden-md-up
 
       .col-12.col-sm-6.col-md-3
         = link_to pre_orders_path(scope: :awaiting_analysis) do
@@ -18,30 +28,16 @@
               = fa_icon 'star'
             .info-box-content
               %span.info-box-text Pre-Orders Awaiting Analysis
-              %span.info-box-number
-                = PreOrder.awaiting_analysis.count
-
-      .clearfix.hidden-md-up
+              %span.info-box-number= PreOrder.awaiting_analysis.count
 
       .col-12.col-sm-6.col-md-3
         = link_to purchase_orders_path(scope: :outstanding) do
           .info-box.mb-3
             %span.info-box-icon.bg-success.elevation-1
-              %i.fas.fa-shopping-cart
+              = fa_icon 'shopping-cart'
             .info-box-content
               %span.info-box-text POs Outstanding
-              %span.info-box-number
-                = PurchaseOrder.outstanding.count
-
-      .col-12.col-sm-6.col-md-3
-        = link_to customers_path(scope: :active) do
-          .info-box.mb-3
-            %span.info-box-icon.bg-warning.elevation-1
-              %i.fas.fa-users
-            .info-box-content
-              %span.info-box-text New Members
-              %span.info-box-number
-                = Customer.active.count
+              %span.info-box-number= PurchaseOrder.outstanding.count
 
     .row
       .col-lg-6
