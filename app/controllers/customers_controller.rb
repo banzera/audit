@@ -1,6 +1,24 @@
 class CustomersController < ApplicationController
   include DefaultCrudController
 
+  load_and_authorize_resource
+
+  def billing
+    @page_title = "#{@customer} Billing Dashboard"
+    @datatable = MarginReportDatatable.new(customer: @customer)
+
+    @invoice = MonthlyInvoiceReport.for_customer(@customer)
+
+    scope = params[:scope] || :current
+
+    @invoice_amounts = if @invoice.respond_to?(scope)
+      @invoice.public_send(scope)
+    else
+      @invoice.current
+    end.first
+
+  end
+
   def permitted_params
     params.require(:customer).permit([
       :custname,

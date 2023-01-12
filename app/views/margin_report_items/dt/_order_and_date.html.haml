@@ -1,0 +1,9 @@
+%span
+  -# orderid could be nil or 0, so use the boolean serializer to get a consistent truthy value
+  - if ActiveModel::Type::Boolean.new.serialize(resource.orderid)
+    = link_to resource.orderid, order_path(resource.orderid), title: 'Show', class: 'btn btn-sm btn-outline-secondary'
+  - else
+    = link_to 'NO ORDER', '#', title: 'Show', class: 'btn btn-sm btn-danger'
+
+%br
+%span=resource.preorderdate.to_date

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_04_202148) do
+ActiveRecord::Schema.define(version: 2023_01_10_015406) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -527,7 +527,6 @@ ActiveRecord::Schema.define(version: 2022_10_04_202148) do
     t.text "skunotes"
     t.tsvector "tsv"
     t.boolean "has_issue", default: false
-    t.boolean "has_expiration_date", default: false
     t.index ["itemno"], name: "index_tblsku_on_itemno", unique: true
     t.index ["sku"], name: "index_tblsku_on_sku", unique: true
     t.index ["skuclassid"], name: "index_tblsku_on_skuclassid"
@@ -545,11 +544,6 @@ ActiveRecord::Schema.define(version: 2022_10_04_202148) do
     t.datetime "skuonlydate"
     t.datetime "skuneverdate"
     t.text "skucustnotes"
-    t.integer "par_level", default: 0
-    t.string "location"
-    t.datetime "created_at", precision: 6
-    t.datetime "updated_at", precision: 6
-    t.index ["custid", "skuid"], name: "index_tblskucustinfo_on_custid_and_skuid", unique: true
     t.index ["custid"], name: "index_tblskucustinfo_on_custid"
     t.index ["skuid"], name: "index_tblskucustinfo_on_skuid"
   end
@@ -667,8 +661,6 @@ ActiveRecord::Schema.define(version: 2022_10_04_202148) do
   add_foreign_key "tblpurchaseorder", "tblsupplier", column: "splrid", primary_key: "splrid", name: "tblpurchaseorder_splrid_fkey"
   add_foreign_key "tblpurchaseorderitems", "tblpurchaseorder", column: "poid", primary_key: "poid", name: "tblpurchaseorderitems_poid_fkey"
   add_foreign_key "tblpurchaseorderitems", "tblsku", column: "skuid", primary_key: "skuid", name: "tblpurchaseorderitems_skuid_fkey"
-  add_foreign_key "tblskucustinfo", "tblcustomer", column: "custid", primary_key: "custid"
-  add_foreign_key "tblskucustinfo", "tblsku", column: "skuid", primary_key: "skuid"
   add_foreign_key "tblsupplierpmtsitems", "tblpurchaseorderitems", column: "poitemsid", primary_key: "poitemsid", name: "tblsupplierpmtsitems_poitemsid_fkey"
   add_foreign_key "tblsupplierpmtsitems", "tblsupplierpmts", column: "spmtsid", primary_key: "spmtid", name: "tblsupplierpmtsitems_spmtsid_fkey"
   create_function :db_to_csv, sql_definition: <<-SQL
@@ -1461,6 +1453,67 @@ ActiveRecord::Schema.define(version: 2022_10_04_202148) do
        LEFT JOIN tblorderitems ON (((qryskupohistau.poid = tblorderitems.poid) AND (qryskupohistau.skuid = tblorderitems.skuid))))
     GROUP BY qryskupohistau.podate, qryskupohistau.skuid, qryskupohistau.splrid2, qryskupohistau.splrname, qryskupohistau.poorderquant, qryskupohistau.poorderrcvdquant, qryskupohistau.podiff, qryskupohistau.poorderpriceper, qryskupohistau.priceeachlesstax, qryskupohistau.poid, qryskupohistau.poorderexpiration;
   SQL
+  create_view "qry_order_data_pick_list", sql_definition: <<-SQL
+      SELECT tblcustomer.custid,
+      tblcustomer.custname,
+      tblcustomer.custfirst,
+      tblcustomer.custlast,
+      tblcustomer.custsal,
+      tblcustomer.custtitle,
+      tblcustomer.custbusinessname,
+      tblcustomer.custaddress,
+      tblcustomer.custcity,
+      tblcustomer.custst,
+      tblcustomer.custzip,
+      tblcustomer.custprimarycontact1,
+      tblcustomer.custphone1,
+      tblcustomer.custphonetype1,
+      tblcustomer.custemail1,
+      tblcustomer.custprimarycontact2,
+      tblcustomer.custphone2,
+      tblcustomer.custphonetype2,
+      tblcustomer.custemail2,
+      tblcustomer.custfax,
+      tblcustomer.custtaxrate,
+      tblcustomer.custccauth,
+      tblcustomer.custcclast4,
+      tblorder.orderid,
+      tblorder.orderdate,
+      tblorder.orderbatch,
+      tblorder.ordertaxrate,
+      tblorder.ordernotes,
+      tblorder.preordercompletedate,
+      tblorderitems.orderitemsid,
+      tblorderitems.poid,
+      tblorderitems.orderdeliverycosttotal,
+      tblorderitems.ordertaxtotal,
+      tblorderitems.ordergrandtotal,
+      tblorderitems.orderquant,
+      tblorderitems.orderpriceper,
+      tblorderitems.orderpricetotal,
+      tblorderitems.orderretailtotal,
+      tblorderitems.orderitemsdelivereddate,
+      tblorderitems.orderdeliveredquant,
+      tblsku.skuid,
+      tblsku.sku,
+      tblsku.manf,
+      tblsku.itemno,
+      tblsku.skudesc,
+      tblsku.unitweight,
+      tblsku.categoryid,
+      tblsku.skuminunits,
+      tblsku.skuminunitstype,
+      tblsku.dcloc,
+      tblsku.skuminpercs,
+      tblsku.has_issue,
+      s1.orderquantdue
+     FROM (((tblsku
+       JOIN tblorderitems ON ((tblorderitems.skuid = tblsku.skuid)))
+       JOIN tblorder ON ((tblorder.orderid = tblorderitems.orderid)))
+       JOIN tblcustomer ON ((tblcustomer.custid = tblorder.custid))),
+      LATERAL ( SELECT (tblorderitems.orderquant - tblorderitems.orderdeliveredquant)) s1(orderquantdue)
+    WHERE ((((tblsku.dcloc)::text <> 'N/A'::text) AND (s1.orderquantdue <> 0) AND (tblsku.has_issue = false)) OR (s1.orderquantdue < 0));
+  SQL
   create_view "qry_order_items_outstanding", sql_definition: <<-SQL
       SELECT gen_random_uuid() AS id,
       tblorder.orderid,
@@ -1868,7 +1921,7 @@ ActiveRecord::Schema.define(version: 2022_10_04_202148) do
        LEFT JOIN tblvendor v09 ON ((v07.vendorid = t.vno09)))
        LEFT JOIN tblvendor v10 ON ((v07.vendorid = t.vno10)));
   SQL
-  create_view "qry_order_data_pick_list", sql_definition: <<-SQL
+  create_view "margin_report", sql_definition: <<-SQL
       SELECT tblcustomer.custid,
       tblcustomer.custname,
       tblcustomer.custfirst,
@@ -1892,41 +1945,135 @@ ActiveRecord::Schema.define(version: 2022_10_04_202148) do
       tblcustomer.custtaxrate,
       tblcustomer.custccauth,
       tblcustomer.custcclast4,
-      tblorder.orderid,
+      tblpreorder.preorderid,
+      tblpreorder.preorderdate,
+      tblpreorder.preorderbatch,
+      tblpreorder.preordernotes,
+      tblpreorder.orderid,
       tblorder.orderdate,
       tblorder.orderbatch,
-      tblorder.ordertaxrate,
-      tblorder.ordernotes,
-      tblorder.preordercompletedate,
-      tblorderitems.orderitemsid,
-      tblorderitems.poid,
-      tblorderitems.orderdeliverycosttotal,
-      tblorderitems.ordertaxtotal,
-      tblorderitems.ordergrandtotal,
-      tblorderitems.orderquant,
-      tblorderitems.orderpriceper,
-      tblorderitems.orderpricetotal,
-      tblorderitems.orderretailtotal,
-      tblorderitems.orderitemsdelivereddate,
-      tblorderitems.orderdeliveredquant,
-      tblsku.skuid,
-      tblsku.sku,
-      tblsku.manf,
-      tblsku.itemno,
-      tblsku.skudesc,
-      tblsku.unitweight,
-      tblsku.categoryid,
-      tblsku.skuminunits,
-      tblsku.skuminunitstype,
-      tblsku.dcloc,
-      tblsku.skuminpercs,
-      tblsku.has_issue,
-      s1.orderquantdue
-     FROM (((tblsku
-       JOIN tblorderitems ON ((tblorderitems.skuid = tblsku.skuid)))
-       JOIN tblorder ON ((tblorder.orderid = tblorderitems.orderid)))
-       JOIN tblcustomer ON ((tblcustomer.custid = tblorder.custid))),
-      LATERAL ( SELECT (tblorderitems.orderquant - tblorderitems.orderdeliveredquant)) s1(orderquantdue)
-    WHERE ((((tblsku.dcloc)::text <> 'N/A'::text) AND (s1.orderquantdue <> 0) AND (tblsku.has_issue = false)) OR (s1.orderquantdue < 0));
+      tblorder.orderccdate,
+      tblorder.orderconfirmdate,
+      tblpreorderitems.preorderitemsid,
+      tblpreorderitems.poid,
+      tblpreorderitems.skuid1,
+      tblpreorderitems.skuid2,
+      tblpreorderitems.orderquant1,
+      tblpreorderitems.orderquant2,
+      tblpreorderitems.orderpriceper1,
+      tblpreorderitems.orderpriceper2,
+      tblpreorderitems.orderpricetotal1,
+      tblpreorderitems.orderpricetotal2,
+      tblpreorderitems.orderaupriceper,
+      sku1.sku,
+      sku1.manf,
+      sku1.itemno,
+      sku1.skudesc,
+      sku2.sku AS sku2,
+      sku2.manf AS manf2,
+      sku2.itemno AS itemno2,
+      sku2.skudesc AS skudesc2,
+      tblpreordercodes.preordercodeid,
+      tblpreordercodes.preordercode,
+      tblpreordercodes.preordercodedesc
+     FROM ((((((tblpreorderitems
+       JOIN tblsku sku1 ON ((sku1.skuid = tblpreorderitems.skuid1)))
+       JOIN tblsku sku2 ON ((sku2.skuid = tblpreorderitems.skuid2)))
+       JOIN tblpreordercodes ON ((tblpreordercodes.preordercodeid = tblpreorderitems.preorderitemcode)))
+       JOIN tblpreorder ON ((tblpreorder.preorderid = tblpreorderitems.preorderid)))
+       JOIN tblorder ON ((tblorder.orderid = tblpreorder.orderid)))
+       JOIN tblcustomer ON ((tblcustomer.custid = tblpreorder.custid)));
+  SQL
+  create_view "monthly_invoice_report", sql_definition: <<-SQL
+      WITH sums AS (
+           SELECT margin_report.custid,
+              margin_report.custname,
+              (date_trunc('month'::text, margin_report.orderdate))::date AS month,
+              array_agg(DISTINCT margin_report.preorderid) AS preorders,
+              array_agg(DISTINCT margin_report.orderid) AS orders,
+              array_agg(DISTINCT margin_report.preorderdate) AS preorderdates,
+              (sum(margin_report.orderpricetotal1))::numeric AS current_total,
+              (sum(margin_report.orderpricetotal2))::numeric AS accelerate_total,
+              ((sum(margin_report.orderpricetotal1))::numeric - (sum(margin_report.orderpricetotal2))::numeric) AS gross_savings
+             FROM margin_report
+            WHERE (margin_report.preordercodeid = ANY (ARRAY[1, 2, 3, 5, 6]))
+            GROUP BY margin_report.custid, margin_report.custname, (date_trunc('month'::text, margin_report.orderdate))
+          ), quals AS (
+           SELECT sums.custid,
+              sums.custname,
+              sums.month,
+              sums.preorders,
+              sums.orders,
+              sums.preorderdates,
+              sums.current_total,
+              sums.accelerate_total,
+              sums.gross_savings,
+                  CASE
+                      WHEN (sums.gross_savings >= (499)::numeric) THEN 499
+                      ELSE 0
+                  END AS tier1_qual,
+                  CASE
+                      WHEN (sums.gross_savings >= (499)::numeric) THEN LEAST((1000)::numeric, (sums.gross_savings - (499)::numeric))
+                      ELSE (0)::numeric
+                  END AS tier2_qual,
+                  CASE
+                      WHEN (sums.gross_savings >= (1500)::numeric) THEN (sums.gross_savings - (1500)::numeric)
+                      ELSE (0)::numeric
+                  END AS tier3_qual
+             FROM sums
+          ), amts AS (
+           SELECT quals.custid,
+              quals.custname,
+              quals.month,
+              quals.preorders,
+              quals.orders,
+              quals.preorderdates,
+              quals.current_total,
+              quals.accelerate_total,
+              quals.gross_savings,
+              quals.tier1_qual,
+              quals.tier2_qual,
+              quals.tier3_qual,
+              ((quals.tier1_qual)::numeric * 1.0) AS tier1_amt,
+              (quals.tier2_qual * 0.5) AS tier2_amt,
+              (quals.tier3_qual * 0.1) AS tier3_amt
+             FROM quals
+          ), totals AS (
+           SELECT amts.custid,
+              amts.custname,
+              amts.month,
+              amts.preorders,
+              amts.orders,
+              amts.preorderdates,
+              amts.current_total,
+              amts.accelerate_total,
+              amts.gross_savings,
+              amts.tier1_qual,
+              amts.tier2_qual,
+              amts.tier3_qual,
+              amts.tier1_amt,
+              amts.tier2_amt,
+              amts.tier3_amt,
+              ((amts.tier1_amt + amts.tier2_amt) + amts.tier3_amt) AS total_fee
+             FROM amts
+          )
+   SELECT totals.custid,
+      totals.custname,
+      totals.month,
+      totals.preorders,
+      totals.orders,
+      totals.current_total,
+      totals.accelerate_total,
+      totals.gross_savings,
+      totals.tier1_qual,
+      totals.tier2_qual,
+      totals.tier3_qual,
+      totals.tier1_amt,
+      totals.tier2_amt,
+      totals.tier3_amt,
+      totals.total_fee,
+      (totals.accelerate_total + totals.total_fee) AS invoice_net,
+      (totals.gross_savings - totals.total_fee) AS net_savings
+     FROM totals;
   SQL
 end

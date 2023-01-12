@@ -1,0 +1,65 @@
+- content_for :page_title do
+  = @page_title
+
+.content
+  .row
+    .col-12
+      = lte_card style: [:secondary, :outline] do
+        .row
+          .col-4
+            .btn-group
+              - (5..1).step(-1).each do |i|
+                =link_to I18n.l(Date.today - i.months, format: :month), "?scope=prev#{i}", class: 'btn btn-default'
+              =link_to 'Current', "?scope=current", class: 'btn btn-default'
+        .row
+          .col-3
+            - unless @invoice_amounts.present?
+              %p.lead No billable orders in specified period
+            - else
+              %p.lead Invoice Amounts for #{@invoice_amounts.month}
+              .table-responsive
+                %table.table.table-sm
+                  %tbody
+                    %tr
+                      %th{:style => "width:70%"} Total Cost of Purchases:
+                      %td.text-right=number_to_currency(@invoice_amounts.current_total)
+                    %tr
+                      %th Accelerate Price
+                      %td.text-right=number_to_currency(@invoice_amounts.accelerate_total)
+                    %tr
+                      %th Gross Savings
+                      %td.text-right=number_to_currency(@invoice_amounts.gross_savings)
+                    %tr
+                      %th Tier 1 Fee Amount
+                      %td.text-right=number_to_currency(@invoice_amounts.tier1_amt)
+                    %tr
+                      %th Tier 2 Fee Amount
+                      %td.text-right=number_to_currency(@invoice_amounts.tier2_amt)
+                    %tr
+                      %th Tier 3 Fee Amount
+                      %td.text-right=number_to_currency(@invoice_amounts.tier3_amt)
+                    %tr
+                      %th Total Fee Amount
+                      %td.text-right=number_to_currency(@invoice_amounts.total_fee)
+                    %tr
+                      %th Invoice Net
+                      %td.text-right=number_to_currency(@invoice_amounts.invoice_net)
+                    %tr
+                      %th Net Savings
+                      %td.text-right=number_to_currency(@invoice_amounts.net_savings)
+
+        .row
+          .col-2#summary1
+          .col-2#summary2
+
+      = lte_card do
+        = render_datatable @datatable,
+          entries: false,
+          pagination: false,
+          buttons: true,
+          sort: false,
+          search: false
+
+- content_for :scripts do
+  = javascript_include_tag "margin_report_datatable"
+  = javascript_include_tag "customers/billing"

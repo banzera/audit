@@ -10,4 +10,14 @@ class BillingController < ApplicationController
     render :index
   end
 
+  def report
+    @datatable = MonthlyInvoiceDatatable.new
+    @dt_opts = {
+      buttons:    false,
+      pagination: false,
+      entries:    false,
+    }
+
+    render :index
+  end
 end

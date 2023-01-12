@@ -28,7 +28,9 @@ Rails.application.routes.draw do
 
   get 'home',        to: 'dashboard#home'
   get 'export',      to: 'dashboard#export'
-  get 'billing/due', to: 'billing#due'
+
+  get 'billing/due',    to: 'billing#due'
+  get 'billing/report', to: 'billing#report'
 
   resources :dashboard, only: [] do
     collection do
@@ -37,7 +39,12 @@ Rails.application.routes.draw do
   end
 
   resources :categories
-  resources :customers
+  resources :customers do
+    member do
+      get :billing
+    end
+  end
+
   resources :orders, concerns: [:has_label] do
     collection do
       get :outstanding
