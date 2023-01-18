@@ -31,7 +31,7 @@
     .col-md-4.col-lg-2
       .row
         .col-10
-          = f.input :suggested_price, label: 'PO Price/Per + 20%', as: :currency
+          = f.input :suggested_price, label: 'PO Price/Per', as: :currency
         .col-2
           %button.btn.btn-small.btn-outline#accept-suggested-price= fa_icon 'arrow-up'
     .col-md-4.col-lg-2
@@ -62,7 +62,7 @@
     $('#pre_order_item_poid').on 'select2:select', (e) =>
       price = currency(e.params.data.price)
       $('#pre_order_item_orderaupriceper').val(price).flash()
-      $('#pre_order_item_suggested_price').val(price.multiply(1.2)).flash()
+      $('#pre_order_item_suggested_price').val(price.multiply(1.0)).flash()
 
     # check for same/different SKU selection and update code and proposed qty as appropriate
     $('#pre_order_item_skuid1, #pre_order_item_skuid2').on 'select2:select', (e) =>
