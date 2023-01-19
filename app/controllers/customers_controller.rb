@@ -16,7 +16,6 @@ class CustomersController < ApplicationController
     else
       @invoice.current
     end.first
-
   end
 
   def permitted_params
@@ -49,5 +48,5 @@ class CustomersController < ApplicationController
       :custtyemail,
     ])
   end
-
+  alias_method :customer_params, :permitted_params
 end
