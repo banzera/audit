@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_10_015406) do
+ActiveRecord::Schema.define(version: 2023_01_30_152645) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -2008,10 +2008,7 @@ ActiveRecord::Schema.define(version: 2023_01_10_015406) do
               sums.current_total,
               sums.accelerate_total,
               sums.gross_savings,
-                  CASE
-                      WHEN (sums.gross_savings >= (499)::numeric) THEN 499
-                      ELSE 0
-                  END AS tier1_qual,
+              LEAST(sums.gross_savings, 499.0) AS tier1_qual,
                   CASE
                       WHEN (sums.gross_savings >= (499)::numeric) THEN LEAST((1000)::numeric, (sums.gross_savings - (499)::numeric))
                       ELSE (0)::numeric

@@ -16,9 +16,7 @@ GROUP BY CustID, CustName, date_trunc('month', orderdate)
 ),
 quals AS (
   SELECT *,
-  CASE WHEN gross_savings >= 499
-    THEN 499.0 ELSE 0.0
-  END AS tier1_qual,
+  least(gross_savings, 499.0) AS tier1_qual,
 
   CASE WHEN gross_savings >= 499
     THEN least(1000, gross_savings - 499) ELSE 0
