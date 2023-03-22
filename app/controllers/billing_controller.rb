@@ -17,7 +17,11 @@ class BillingController < ApplicationController
       pagination: false,
       entries:    false,
     }
+  end
 
-    render :index
+  def export
+    InvoiceService.export(params[:scope]) do |zipfile|
+      send_data zipfile.data, filename: 'invoices.zip'
+    end
   end
 end

@@ -47,6 +47,11 @@
                     %tr
                       %th Net Savings
                       %td.text-right=number_to_currency(@invoice_amounts.net_savings)
+                    %tr
+                      %th Download to CSV
+                      %td.text-right
+                        = link_to(billing_customer_path(format: :csv, scope: params[:scope]), class: 'btn btn-secondary') do
+                          = fa_icon :download
 
         .row
           .col-2#summary1

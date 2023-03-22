@@ -1,0 +1,15 @@
+- content_for :page_title do
+  = @page_title
+
+.row
+  .col-12
+    .card
+      .card-header
+        %h3.card-title
+        .card-tools
+          = link_to billing_export_path, class: 'btn btn-secondary' do
+            = fa_icon :download, text: 'Download'
+
+      .card-body
+        = render_datatable(@datatable, **(@dt_opts|| {}))
+

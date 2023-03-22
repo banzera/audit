@@ -16,6 +16,18 @@ class CustomersController < ApplicationController
     else
       @invoice.current
     end.first
+
+    respond_to do |format|
+      format.html {}
+      format.csv {
+        filename = [
+          @customer.custname,
+          @invoice_amounts.month.to_s(:number),
+        ].join('_') + ".csv"
+
+        send_data InvoiceService::Invoice.new(@invoice_amounts).to_csv, filename: filename
+      }
+    end
   end
 
   def permitted_params
