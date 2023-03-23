@@ -87,6 +87,19 @@
           %td=item.itemno
           %td=item.skudesc
 
-
-
-
+  %h4 Drop-ship order items shipping separately:
+  %table.table.table-striped.table-sm.table-bordered
+    %thead
+      %th.border.border-dark Order Qty
+      %th.border.border-dark SKUID
+      %th.border.border-dark Manufacturer
+      %th.border.border-dark Item #
+      %th.border.border-dark Description
+    %tbody
+      - @order.drop_ship_items.each do |item|
+        %tr
+          %td=item.orderquant1
+          %td=item.sku1.id
+          %td=item.sku1.manf
+          %td=item.sku1.itemno
+          %td=item.sku1.skudesc

@@ -99,6 +99,17 @@ class Order < ApplicationRecord
     items.map(&:diff_quant).sum
   end
 
+  def drop_ship_items
+    return [] unless self.pre_order.present?
+
+    self.pre_order
+        .items
+        .where("preorderitemcode > 4")
+        .joins(:sku1)
+        .includes(:sku1)
+        .order(:manf)
+  end
+
   def to_s
     "Order #{orderid}"
   end
