@@ -31,7 +31,7 @@ prawn_document(DOCUMENT_OPTIONS) do |pdf|
 
   # logo
   pdf.bounding_box(*logo_box) do
-    pdf.image Rails.root + "public/img/logo_black.png", position: :left, vposition: :bottom, height: POID_HEIGHT
+    pdf.image Rails.root + "public/img/AC_Icon_LightBG@4x.png", position: :left, vposition: :bottom, height: POID_HEIGHT
   end
 
   # POID

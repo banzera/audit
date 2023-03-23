@@ -1,10 +1,8 @@
 {
-    "master_picture": "public/img/logo.png",
+    "master_picture": "public/img/AC_Icon_DarkBG.svg",
     "favicon_design": {
         "ios": {
-            "picture_aspect": "background_and_margin",
-            "background_color": "#333333",
-            "margin": "7%",
+            "picture_aspect": "no_change",
             "assets": {
                 "ios6_and_prior_icons": false,
                 "ios7_and_later_icons": false,
@@ -15,11 +13,11 @@
         "desktop_browser": {
             "design": "background",
             "backgroundColor": "#333333",
-            "backgroundRadius": 1,
-            "imageScale": 1
+            "backgroundRadius": 0.45,
+            "imageScale": 0.8
         },
         "windows": {
-            "picture_aspect": "no_change",
+            "picture_aspect": "white_silhouette",
             "background_color": "#da532c",
             "on_conflict": "override",
             "assets": {
@@ -33,11 +31,10 @@
             }
         },
         "android_chrome": {
-            "picture_aspect": "background_and_margin",
-            "margin": "6%",
-            "background_color": "#333333",
+            "picture_aspect": "shadow",
             "theme_color": "#333333",
             "manifest": {
+                "name": "Accelerate",
                 "display": "standalone",
                 "orientation": "not_set",
                 "on_conflict": "override",
@@ -50,11 +47,12 @@
         },
         "safari_pinned_tab": {
             "picture_aspect": "silhouette",
-            "theme_color": "#5bbad5"
+            "theme_color": "#333333"
         }
     },
     "settings": {
-        "scaling_algorithm": "Mitchell",
+        "compression": 3,
+        "scaling_algorithm": "Cubic",
         "error_on_image_too_small": false,
         "readme_file": false,
         "html_code_file": false,

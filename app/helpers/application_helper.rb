@@ -1,5 +1,10 @@
 module ApplicationHelper
 
+  def logo_image(opts={})
+    d_opts = { alt: "AURORA Logo", height: "60px" }
+    image_tag("/img/AC_Icon_LightBG@4x.png", opts.reverse_merge(d_opts))
+  end
+
   def creating_resource?
     action_name.in? %w(new create)
   end
