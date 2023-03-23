@@ -8,7 +8,6 @@
 %table.table.table-sm.table-borderless.m-0
   %tr
     %td(colspan=2)
-      %strong=@order.orderid
     %td.float-right
       %u Order # #{@order.orderbatch}
       %br
@@ -26,3 +25,7 @@
       = @customer.custaddress
       %br
       = @customer.city_state_zip
+    %td.fload-right
+      = @order.barcode_data(margin: 0, height: 40, xdim: 2).html_safe
+      %br
+      %strong=@order.orderid
