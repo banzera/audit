@@ -1,6 +1,7 @@
 WITH
 sums AS (
-SELECT CustID, CustName,
+SELECT CustID,
+       CustName,
        date_trunc('month', orderdate)::date as month,
        array_agg ( DISTINCT preorderid ) preorders,
        array_agg ( DISTINCT orderid ) orders,

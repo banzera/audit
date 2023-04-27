@@ -31,6 +31,7 @@ Rails.application.routes.draw do
 
   get 'billing/due',    to: 'billing#due'
   get 'billing/report', to: 'billing#report'
+  get 'billing/export', to: 'billing#export'
 
   resources :dashboard, only: [] do
     collection do

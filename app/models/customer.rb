@@ -30,6 +30,10 @@ class Customer < ApplicationRecord
   # validates :custdatecreated, presence: true
   # validates :custdatemodified, presence: true
 
+  def custbillingbusinessname
+    super.presence || custbusinessname
+  end
+
   def full_name
     "#{custsal} #{custfirst} #{custlast}"
   end

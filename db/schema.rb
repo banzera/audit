@@ -2031,7 +2031,7 @@ ActiveRecord::Schema.define(version: 2023_01_30_152645) do
               quals.tier1_qual,
               quals.tier2_qual,
               quals.tier3_qual,
-              ((quals.tier1_qual)::numeric * 1.0) AS tier1_amt,
+              (quals.tier1_qual * 1.0) AS tier1_amt,
               (quals.tier2_qual * 0.5) AS tier2_amt,
               (quals.tier3_qual * 0.1) AS tier3_amt
              FROM quals
