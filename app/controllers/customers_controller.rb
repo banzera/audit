@@ -25,7 +25,7 @@ class CustomersController < ApplicationController
           @invoice_amounts.month.to_s(:number),
         ].join('_') + ".csv"
 
-        send_data InvoiceService::Invoice.new(@invoice_amounts).to_csv, filename: filename
+        send_data InvoiceService::Invoice.new(@invoice_amounts, 0).to_csv, filename: filename
       }
     end
   end
