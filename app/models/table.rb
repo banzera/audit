@@ -12,7 +12,9 @@ class Table < ApplicationRecord
   has_many :columns, foreign_key: :table_name
 
   def select_columns
-    self.columns.map do|c| c.to_s end.join(',')
+    self.columns
+        .where.not(column_name: column_blacklist)
+        .map do|c| c.to_s end.join(',')
   end
 
   def copy_sql
@@ -39,6 +41,14 @@ class Table < ApplicationRecord
   def to_s
     "#{table_schema}.#{table_name}"
     "AUDIT Tables"
+  end
+
+  # prevent billing mode from being exported to remain compat with
+  # legacy AUDIT Access DB
+  def column_blacklist
+    %w(
+      billing_mode
+    )
   end
 
 end

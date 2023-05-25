@@ -21,6 +21,7 @@ Rails.application.config.assets.precompile += %w(
   application.js
   drop_zone.js
   linked_sku_po_selects.js
+  customers_datatable.js
   order_items_datatable.js
   purchase_order_items_datatable.js
   pre_order_items_datatable.js

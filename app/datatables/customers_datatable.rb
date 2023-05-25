@@ -7,6 +7,8 @@ class CustomersDatatable < Effective::Datatable
   filters do
     scope :all, default: true
     scope :active
+    scope :monthly
+    scope :savings
   end
 
   datatable do
@@ -14,6 +16,7 @@ class CustomersDatatable < Effective::Datatable
     col :custbusinessname,        visible: true
     col :custfirst
     col :custlast
+    col :billing_mode, search: false do |c| c.billing_mode.to_s end
     col :custsal,                 visible: false
     col :custtitle,               visible: false
     col :custaddress,             visible: false

@@ -3,6 +3,10 @@
     defaults: { disabled: local_assigns[:readonly], stimulus: {controller: 'preorderprice'} },
     wrapper: :vertical_form do |f|
 
+  .row
+    .col-12
+      = render partial: 'customers/billing_mode', locals: { customer: @pre_order_item.pre_order.customer }
+
   .row{ 'data-controller' => 'preorderprice' }
     .col-md-12.col-lg-6
       = f.association :sku1, as: :sku_selection, source_url: '/skus'

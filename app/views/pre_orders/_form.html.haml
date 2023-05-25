@@ -17,6 +17,10 @@
           .card-body
             #tabContent.tab-content
               #general.tab-pane.fade.active.show{"aria-labelledby" => "general-tab", :role => "tabpanel"}
+                - if @pre_order.customer.present?
+                  .row
+                    .col-12
+                      = render partial: 'customers/billing_mode', locals: { customer: @pre_order.customer }
                 .row
                   .col-3
                     = f.input :preorderbatch, wrapper: :vertical_form, disabled: true

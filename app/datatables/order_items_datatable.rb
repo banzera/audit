@@ -2,7 +2,13 @@ class OrderItemsDatatable < Effective::Datatable
 
   collection do
     order = attributes[:order]
-    scope = order.present? ? order.items.joins(:sku).includes(:sku) : OrderItem.all
+    scope = if order.present?
+      order.items
+    else
+      OrderItem.joins(:order).where("orderdate > ?", 100.days.ago)
+    end
+
+    scope.joins(:sku).includes(:sku)
   end
 
   filters do
@@ -10,7 +16,7 @@ class OrderItemsDatatable < Effective::Datatable
   end
 
   datatable do
-    length :all
+    length 50
 
     order 'sku.dcloc'
 

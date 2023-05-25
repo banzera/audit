@@ -1,7 +1,15 @@
 class OrdersDatatable < Effective::Datatable
 
   collection do
+    customer = attributes[:customer]
+
     scope = Order.includes(:customer).all
+
+    if customer.present?
+      scope = scope.where(custid: customer.id)
+    end
+
+    scope
   end
 
   filters do
@@ -16,15 +24,17 @@ class OrdersDatatable < Effective::Datatable
     col :orderid
     col :orderdate, as: :date
     col :orderbatch
-    col :customer, action: :show
+    unless attributes[:customer].present?
+      col :customer, action: :show
+    end
     col :ordertaxrate,         visible: false
-    col :orderdelivereddate,   visible: false, as: :date
+    col :orderdelivereddate,   visible: attributes[:customer].present?, as: :date
     col :orderdeliverdfrom,    visible: false
     col :orderdeliveredto,     visible: false
     col :ordershipmethod,      visible: false
     col :orderreceipthl,       visible: false
     col :orderdateinvoiced,    visible: false, as: :date
-    col :orderdatepaid,        visible: false, as: :date
+    col :orderdatepaid,        visible: attributes[:customer].present?, as: :date
     col :orderpaymentmethod,   visible: false
     col :orderpaymentamount,   visible: false
     col :ordernotes,           visible: false

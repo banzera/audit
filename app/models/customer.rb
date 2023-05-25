@@ -4,6 +4,15 @@ class Customer < ApplicationRecord
 
   scope :active, -> { where(discontinued: false) }
 
+  scope :gen4, -> {
+    where("custbusinessname ilike 'gen4%'")
+  }
+
+  scope :not_gen4, -> {
+    where.not("custbusinessname ilike 'gen4%'")
+  }
+
+
   validates :custname, presence: true
   validates :custbusinessname, presence: true
   validates :custfirst, presence: true
@@ -29,6 +38,11 @@ class Customer < ApplicationRecord
   # validates :custnotes, presence: true
   # validates :custdatecreated, presence: true
   # validates :custdatemodified, presence: true
+
+  enum billing_mode: {
+    monthly: 0,
+    savings: 1,
+  }
 
   def custbillingbusinessname
     super.presence || custbusinessname

@@ -58,6 +58,7 @@ class CustomersController < ApplicationController
       :custtyfirstname, :custtylastname, :custtyaddress,
       :custtycity, :custtyst, :custtyzip, :custtyphone,
       :custtyemail,
+      :billing_mode,
     ])
   end
   alias_method :customer_params, :permitted_params

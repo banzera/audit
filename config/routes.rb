@@ -70,7 +70,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :order_items, only: [:update, :edit, :show, :destroy] do
+  resources :order_items, only: [:update, :edit, :show, :destroy, :index] do
     member do
       get   :split
       patch :split

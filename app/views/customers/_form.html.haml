@@ -1,0 +1,138 @@
+.content
+  = default_resource_form(read_only: local_assigns[:readonly]) do |f|
+    .row
+      .col-12
+        = card_with_tabs style: [:primary, :outline, 'outline-tabs'] do
+          = tab 'General' do
+            .row
+              .col-4
+                = f.input :custname, disabled: true
+              .col-4
+                = f.input :custbusinessname
+              .col-4
+                = f.input :billing_mode, collection: Customer.billing_modes.keys
+            %hr
+            .row
+              .col-3
+                = f.input :custdatecreated, disabled: true
+              .col-3
+                = f.input :custdatemodified, disabled: true
+              .col-2
+                = f.input :discontinued
+            .row
+              .col-12
+                = f.input :custnotes
+
+            %hr
+            .row
+              .col-3
+                = f.input :custsal, wrapper: :vertical_form
+              .col-3
+                = f.input :custfirst, wrapper: :vertical_form
+              .col-3
+                = f.input :custlast, wrapper: :vertical_form
+              .col-3
+                = f.input :custtitle
+            .row
+              .col-6
+                = f.input :custaddress
+            .row
+              .col-4
+                = f.input :custcity
+              .col-2
+                = f.input :custst
+              .col-2
+                = f.input :custzip
+            .row
+              .col-4
+                = f.input :custphone
+                = f.input :custfax
+                = f.input :custemail
+          = tab 'Contacts' do
+            .row
+              .col-3
+                = f.input :custprimarycontact1
+              .col-3
+                = f.input :custprimarycontact2
+            .row
+              .col-3
+                = f.input :custphone1
+              .col-3
+                = f.input :custphone2
+            .row
+              .col-3
+                = f.input :custphonetype1
+              .col-3
+                = f.input :custphonetype2
+            .row
+              .col-3
+                = f.input :custemail1
+              .col-3
+                = f.input :custemail2
+          = tab 'Billing' do
+            .row
+              .col-4
+                = f.input :custbillingbusinessname
+                = f.input :custbillingfirst
+                = f.input :custbillinglast
+                = f.input :custbillingsal
+                = f.input :custbillingtitle
+                = f.input :custbillingaddress
+                = f.input :custbillingcity
+                = f.input :custbillingst
+                = f.input :custbillingzip
+                = f.input :custbillingphone
+                = f.input :custbillingfax
+                = f.input :custbillingemail
+                = f.input :custbillingsame
+
+                = f.input :custqbo
+                = f.input :custccauth
+                = f.input :custcclast4
+                = f.input :custtaxjurisid
+                = f.input :custhsacct
+                = f.input :custtaxrate
+          = tab 'Thank You Program' do
+            .row
+              .col-2
+                = f.input :custtyfirstname, label: 'First Name'
+              .col-2
+                = f.input :custtylastname, label: 'Last Name'
+            .row
+              .col-6
+                = f.input :custtyaddress, label: 'Address'
+            .row
+              .col-4
+                = f.input :custtycity, label: 'City'
+              .col-2
+                = f.input :custtyst, label: 'State'
+              .col-4
+                = f.input :custtyzip, label: 'Zip'
+            .row
+              .col-4
+                = f.input :custtyphone, label: 'Phone'
+            .row
+              .col-4
+                = f.input :custtyemail, label: 'Email'
+            .row
+              .col-4
+                = f.input :lastrewarddate
+          - if local_assigns[:readonly]
+            = tab 'Orders' do
+              = render_datatable OrdersDatatable.new(customer: @customer),
+                entries: false,
+                pagination: false,
+                buttons: false,
+                sort: true,
+                search: false
+            = tab 'Items' do
+              = render_datatable CustomerItemsDatatable.new(customer: @customer),
+                entries: false,
+                pagination: false,
+                buttons: false,
+                sort: true,
+                search: false
+
+    - unless local_assigns[:readonly]
+      .row
+        = simple_form_submit(f)

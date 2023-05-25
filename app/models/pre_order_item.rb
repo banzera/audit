@@ -37,6 +37,10 @@ class PreOrderItem < ApplicationRecord
   scope :outstanding, -> { where(preorderitemcode: [PreOrderCode::EXACT, PreOrderCode::SUB, PreOrderCode::NEW]).
                            where('poid isnull or poid=0') }
 
+  scope :for_customer, -> (customer) {
+    joins(:pre_order).where('pre_order.custid': customer.custid)
+  }
+
   after_save :update_pre_order
 
   def update_pre_order

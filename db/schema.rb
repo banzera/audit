@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_30_152645) do
+ActiveRecord::Schema.define(version: 2023_05_12_140941) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -274,6 +274,7 @@ ActiveRecord::Schema.define(version: 2023_01_30_152645) do
     t.string "custtyzip", limit: 255
     t.string "custtyphone", limit: 255
     t.string "custtyemail", limit: 255
+    t.integer "billing_mode"
     t.index ["custname"], name: "index_tblcustomer_on_custname"
     t.index ["custtaxjurisid"], name: "index_tblcustomer_on_custtaxjurisid"
   end
