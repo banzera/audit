@@ -2,6 +2,8 @@ class Customer < ApplicationRecord
   self.table_name  = 'tblcustomer'
   self.primary_key = 'custid'
 
+  has_many :sku_infos, class_name: "SkuCustInfo", foreign_key: :custid
+
   scope :active, -> { where(discontinued: false) }
 
   scope :gen4, -> {

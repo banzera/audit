@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   resources :customers do
     member do
       get :billing
+      get 'sku_infos(/:scope)', to: "customers#sku_infos"
     end
   end
 

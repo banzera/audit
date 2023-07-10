@@ -30,6 +30,17 @@ class CustomersController < ApplicationController
     end
   end
 
+  def sku_infos
+    @infos = @customer.sku_infos
+
+    case params[:scope]
+    when 'never' then @infos = @infos.never
+    when 'always' then @infos = @infos.always
+    end
+
+    render json: @infos.to_json
+  end
+
   def permitted_params
     params.require(:customer).permit([
       :custname,

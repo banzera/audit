@@ -15,7 +15,8 @@ class PreOrderItemsController < ApplicationController
   on :destroy, redirect: -> { pre_order_path(resource.pre_order) }
 
   def show
-    @parent = @pre_order_item.pre_order
+    @parent = @pre_order = @pre_order_item.pre_order
+    redirect_to @parent
   end
 
   def outstanding

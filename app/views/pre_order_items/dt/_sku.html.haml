@@ -4,5 +4,8 @@
 
 - btn_class = skuid1 == skuid2 ? 'bg-success' : 'bg-lightblue'
 
+- never_skus = resource.pre_order.customer.sku_infos.never
+- btn_class = 'bg-danger' if never_skus.pluck(:skuid).include? skuid
+
 - if skuid&.positive?
   = link_to skuid, sku_path(skuid), title: 'Show', class: 'btn btn-sm btn-outline-secondary ' + btn_class

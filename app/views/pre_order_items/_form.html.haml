@@ -19,7 +19,11 @@
 
   .row.post{ 'data-controller' => 'preorderprice' }
     .col-md-12.col-lg-6
-      = f.association :sku2, as: :sku_selection, source_url: '/skus'
+      - hint = capture_haml do
+        - unless local_assigns[:readonly]
+          = fa_icon 'cog spin', text: "Select a SKU"
+      = f.association :sku2, as: :sku_selection, source_url: '/skus', hint: hint
+
     .col-md-4.col-lg-2
       = f.input :orderquant2, stimulus: { target: :qty, action: 'preorderprice#calculate' }
     .col-md-4.col-lg-2
@@ -53,37 +57,10 @@
       = simple_form_submit(f)
 
 - content_for :scripts do
+  = javascript_include_tag 'pre_order_items_form'
+
   :coffee
-    $(document).ready () -> new LinkedSkuPoSelects('#pre_order_item_skuid2', '#pre_order_item_poid')
-
-    $('#accept-suggested-price').click (e) ->
-      e.preventDefault()
-      $el = $('#pre_order_item_orderpriceper2')
-      $el.val($('#pre_order_item_suggested_price').val()).flash()
-
-      window.Stimulus.controllers[1].calculate($el[0])
-
-    $('#pre_order_item_poid').on 'select2:select', (e) =>
-      price = currency(e.params.data.price)
-      $('#pre_order_item_orderaupriceper').val(price).flash()
-      $('#pre_order_item_suggested_price').val(price.multiply(1.0)).flash()
-
-    # check for same/different SKU selection and update code and proposed qty as appropriate
-    $('#pre_order_item_skuid1, #pre_order_item_skuid2').on 'select2:select', (e) =>
-      id1 = $('#pre_order_item_skuid1').select2('data')[0].id
-      id2 = $('#pre_order_item_skuid2').select2('data')[0].id
-
-      if id1 == id2
-        newVal = $('#pre_order_item_orderquant1').val()
-        $el = $('#pre_order_item_orderquant2').val(newVal).flash()
-
-        window.Stimulus.controllers[1].calculate($el[0])
-
-      if id2
-        val = if id1 == id2 then 1 else 2
-
-        $code = $('#pre_order_item_preorderitemcode')
-        $code.val(val).trigger 'change'
-
-        $s = $code.parent().find('span.select2-selection__rendered').flash()
-
+    $.get
+      url: "/customers/#{@pre_order.customer.custid}/sku_infos/never",
+      success: (data) ->
+        $(document).prop('SKU_INFOS', data)
