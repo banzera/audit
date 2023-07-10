@@ -122,16 +122,16 @@
               = render_datatable OrdersDatatable.new(customer: @customer),
                 entries: false,
                 pagination: false,
-                buttons: false,
+                buttons: true,
                 sort: true,
-                search: false
+                search: true
             = tab 'Items' do
               = render_datatable CustomerItemsDatatable.new(customer: @customer),
                 entries: false,
                 pagination: false,
-                buttons: false,
+                buttons: true,
                 sort: true,
-                search: false
+                search: true
 
     - unless local_assigns[:readonly]
       .row
