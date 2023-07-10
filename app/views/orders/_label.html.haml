@@ -1,23 +1,21 @@
+:css
+  table {
+    font-size: .75rem;
+  }
+
 %table.table.table-sm.table-borderless.m-0
   %tr
     %td.wpc10
       %b FROM:
     %td=render OfficeAddressComponent.new
     %td=logo_image
-
-%table.table.table-sm.table-borderless.m-0
-  %tr
-    %td(colspan=2)
-    %td.float-right
-      %u Order # #{@order.orderbatch}
-      %br
-      Order Date: #{@order.orderdate.to_date}
+%hr.m-1
 
 %table.table.table-sm.table-borderless.m-0
   %tr
     %td.wpc10
       %b TO:
-    %td
+    %td.wpc90
       = @customer.full_name
       %br
       = @customer.custbusinessname
@@ -25,7 +23,18 @@
       = @customer.custaddress
       %br
       = @customer.city_state_zip
-    %td.fload-right
+%hr.m-1
+
+%table.table.table-sm.table-borderless.m-0
+  %tr
+    %td
+    %td
+    %td.float-right
       = @order.barcode_data(margin: 0, height: 40, xdim: 2).html_safe
-      %br
+  %tr
+    %td.wpc50
+      =@order.orderbatch
+    %td
+      =@order.orderdate.to_date
+    %td.float-right
       %strong=@order.orderid
