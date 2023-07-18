@@ -10,12 +10,13 @@ class PreOrderItemsDatatable < Effective::Datatable
   end
 
   filters do
-    scope :recent, default: true
+    scope :all, default: true
+    scope :recent
     scope :outstanding
   end
 
   datatable do
-    length 100
+    length :all
 
     order :preorderitemsid, :asc
 
