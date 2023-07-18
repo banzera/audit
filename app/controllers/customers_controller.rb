@@ -3,6 +3,8 @@ class CustomersController < ApplicationController
 
   load_and_authorize_resource
 
+  button :sku_infos, false
+
   def billing
     @page_title = "#{@customer} Billing Dashboard"
     @datatable = MarginReportDatatable.new(customer: @customer)

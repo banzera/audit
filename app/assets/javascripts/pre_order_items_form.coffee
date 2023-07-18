@@ -38,7 +38,6 @@ $('#pre_order_item_skuid2').on 'select2:select', (e) =>
   infos = $(document).prop("SKU_INFOS")
 
   info = infos.find (i) ->
-    console.log  i.skuid, skuid
     i.skuid == skuid
 
   $hint = $('.pre_order_item_sku2 > small.form-text')
@@ -53,5 +52,4 @@ $('#pre_order_item_skuid2').on 'select2:select', (e) =>
   else
     "No customer-specific SKU info for #{skuid}"
 
-  console.log msg
   $('.pre_order_item_sku2 > small.form-text').html(msg)

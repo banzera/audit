@@ -7,9 +7,14 @@
     .col-12
       = render partial: 'customers/billing_mode', locals: { customer: @pre_order_item.pre_order.customer }
 
+  - if @pre_order.customer.sku_infos.always.pluck(:skuid).include? @pre_order_item.skuid1
+    - only_hint = capture_haml do
+      = fa_icon 'arrow-circle-right'
+      = link_to 'Customer', customer_path(@pre_order.customer, anchor: 'sku_preferences'), target: :blank
+      specifies to only use #{@pre_order_item.sku1}"
   .row{ 'data-controller' => 'preorderprice' }
     .col-md-12.col-lg-6
-      = f.association :sku1, as: :sku_selection, source_url: '/skus'
+      = f.association :sku1, as: :sku_selection, source_url: skus_path
     .col-md-4.col-lg-2
       = f.input :orderquant1, stimulus: { target: :qty, action: 'preorderprice#calculate' }
     .col-md-4.col-lg-2
@@ -19,10 +24,18 @@
 
   .row.post{ 'data-controller' => 'preorderprice' }
     .col-md-12.col-lg-6
-      - hint = capture_haml do
-        - unless local_assigns[:readonly]
-          = fa_icon 'cog spin', text: "Select a SKU"
-      = f.association :sku2, as: :sku_selection, source_url: '/skus', hint: hint
+      - if only_hint
+        = f.association :sku2,
+          as: :sku_selection,
+          disabled: true,
+          default_value: @pre_order_item.sku1,
+          hint: only_hint
+        = f.hidden_field :skuid2, value: @pre_order_item.skuid1
+      - else
+        - hint = capture_haml do
+          - unless local_assigns[:readonly]
+            = fa_icon 'cog spin', text: "Select a SKU"
+        = f.association :sku2, as: :sku_selection, source_url: skus_path, hint: hint
 
     .col-md-4.col-lg-2
       = f.input :orderquant2, stimulus: { target: :qty, action: 'preorderprice#calculate' }

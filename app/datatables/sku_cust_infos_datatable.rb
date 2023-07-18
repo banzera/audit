@@ -1,7 +1,11 @@
 class SkuCustInfosDatatable < Effective::Datatable
 
   collection do
-    SkuCustInfo.all
+    scope = if attributes[:customer]
+      SkuCustInfo.where(custid: attributes[:customer])
+    else
+      SkuCustInfo.all
+    end
   end
 
   filters do
