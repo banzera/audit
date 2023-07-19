@@ -54,7 +54,8 @@ class InvoiceService
         savings_line,
         tier1_line,
         tier2_line,
-        tier3_line
+        tier3_line,
+        returns_line,
       ].compact.join "\n"
     end
 
@@ -124,6 +125,12 @@ class InvoiceService
     def tier3_line
       line_item("Savings Tier 3", @mir.tier3_amt,
         description: "10% of savings amount above $1499"
+      )
+    end
+
+    def returns_line
+      line_item("Returns", @mir.total_returns,
+        description: "Product returns processed this month"
       )
     end
 

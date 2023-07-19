@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_12_140941) do
+ActiveRecord::Schema.define(version: 2023_07_10_152558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -1309,6 +1309,173 @@ ActiveRecord::Schema.define(version: 2023_05_12_140941) do
        JOIN tblcustomer ON ((qryskuorderhistoryunion.custid = tblcustomer.custid)))
     ORDER BY qryskuorderhistoryunion.orderdate DESC;
   SQL
+  create_view "margin_report", sql_definition: <<-SQL
+      SELECT tblcustomer.custid,
+      tblcustomer.custname,
+      tblcustomer.custfirst,
+      tblcustomer.custlast,
+      tblcustomer.custsal,
+      tblcustomer.custtitle,
+      tblcustomer.custbusinessname,
+      tblcustomer.custaddress,
+      tblcustomer.custcity,
+      tblcustomer.custst,
+      tblcustomer.custzip,
+      tblcustomer.custprimarycontact1,
+      tblcustomer.custphone1,
+      tblcustomer.custphonetype1,
+      tblcustomer.custemail1,
+      tblcustomer.custprimarycontact2,
+      tblcustomer.custphone2,
+      tblcustomer.custphonetype2,
+      tblcustomer.custemail2,
+      tblcustomer.custfax,
+      tblcustomer.custtaxrate,
+      tblcustomer.custccauth,
+      tblcustomer.custcclast4,
+      tblpreorder.preorderid,
+      tblpreorder.preorderdate,
+      tblpreorder.preorderbatch,
+      tblpreorder.preordernotes,
+      tblpreorder.orderid,
+      tblorder.orderdate,
+      tblorder.orderbatch,
+      tblorder.orderccdate,
+      tblorder.orderconfirmdate,
+      tblpreorderitems.preorderitemsid,
+      tblpreorderitems.poid,
+      tblpreorderitems.skuid1,
+      tblpreorderitems.skuid2,
+      tblpreorderitems.orderquant1,
+      tblpreorderitems.orderquant2,
+      tblpreorderitems.orderpriceper1,
+      tblpreorderitems.orderpriceper2,
+      tblpreorderitems.orderpricetotal1,
+      tblpreorderitems.orderpricetotal2,
+      tblpreorderitems.orderaupriceper,
+      sku1.sku,
+      sku1.manf,
+      sku1.itemno,
+      sku1.skudesc,
+      sku2.sku AS sku2,
+      sku2.manf AS manf2,
+      sku2.itemno AS itemno2,
+      sku2.skudesc AS skudesc2,
+      tblpreordercodes.preordercodeid,
+      tblpreordercodes.preordercode,
+      tblpreordercodes.preordercodedesc
+     FROM ((((((tblpreorderitems
+       JOIN tblsku sku1 ON ((sku1.skuid = tblpreorderitems.skuid1)))
+       JOIN tblsku sku2 ON ((sku2.skuid = tblpreorderitems.skuid2)))
+       JOIN tblpreordercodes ON ((tblpreordercodes.preordercodeid = tblpreorderitems.preorderitemcode)))
+       JOIN tblpreorder ON ((tblpreorder.preorderid = tblpreorderitems.preorderid)))
+       JOIN tblorder ON ((tblorder.orderid = tblpreorder.orderid)))
+       JOIN tblcustomer ON ((tblcustomer.custid = tblpreorder.custid)));
+  SQL
+  create_view "monthly_invoice_report", sql_definition: <<-SQL
+      WITH returns AS (
+           SELECT c.custid,
+              c.custname,
+              (date_trunc('month'::text, o.orderdate))::date AS month,
+              array_agg(DISTINCT oi.orderid) AS return_orders,
+              (sum(oi.ordergrandtotal))::numeric AS total_returns
+             FROM ((tblorderitems oi
+               JOIN tblorder o USING (orderid))
+               JOIN tblcustomer c USING (custid))
+            WHERE (oi.ordergrandtotal < (0)::double precision)
+            GROUP BY c.custid, c.custname, (date_trunc('month'::text, o.orderdate))
+            ORDER BY (date_trunc('month'::text, o.orderdate))
+          ), sums AS (
+           SELECT margin_report.custid,
+              margin_report.custname,
+              (date_trunc('month'::text, margin_report.orderdate))::date AS month,
+              array_agg(DISTINCT margin_report.preorderid) AS preorders,
+              array_agg(DISTINCT margin_report.orderid) AS orders,
+              array_agg(DISTINCT margin_report.preorderdate) AS preorderdates,
+              (sum(margin_report.orderpricetotal1))::numeric AS current_total,
+              (sum(margin_report.orderpricetotal2))::numeric AS accelerate_total,
+              ((sum(margin_report.orderpricetotal1))::numeric - (sum(margin_report.orderpricetotal2))::numeric) AS gross_savings
+             FROM margin_report
+            WHERE (margin_report.preordercodeid = ANY (ARRAY[1, 2, 3, 5, 6]))
+            GROUP BY margin_report.custid, margin_report.custname, (date_trunc('month'::text, margin_report.orderdate))
+          ), quals AS (
+           SELECT sums.custid,
+              sums.custname,
+              sums.month,
+              sums.preorders,
+              sums.orders,
+              sums.preorderdates,
+              sums.current_total,
+              sums.accelerate_total,
+              sums.gross_savings,
+              LEAST(sums.gross_savings, 499.0) AS tier1_qual,
+                  CASE
+                      WHEN (sums.gross_savings >= (499)::numeric) THEN LEAST((1000)::numeric, (sums.gross_savings - (499)::numeric))
+                      ELSE (0)::numeric
+                  END AS tier2_qual,
+                  CASE
+                      WHEN (sums.gross_savings >= (1500)::numeric) THEN (sums.gross_savings - (1500)::numeric)
+                      ELSE (0)::numeric
+                  END AS tier3_qual
+             FROM sums
+          ), amts AS (
+           SELECT quals.custid,
+              quals.custname,
+              quals.month,
+              quals.preorders,
+              quals.orders,
+              quals.preorderdates,
+              quals.current_total,
+              quals.accelerate_total,
+              quals.gross_savings,
+              quals.tier1_qual,
+              quals.tier2_qual,
+              quals.tier3_qual,
+              (quals.tier1_qual * 1.0) AS tier1_amt,
+              (quals.tier2_qual * 0.5) AS tier2_amt,
+              (quals.tier3_qual * 0.1) AS tier3_amt
+             FROM quals
+          ), totals AS (
+           SELECT amts.custid,
+              amts.custname,
+              amts.month,
+              amts.preorders,
+              amts.orders,
+              amts.preorderdates,
+              amts.current_total,
+              amts.accelerate_total,
+              amts.gross_savings,
+              amts.tier1_qual,
+              amts.tier2_qual,
+              amts.tier3_qual,
+              amts.tier1_amt,
+              amts.tier2_amt,
+              amts.tier3_amt,
+              ((amts.tier1_amt + amts.tier2_amt) + amts.tier3_amt) AS total_fee
+             FROM amts
+          )
+   SELECT COALESCE(t.custid, r.custid) AS custid,
+      COALESCE(t.custname, r.custname) AS custname,
+      COALESCE(t.month, r.month) AS month,
+      t.preorders,
+      t.orders,
+      t.current_total,
+      t.accelerate_total,
+      t.gross_savings,
+      t.tier1_qual,
+      t.tier2_qual,
+      t.tier3_qual,
+      t.tier1_amt,
+      t.tier2_amt,
+      t.tier3_amt,
+      t.total_fee,
+      (t.accelerate_total + t.total_fee) AS invoice_net,
+      (t.gross_savings - t.total_fee) AS net_savings,
+      r.return_orders,
+      r.total_returns
+     FROM (totals t
+       FULL JOIN returns r USING (custid, month));
+  SQL
   create_view "update_dc_inventory_counts", sql_definition: <<-SQL
       WITH qryupdatedcorderinventorycounts AS (
            SELECT tblsku_1.skuid,
@@ -1921,157 +2088,5 @@ ActiveRecord::Schema.define(version: 2023_05_12_140941) do
        LEFT JOIN tblvendor v08 ON ((v07.vendorid = t.vno08)))
        LEFT JOIN tblvendor v09 ON ((v07.vendorid = t.vno09)))
        LEFT JOIN tblvendor v10 ON ((v07.vendorid = t.vno10)));
-  SQL
-  create_view "margin_report", sql_definition: <<-SQL
-      SELECT tblcustomer.custid,
-      tblcustomer.custname,
-      tblcustomer.custfirst,
-      tblcustomer.custlast,
-      tblcustomer.custsal,
-      tblcustomer.custtitle,
-      tblcustomer.custbusinessname,
-      tblcustomer.custaddress,
-      tblcustomer.custcity,
-      tblcustomer.custst,
-      tblcustomer.custzip,
-      tblcustomer.custprimarycontact1,
-      tblcustomer.custphone1,
-      tblcustomer.custphonetype1,
-      tblcustomer.custemail1,
-      tblcustomer.custprimarycontact2,
-      tblcustomer.custphone2,
-      tblcustomer.custphonetype2,
-      tblcustomer.custemail2,
-      tblcustomer.custfax,
-      tblcustomer.custtaxrate,
-      tblcustomer.custccauth,
-      tblcustomer.custcclast4,
-      tblpreorder.preorderid,
-      tblpreorder.preorderdate,
-      tblpreorder.preorderbatch,
-      tblpreorder.preordernotes,
-      tblpreorder.orderid,
-      tblorder.orderdate,
-      tblorder.orderbatch,
-      tblorder.orderccdate,
-      tblorder.orderconfirmdate,
-      tblpreorderitems.preorderitemsid,
-      tblpreorderitems.poid,
-      tblpreorderitems.skuid1,
-      tblpreorderitems.skuid2,
-      tblpreorderitems.orderquant1,
-      tblpreorderitems.orderquant2,
-      tblpreorderitems.orderpriceper1,
-      tblpreorderitems.orderpriceper2,
-      tblpreorderitems.orderpricetotal1,
-      tblpreorderitems.orderpricetotal2,
-      tblpreorderitems.orderaupriceper,
-      sku1.sku,
-      sku1.manf,
-      sku1.itemno,
-      sku1.skudesc,
-      sku2.sku AS sku2,
-      sku2.manf AS manf2,
-      sku2.itemno AS itemno2,
-      sku2.skudesc AS skudesc2,
-      tblpreordercodes.preordercodeid,
-      tblpreordercodes.preordercode,
-      tblpreordercodes.preordercodedesc
-     FROM ((((((tblpreorderitems
-       JOIN tblsku sku1 ON ((sku1.skuid = tblpreorderitems.skuid1)))
-       JOIN tblsku sku2 ON ((sku2.skuid = tblpreorderitems.skuid2)))
-       JOIN tblpreordercodes ON ((tblpreordercodes.preordercodeid = tblpreorderitems.preorderitemcode)))
-       JOIN tblpreorder ON ((tblpreorder.preorderid = tblpreorderitems.preorderid)))
-       JOIN tblorder ON ((tblorder.orderid = tblpreorder.orderid)))
-       JOIN tblcustomer ON ((tblcustomer.custid = tblpreorder.custid)));
-  SQL
-  create_view "monthly_invoice_report", sql_definition: <<-SQL
-      WITH sums AS (
-           SELECT margin_report.custid,
-              margin_report.custname,
-              (date_trunc('month'::text, margin_report.orderdate))::date AS month,
-              array_agg(DISTINCT margin_report.preorderid) AS preorders,
-              array_agg(DISTINCT margin_report.orderid) AS orders,
-              array_agg(DISTINCT margin_report.preorderdate) AS preorderdates,
-              (sum(margin_report.orderpricetotal1))::numeric AS current_total,
-              (sum(margin_report.orderpricetotal2))::numeric AS accelerate_total,
-              ((sum(margin_report.orderpricetotal1))::numeric - (sum(margin_report.orderpricetotal2))::numeric) AS gross_savings
-             FROM margin_report
-            WHERE (margin_report.preordercodeid = ANY (ARRAY[1, 2, 3, 5, 6]))
-            GROUP BY margin_report.custid, margin_report.custname, (date_trunc('month'::text, margin_report.orderdate))
-          ), quals AS (
-           SELECT sums.custid,
-              sums.custname,
-              sums.month,
-              sums.preorders,
-              sums.orders,
-              sums.preorderdates,
-              sums.current_total,
-              sums.accelerate_total,
-              sums.gross_savings,
-              LEAST(sums.gross_savings, 499.0) AS tier1_qual,
-                  CASE
-                      WHEN (sums.gross_savings >= (499)::numeric) THEN LEAST((1000)::numeric, (sums.gross_savings - (499)::numeric))
-                      ELSE (0)::numeric
-                  END AS tier2_qual,
-                  CASE
-                      WHEN (sums.gross_savings >= (1500)::numeric) THEN (sums.gross_savings - (1500)::numeric)
-                      ELSE (0)::numeric
-                  END AS tier3_qual
-             FROM sums
-          ), amts AS (
-           SELECT quals.custid,
-              quals.custname,
-              quals.month,
-              quals.preorders,
-              quals.orders,
-              quals.preorderdates,
-              quals.current_total,
-              quals.accelerate_total,
-              quals.gross_savings,
-              quals.tier1_qual,
-              quals.tier2_qual,
-              quals.tier3_qual,
-              (quals.tier1_qual * 1.0) AS tier1_amt,
-              (quals.tier2_qual * 0.5) AS tier2_amt,
-              (quals.tier3_qual * 0.1) AS tier3_amt
-             FROM quals
-          ), totals AS (
-           SELECT amts.custid,
-              amts.custname,
-              amts.month,
-              amts.preorders,
-              amts.orders,
-              amts.preorderdates,
-              amts.current_total,
-              amts.accelerate_total,
-              amts.gross_savings,
-              amts.tier1_qual,
-              amts.tier2_qual,
-              amts.tier3_qual,
-              amts.tier1_amt,
-              amts.tier2_amt,
-              amts.tier3_amt,
-              ((amts.tier1_amt + amts.tier2_amt) + amts.tier3_amt) AS total_fee
-             FROM amts
-          )
-   SELECT totals.custid,
-      totals.custname,
-      totals.month,
-      totals.preorders,
-      totals.orders,
-      totals.current_total,
-      totals.accelerate_total,
-      totals.gross_savings,
-      totals.tier1_qual,
-      totals.tier2_qual,
-      totals.tier3_qual,
-      totals.tier1_amt,
-      totals.tier2_amt,
-      totals.tier3_amt,
-      totals.total_fee,
-      (totals.accelerate_total + totals.total_fee) AS invoice_net,
-      (totals.gross_savings - totals.total_fee) AS net_savings
-     FROM totals;
   SQL
 end

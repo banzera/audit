@@ -13,7 +13,7 @@ class BillingController < ApplicationController
   def report
     @datatable = MonthlyInvoiceDatatable.new
     @dt_opts = {
-      buttons:    false,
+      # buttons:    false,
       pagination: false,
       entries:    false,
     }

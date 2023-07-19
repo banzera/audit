@@ -20,6 +20,10 @@ class MonthlyInvoiceReport < ApplicationRecord
 
   attr_accessor :start_date
 
+  def orders        = super || []
+  def preorders     = super || []
+  def return_orders = super || []
+
   def self.monthrange(x)
     day = Date.today - x.month
     range = day.beginning_of_month..day.end_of_month

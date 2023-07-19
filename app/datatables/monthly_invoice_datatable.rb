@@ -31,29 +31,37 @@ class MonthlyInvoiceDatatable < Effective::Datatable
     col :custid, visible: false
     col :customer, action: :show
     col :custname, label: "Customer Name"
-    col :preorders, sort: false do |v|
+    col :preorders, sort: false, search: false do |v|
       v.preorders.map do |id|
         link_to id, pre_order_path(id), title: 'Show', class: 'btn btn-sm btn-outline-secondary'
       end.join("&nbsp;")
     end
-    col :orders, sort: false do |v|
+    col :orders, sort: false, search: false do |v|
       v.orders.map do |id|
         link_to id, order_path(id), title: 'Show', class: 'btn btn-sm btn-outline-secondary'
       end.join("&nbsp;")
     end
 
-    col :current_total,    label: 'Market Total',    as: :currency
-    col :accelerate_total, label: 'AU Total',        as: :currency
-    col :gross_savings,    label: 'Savings',         as: :currency
-    col :tier1_qual,       label: 'Tier 1 Qual',     as: :currency, visible: false
-    col :tier2_qual,       label: 'Tier 2 Qual',     as: :currency, visible: false
-    col :tier3_qual,       label: 'Tier 3 Qual',     as: :currency, visible: false
-    col :tier1_amt,        label: 'Tier 1 Amt',      as: :currency
-    col :tier2_amt,        label: 'Tier 2 Amt',      as: :currency
-    col :tier3_amt,        label: 'Tier 3 Amt',      as: :currency
-    col :total_fee,        label: 'Total Fee',       as: :currency
-    col :invoice_net,      label: 'Net Invoice Amt', as: :currency
-    col :net_savings,      label: 'Net Savings Amt', as: :currency
+    col :current_total,    label: 'Market Total',    search: false, as: :currency
+    col :accelerate_total, label: 'AU Total',        search: false, as: :currency
+    col :gross_savings,    label: 'Savings',         search: false, as: :currency
+    col :tier1_qual,       label: 'Tier 1 Qual',     search: false, as: :currency, visible: false
+    col :tier2_qual,       label: 'Tier 2 Qual',     search: false, as: :currency, visible: false
+    col :tier3_qual,       label: 'Tier 3 Qual',     search: false, as: :currency, visible: false
+    col :tier1_amt,        label: 'Tier 1 Amt',      search: false, as: :currency
+    col :tier2_amt,        label: 'Tier 2 Amt',      search: false, as: :currency
+    col :tier3_amt,        label: 'Tier 3 Amt',      search: false, as: :currency
+    col :total_fee,        label: 'Total Fee',       search: false, as: :currency
+    col :invoice_net,      label: 'Net Invoice Amt', search: false, as: :currency
+    col :net_savings,      label: 'Net Savings Amt', search: false, as: :currency
+
+    col :return_orders, sort: false, search: false do |v|
+      v.return_orders.map do |id|
+        link_to id, order_path(id), title: 'Show', class: 'btn btn-sm btn-outline-secondary'
+      end.join("&nbsp;")
+    end
+
+    col :total_returns, search: false, as: :currency
 
     actions_col do |resource|
       link_to 'Bill', billing_customer_path(resource.custid), title: 'Billing', class: 'btn btn-sm btn-outline-secondary'
