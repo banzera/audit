@@ -2,7 +2,7 @@ class MonthlyInvoiceDatatable < Effective::Datatable
 
   collection do
     customer = attributes[:customer]
-    scope    = customer.present? ? MonthlyInvoiceReport.for_customer(customer) : MonthlyInvoiceReport.no_gen4
+    scope    = customer.present? ? MonthlyInvoiceReport.for_customer(customer) : MonthlyInvoiceReport.savings
   end
 
   filters do

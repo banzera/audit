@@ -7,8 +7,8 @@ class MonthlyInvoiceReport < ApplicationRecord
   scope :for_customer, -> (customer) { where(custid: customer) }
   scope :in_range,     -> (date_range) { where(month: date_range) }
 
-  scope :no_gen4, -> {
-    joins(:customer).where.not("custbusinessname ilike 'gen4%'")
+  scope :savings, -> {
+    joins(:customer).where(custid: Customer.savings)
   }
 
   scope :current, -> { in_range(monthrange(0)) }

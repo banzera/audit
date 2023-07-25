@@ -17,7 +17,7 @@ class InvoiceService
     Zippy.create(file) do |zip|
       total = []
 
-      MonthlyInvoiceReport.prev1.no_gen4.each_with_index do |mir, x|
+      MonthlyInvoiceReport.prev1.savings.each_with_index do |mir, x|
         puts mir.custname
           i = Invoice.new(mir, x, header: x.zero?)
           zip[i.filename] = i.to_csv

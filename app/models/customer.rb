@@ -6,15 +6,6 @@ class Customer < ApplicationRecord
 
   scope :active, -> { where(discontinued: false) }
 
-  scope :gen4, -> {
-    where("custbusinessname ilike 'gen4%'")
-  }
-
-  scope :not_gen4, -> {
-    where.not("custbusinessname ilike 'gen4%'")
-  }
-
-
   validates :custname, presence: true
   validates :custbusinessname, presence: true
   validates :custfirst, presence: true
