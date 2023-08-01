@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_10_152558) do
+ActiveRecord::Schema.define(version: 2023_08_01_152558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -1378,7 +1378,7 @@ ActiveRecord::Schema.define(version: 2023_07_10_152558) do
               c.custname,
               (date_trunc('month'::text, o.orderdate))::date AS month,
               array_agg(DISTINCT oi.orderid) AS return_orders,
-              (sum(oi.ordergrandtotal))::numeric AS total_returns
+              (sum(oi.orderpricetotal))::numeric AS total_returns
              FROM ((tblorderitems oi
                JOIN tblorder o USING (orderid))
                JOIN tblcustomer c USING (custid))
