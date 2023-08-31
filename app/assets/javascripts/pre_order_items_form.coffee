@@ -10,7 +10,7 @@ $('#accept-suggested-price').click (e) ->
 $('#pre_order_item_poid').on 'select2:select', (e) =>
   price = currency(e.params.data.price)
   $('#pre_order_item_orderaupriceper').val(price).flash()
-  $('#pre_order_item_suggested_price').val(price.multiply(1.0)).flash()
+  $('#pre_order_item_suggested_price').val(price.multiply(1.2)).flash()
 
 # check for same/different SKU selection and update code and proposed qty as appropriate
 $('#pre_order_item_skuid1, #pre_order_item_skuid2').on 'select2:select', (e) =>
