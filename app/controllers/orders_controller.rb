@@ -126,6 +126,7 @@ class OrdersController < ApplicationController
       :orderccdate,
       :preordercompletedate,
       :orderconfirmdate,
+      :qbo_invoice_number,
     ])
   end
   alias_method :order_params, :permitted_params

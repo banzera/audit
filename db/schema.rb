@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_01_152558) do
+ActiveRecord::Schema.define(version: 2023_09_14_205835) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -306,6 +306,7 @@ ActiveRecord::Schema.define(version: 2023_08_01_152558) do
     t.datetime "orderccdate"
     t.datetime "preordercompletedate"
     t.datetime "orderconfirmdate"
+    t.string "qbo_invoice_number"
     t.index ["custid"], name: "index_tblorder_on_custid"
     t.index ["orderbatch"], name: "index_tblorder_on_orderbatch"
     t.index ["orderdateinvoiced"], name: "index_tblorder_on_orderdateinvoiced"

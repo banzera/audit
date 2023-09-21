@@ -160,6 +160,7 @@ en:
         orderccdate: CC Date
         preordercompletedate: Pre-Order Completed Date
         orderconfirmdate: Confirmed Date
+        qbo_invoice_number: QBO Invoice Number
       order_deposit:
         odepositid: ID
         odepositdate: Date
