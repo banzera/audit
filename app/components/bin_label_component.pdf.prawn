@@ -41,7 +41,7 @@ prawn_document(DOCUMENT_OPTIONS) do |pdf|
 
   # POID Barcode
   pdf.bounding_box(*poid_barcode_box) do
-    pdf.svg Barby::Code39.new(@po.poid.to_s).to_svg(margin: 0, height: POID_HEIGHT, xdim: 1)
+    # pdf.svg Barby::Code39.new(@po.poid.to_s).to_svg(margin: 0, height: POID_HEIGHT, xdim: 1)
   end
 
   # batch
