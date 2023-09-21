@@ -18,114 +18,94 @@ class InvoiceService
       total = []
 
       MonthlyInvoiceReport.prev1.savings.each_with_index do |mir, x|
-        puts mir.custname
-          i = Invoice.new(mir, x, header: x.zero?)
-          zip[i.filename] = i.to_csv
-          total << i.to_csv
+        i = Invoice.new(mir, x + 1001, header: x.zero?)
+        zip[i.filename] = i.to_csv
+        total << i.to_csv
       end
 
       all = total.join "\n"
 
       zip['all_invoices.csv'] = all
-
     end
   end
 
   private
 
   class Invoice
-    attr_reader :mir, :invoice_number, :header
+    extend Dry::Initializer
 
-    def initialize(mir, invoice_number, header: true)
-      @mir            = mir
-      @invoice_number = invoice_number + 1001
-      @header         = header
-    end
+    EMPTY_FIELD = "".freeze
+
+    param :mir
+    param :invoice_number
+    option :header, default: proc { true }
 
     def filename
       "invoice_#{mir.customer.custname}_#{mir.month.to_s(:number)}.csv"
     end
 
     def to_csv
-      [
-        header_line,
-        line1,
-        market_price_line,
-        savings_line,
-        tier1_line,
-        tier2_line,
-        tier3_line,
-        returns_line,
-      ].compact.join "\n"
+      CSV.generate(force_quotes: true) do |csv|
+        csv << header_line if header
+        csv << line1
+        csv << market_price_line
+        csv << savings_line
+        csv << membership_line
+        csv << returns_line
+      end
     end
 
     def line1
       [
-        invoice_number,
-        '"' + @mir.customer.custbillingbusinessname + '"',
-        Date.today.beginning_of_month,            # invoice date
-        Date.today.beginning_of_month + 30,       # due date
-        'Net 30',                                 # terms
-        '', # 'Location',
-        '', # 'Memo',
-        '', # 'Item(Product/Service)',
-        '', # 'ItemDescription',
-        '', # 'ItemQuantity',
-        '', # 'ItemRate',
-        '', # '*ItemAmount',
-        '', # 'Taxable',
-        '', # 'TaxRate',
-        '', # 'Service Date',
-      ].join(',')
+        invoice_number,                        # InvoiceNo
+        @mir.customer.custbillingbusinessname, # Customer
+        Date.today.beginning_of_month,         # InvoiceDate
+        Date.today.beginning_of_month + 30,    # DueDate
+        'Net 30',                              # Terms
+      ]
     end
 
     def line_item(product, amt, description: '', service_date: '', qty: 1)
       [
         invoice_number, # *InvoiceNo
-        '',          # *Customer
-        '',          # *InvoiceDate
-        '',          # *DueDate
-        '',          # Terms
-        '',          # Location
-        '',          # Memo
-        product,     # Item(Product/Service)
-        description, # ItemDescription
-        qty,         # ItemQuantity
-        amt,         # ItemRate
-        amt,         # *ItemAmount
-        '',          # Taxable
-        '',          # TaxRate
+        EMPTY_FIELD,    # *Customer
+        EMPTY_FIELD,    # *InvoiceDate
+        EMPTY_FIELD,    # *DueDate
+        EMPTY_FIELD,    # Terms
+        EMPTY_FIELD,    # Location
+        EMPTY_FIELD,    # Memo
+        product,        # Item(Product/Service)
+        description,    # ItemDescription
+        qty,            # ItemQuantity
+        amt,            # ItemRate
+        amt,            # *ItemAmount
+        EMPTY_FIELD,    # Taxable
+        EMPTY_FIELD,    # TaxRate
         service_date
-      ].join(',')
+      ]
     end
 
     def market_price_line
       line_item("Market Price", @mir.current_total,
-        description:  "#{@mir.orders.size} order".pluralize(@mir.orders.size),
+        description:  market_desc,
         service_date: @mir.month.beginning_of_month
       )
     end
 
+    def market_desc
+      [
+        @mir.orders.size,
+        "order".pluralize(@mir.orders.size),
+        @mir.orders.to_s,
+      ].join " "
+    end
+
     def savings_line
-      line_item("Realized Savings", @mir.gross_savings, qty: 1)
+      line_item("Realized Savings", -@mir.gross_savings)
     end
 
-    def tier1_line
-      line_item("Savings Tier 1", @mir.tier1_amt,
-        description: "100% of savings amount up to $499"
-      )
-    end
-
-    def tier2_line
-      line_item("Savings Tier 2", @mir.tier2_amt,
-        description: "50% of savings amount between $499 and $1499"
-      )
-    end
-
-    def tier3_line
-      line_item("Savings Tier 3", @mir.tier3_amt,
-        description: "10% of savings amount above $1499"
-      )
+    def membership_line
+      line_item("Membership Fee", @mir.customer.subscription_amount)
     end
 
     def returns_line
@@ -135,8 +115,6 @@ class InvoiceService
     end
 
     def header_line
-      return nil unless header
-
       %w(
         InvoiceNo
         Customer
@@ -153,7 +131,7 @@ class InvoiceService
         Taxable
         TaxRate
         ServiceDate
-      ).join(',')
+      )
     end
   end
 end

@@ -148,6 +148,7 @@ GEM
       warden (~> 1.2.3)
     down (5.2.4)
       addressable (~> 2.8)
+    dry-initializer (3.1.1)
     effective_addresses (1.9.11)
       carmen
       coffee-rails
@@ -433,6 +434,7 @@ DEPENDENCIES
   delayed_job_active_record (~> 4.1)
   devise (~> 4.8)
   down (~> 5.2)
+  dry-initializer (~> 3.1)
   effective_addresses (~> 1.9)
   effective_datatables (~> 4.9)!
   effective_logging (~> 3.2)

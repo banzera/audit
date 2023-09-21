@@ -2,7 +2,7 @@ class MonthlyInvoiceDatatable < Effective::Datatable
 
   collection do
     customer = attributes[:customer]
-    scope    = customer.present? ? MonthlyInvoiceReport.for_customer(customer) : MonthlyInvoiceReport.savings
+    scope    = customer.present? ? MonthlyInvoiceReport.for_customer(customer) : MonthlyInvoiceReport.all
   end
 
   filters do
@@ -45,15 +45,6 @@ class MonthlyInvoiceDatatable < Effective::Datatable
     col :current_total,    label: 'Market Total',    search: false, as: :currency
     col :accelerate_total, label: 'AU Total',        search: false, as: :currency
     col :gross_savings,    label: 'Savings',         search: false, as: :currency
-    col :tier1_qual,       label: 'Tier 1 Qual',     search: false, as: :currency, visible: false
-    col :tier2_qual,       label: 'Tier 2 Qual',     search: false, as: :currency, visible: false
-    col :tier3_qual,       label: 'Tier 3 Qual',     search: false, as: :currency, visible: false
-    col :tier1_amt,        label: 'Tier 1 Amt',      search: false, as: :currency
-    col :tier2_amt,        label: 'Tier 2 Amt',      search: false, as: :currency
-    col :tier3_amt,        label: 'Tier 3 Amt',      search: false, as: :currency
-    col :total_fee,        label: 'Total Fee',       search: false, as: :currency
-    col :invoice_net,      label: 'Net Invoice Amt', search: false, as: :currency
-    col :net_savings,      label: 'Net Savings Amt', search: false, as: :currency
 
     col :return_orders, sort: false, search: false do |v|
       v.return_orders.map do |id|
@@ -62,6 +53,10 @@ class MonthlyInvoiceDatatable < Effective::Datatable
     end
 
     col :total_returns, search: false, as: :currency
+
+    col :subscription_amount, search: false, as: :currency
+    col :invoice_total, search: false, as: :currency
+
 
     actions_col do |resource|
       link_to 'Bill', billing_customer_path(resource.custid), title: 'Billing', class: 'btn btn-sm btn-outline-secondary'
@@ -74,13 +69,8 @@ class MonthlyInvoiceDatatable < Effective::Datatable
       when :current_total,
            :accelerate_total,
            :gross_savings,
-           :tier1_qual,
-           :tier2_qual,
-           :tier3_qual,
-           :tier1_amt,
-           :tier2_amt,
-           :tier3_amt,
-           :total_fee
+           :subscription_amount,
+           :invoice_total
         number_to_currency(values.compact.sum)
       end
     end

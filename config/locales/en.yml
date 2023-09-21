@@ -141,6 +141,9 @@ en:
         custtyzip: Thank You Zip
         custtyphone: Thank You Phone
         custtyemail: Thank You Email
+        billing_mode: Billing Mode
+        tax_jurisdiction: Tax Jurisdiction
+        subscription_amount: Subscription Amount
       order:
         orderid: ID
         orderdate: Date

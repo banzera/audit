@@ -3,6 +3,6 @@ class TaxJurisdiction < ApplicationRecord
   self.primary_key = 'tjid'
 
   def to_s
-    jurisdictioncode
+    "#{jurisdictionname} (#{jurisdictioncode})"
   end
 end

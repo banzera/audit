@@ -7,9 +7,8 @@ class CustomersController < ApplicationController
 
   def billing
     @page_title = "#{@customer} Billing Dashboard"
-    @datatable = MarginReportDatatable.new(customer: @customer)
-
-    @invoice = MonthlyInvoiceReport.for_customer(@customer)
+    @datatable  = MarginReportDatatable.new(customer: @customer)
+    @invoice    = MonthlyInvoiceReport.for_customer(@customer)
 
     scope = params[:scope] || :current
 
@@ -22,12 +21,9 @@ class CustomersController < ApplicationController
     respond_to do |format|
       format.html {}
       format.csv {
-        filename = [
-          @customer.custname,
-          @invoice_amounts.month.to_s(:number),
-        ].join('_') + ".csv"
+        invoice = InvoiceService::Invoice.new(@invoice_amounts, 1001)
 
-        send_data InvoiceService::Invoice.new(@invoice_amounts, 0).to_csv, filename: filename
+        send_data invoice.to_csv, filename: invoice.filename
       }
     end
   end
@@ -72,6 +68,7 @@ class CustomersController < ApplicationController
       :custtycity, :custtyst, :custtyzip, :custtyphone,
       :custtyemail,
       :billing_mode,
+      :subscription_amount,
     ])
   end
   alias_method :customer_params, :permitted_params

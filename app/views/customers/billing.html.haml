@@ -21,32 +21,24 @@
                 %table.table.table-sm
                   %tbody
                     %tr
-                      %th{:style => "width:70%"} Total Cost of Purchases:
+                      %th{style: "width:70%"}
+                        Total Cost of Purchases: #{@invoice_amounts.orders}
                       %td.text-right=number_to_currency(@invoice_amounts.current_total)
-                    %tr
-                      %th Accelerate Price
-                      %td.text-right=number_to_currency(@invoice_amounts.accelerate_total)
                     %tr
                       %th Gross Savings
                       %td.text-right=number_to_currency(@invoice_amounts.gross_savings)
                     %tr
-                      %th Tier 1 Fee Amount
-                      %td.text-right=number_to_currency(@invoice_amounts.tier1_amt)
+                      %th Accelerate Price
+                      %td.text-right=number_to_currency(@invoice_amounts.accelerate_total)
                     %tr
-                      %th Tier 2 Fee Amount
-                      %td.text-right=number_to_currency(@invoice_amounts.tier2_amt)
+                      %th Subscription Amount
+                      %td.text-right=number_to_currency(@invoice_amounts.customer.subscription_amount)
                     %tr
-                      %th Tier 3 Fee Amount
-                      %td.text-right=number_to_currency(@invoice_amounts.tier3_amt)
-                    %tr
-                      %th Total Fee Amount
-                      %td.text-right=number_to_currency(@invoice_amounts.total_fee)
-                    %tr
-                      %th Invoice Net
-                      %td.text-right=number_to_currency(@invoice_amounts.invoice_net)
-                    %tr
-                      %th Net Savings
-                      %td.text-right=number_to_currency(@invoice_amounts.net_savings)
+                      %th
+                        Returns
+                        - if @invoice_amounts.return_orders.any?
+                          #{@invoice_amounts.return_orders}
+                      %td.text-right=number_to_currency(@invoice_amounts.total_returns)
                     %tr
                       %th Download to CSV
                       %td.text-right

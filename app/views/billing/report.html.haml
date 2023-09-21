@@ -6,10 +6,17 @@
     .card
       .card-header
         %h3.card-title
+          .row
+            .col-4
+              .btn-group
+                - (5..1).step(-1).each do |i|
+                  =link_to I18n.l(Date.today - i.months, format: :month), "?scope=prev#{i}", class: 'btn btn-default'
+                =link_to 'Current', "?scope=current", class: 'btn btn-default'
+
         .card-tools
-          = link_to billing_export_path, class: 'btn btn-secondary' do
+          = link_to billing_export_path(params.to_unsafe_hash), class: 'btn btn-secondary' do
             = fa_icon :download, text: 'Download'
 
       .card-body
-        = render_datatable(@datatable, **(@dt_opts|| {}))
+        = render_datatable @datatable, filters: false
 

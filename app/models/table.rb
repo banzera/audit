@@ -48,6 +48,8 @@ class Table < ApplicationRecord
   def column_blacklist
     %w(
       billing_mode
+      subscription_amount
+      qbo_invoice_number
     )
   end
 

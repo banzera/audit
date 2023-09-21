@@ -17,6 +17,7 @@ class CustomersDatatable < Effective::Datatable
     col :custfirst
     col :custlast
     col :billing_mode, search: false do |c| c.billing_mode.to_s end
+    col :subscription_amount, as: :currency
     col :custsal,                 visible: false
     col :custtitle,               visible: false
     col :custaddress,             visible: false

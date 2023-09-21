@@ -5,23 +5,14 @@
         = card_with_tabs style: [:primary, :outline, 'outline-tabs'] do
           = tab 'General' do
             .row
-              .col-4
-                = f.input :custname
-              .col-4
-                = f.input :custbusinessname
-              .col-4
-                = f.input :billing_mode, collection: Customer.billing_modes.keys
-            %hr
-            .row
-              .col-3
-                = f.input :custdatecreated, disabled: true
-              .col-3
-                = f.input :custdatemodified, disabled: true
               .col-2
-                = f.input :discontinued
-            .row
-              .col-12
-                = f.input :custnotes
+                = f.input :custname, wrapper: :vertical_form
+              .col-4
+                = f.input :custbusinessname, wrapper: :vertical_form
+              .col-3
+                = f.input :billing_mode, wrapper: :vertical_form, collection: Customer.billing_modes.keys
+              .col-3
+                = f.input :subscription_amount, wrapper: :vertical_form, as: :currency
 
             %hr
             .row
@@ -32,91 +23,115 @@
               .col-3
                 = f.input :custlast, wrapper: :vertical_form
               .col-3
-                = f.input :custtitle
+                = f.input :custtitle, wrapper: :vertical_form
             .row
               .col-6
                 = f.input :custaddress
             .row
-              .col-4
+              .col-6
                 = f.input :custcity
-              .col-2
                 = f.input :custst
-              .col-2
                 = f.input :custzip
-            .row
-              .col-4
+              .col-6
                 = f.input :custphone
                 = f.input :custfax
                 = f.input :custemail
+            %hr
+            .row
+              .col-9
+                = f.input :custnotes, wrapper: :vertical_form, input_html: {rows: 8}
+              .col-3
+                = f.input :custdatecreated, disabled: true
+                = f.input :custdatemodified, disabled: true
+                = f.input :discontinued
+
           = tab 'Contacts' do
             .row
               .col-3
-                = f.input :custprimarycontact1
+                = f.input :custprimarycontact1, wrapper: :vertical_form
               .col-3
-                = f.input :custprimarycontact2
+                = f.input :custprimarycontact2, wrapper: :vertical_form
             .row
               .col-3
-                = f.input :custphone1
+                = f.input :custphone1, wrapper: :vertical_form
               .col-3
-                = f.input :custphone2
+                = f.input :custphone2, wrapper: :vertical_form
             .row
               .col-3
-                = f.input :custphonetype1
+                = f.input :custphonetype1, wrapper: :vertical_form
               .col-3
-                = f.input :custphonetype2
+                = f.input :custphonetype2, wrapper: :vertical_form
             .row
               .col-3
-                = f.input :custemail1
+                = f.input :custemail1, wrapper: :vertical_form
               .col-3
-                = f.input :custemail2
+                = f.input :custemail2, wrapper: :vertical_form
           = tab 'Billing' do
             .row
-              .col-4
-                = f.input :custbillingbusinessname
-                = f.input :custbillingfirst
-                = f.input :custbillinglast
-                = f.input :custbillingsal
-                = f.input :custbillingtitle
+              .col-6
+                = f.input :custbillingbusinessname, wrapper: :vertical_form
+            .row
+              .col-3
+                = f.input :custbillingsal, wrapper: :vertical_form, label: "Salutation"
+              .col-3
+                = f.input :custbillingfirst, wrapper: :vertical_form, label: "First Name"
+              .col-3
+                = f.input :custbillinglast, wrapper: :vertical_form, label: "Last Name"
+              .col-3
+                = f.input :custbillingtitle, wrapper: :vertical_form, label: "Title"
+            .row
+              .col-6
                 = f.input :custbillingaddress
+              .col-3.offset-3
+                = f.input :custbillingsame, wrapper: :vertical_form
+            .row
+              .col-6
                 = f.input :custbillingcity
                 = f.input :custbillingst
                 = f.input :custbillingzip
+              .col-6
                 = f.input :custbillingphone
                 = f.input :custbillingfax
                 = f.input :custbillingemail
-                = f.input :custbillingsame
-
+            %hr
+            .row
+              .col-3
+                = f.input :tax_jurisdiction, wrapper: :vertical_form, collection: TaxJurisdiction.all
+              .col-3
+                = f.input :custtaxrate, wrapper: :vertical_form
+            %hr
+            .row
+              .col-6
                 = f.input :custqbo
+              .col-6
                 = f.input :custccauth
+            %hr
+            .row
+              .col-6
                 = f.input :custcclast4
-                = f.input :custtaxjurisid
+              .col-6
                 = f.input :custhsacct
-                = f.input :custtaxrate
+
           = tab 'Thank You Program' do
             .row
-              .col-2
-                = f.input :custtyfirstname, label: 'First Name'
-              .col-2
-                = f.input :custtylastname, label: 'Last Name'
+              .col-3
+                = f.input :custtyfirstname, wrapper: :vertical_form, label: 'First Name'
+              .col-3
+                = f.input :custtylastname, wrapper: :vertical_form, label: 'Last Name'
+              .col-3.offset-3
+                = f.input :lastrewarddate
             .row
               .col-6
                 = f.input :custtyaddress, label: 'Address'
             .row
-              .col-4
+              .col-6
                 = f.input :custtycity, label: 'City'
-              .col-2
                 = f.input :custtyst, label: 'State'
-              .col-4
                 = f.input :custtyzip, label: 'Zip'
-            .row
-              .col-4
+              .col-6
                 = f.input :custtyphone, label: 'Phone'
-            .row
-              .col-4
                 = f.input :custtyemail, label: 'Email'
-            .row
-              .col-4
-                = f.input :lastrewarddate
+
           - if local_assigns[:readonly]
             = tab 'Orders' do
               = render_datatable OrdersDatatable.new(customer: @customer),

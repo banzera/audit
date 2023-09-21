@@ -4,6 +4,8 @@ class Customer < ApplicationRecord
 
   has_many :sku_infos, class_name: "SkuCustInfo", foreign_key: :custid
 
+  belongs_to :tax_jurisdiction, class_name: "TaxJurisdiction", foreign_key: :custtaxjurisid, optional: true
+
   scope :active, -> { where(discontinued: false) }
 
   validates :custname, presence: true

@@ -1,0 +1,55 @@
+.content
+  = default_resource_form(read_only: local_assigns[:readonly]) do |f|
+    .row
+      .col-12
+        = card_with_tabs style: [:primary, :outline, 'outline-tabs'] do
+          = tab 'General' do
+            .row
+              .col-3
+                = f.input :custname, wrapper: :vertical_form
+              .col-3
+                = f.input :custbusinessname, wrapper: :vertical_form
+              .col-3
+                = f.input :billing_mode, wrapper: :vertical_form, collection: Customer.billing_modes.keys
+              .col-3
+                = f.input :subscription_amount, wrapper: :vertical_form, as: :currency
+
+            %hr
+            .row
+              .col-3
+                = f.input :custdatecreated, disabled: true
+              .col-3
+                = f.input :custdatemodified, disabled: true
+              .col-2
+                = f.input :discontinued
+              .col-2
+                = f.input :custtaxrate, wrapper: :vertical_form
+            .row
+              .col-12
+                = f.input :custnotes
+
+            %hr
+            .row
+              .col-3
+                = f.input :custsal, wrapper: :vertical_form
+              .col-3
+                = f.input :custfirst, wrapper: :vertical_form
+              .col-3
+                = f.input :custlast, wrapper: :vertical_form
+              .col-3
+                = f.input :custtitle, wrapper: :vertical_form
+            .row
+              .col-6
+                = f.input :custaddress
+            .row
+              .col-6
+                = f.input :custcity
+                = f.input :custst
+                = f.input :custzip
+              .col-6
+                = f.input :custphone
+                = f.input :custfax
+                = f.input :custemail
+
+    .row
+      = simple_form_submit(f)
