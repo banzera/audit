@@ -84,7 +84,7 @@ module AdminLTEHelper
 
     classes = ['card', 'card-tabs'] + Array(style).map {|a| a.to_s.prepend 'card-' }
     content_tag(:div, class: classes.join(' ')) do
-      content_tag(:div, class: 'card-header p-0 border-botton-0') do
+      content_tag(:div, class: 'card-header p-0 border-bottom-0') do
         @_tab_mode = :tablist
         @_tab_active = (active || :first)
         @_tab_unique = effective_bootstrap_unique_id if unique
