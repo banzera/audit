@@ -160,6 +160,8 @@ Rails.application.routes.draw do
     get 'by_po',  to: 'receiving#receive'
   end
 
+  get 'inventory', to: 'inventory#export'
+
   post 'scan', to: 'scans#post'
   resources :inventory_scan_operations, only: [:index, :show]
 
