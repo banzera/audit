@@ -1,0 +1,40 @@
+xlsx_package
+  .workbook
+  .add_worksheet(name: "Items") do |sheet|
+
+  sheet.add_row [
+    "Provider",
+    "Provider SKU",
+    "Title",
+    "Product",
+    "PageURL",
+    "Manufacturer",
+    "Manufacturer Sku",
+    "Category",
+    "Subcategory",
+    "Images (URLs)",
+    "UOM",
+    "Conversion Factor",
+    "Description",
+    "Rate",
+  ]
+
+  @items.each do |i|
+    sheet.add_row [
+    i["Provider"],
+    i["Provider SKU"],
+    i["Title"],
+    i["Product"],
+    i["PageURL"],
+    i["Manufacturer"],
+    i["Manufacturer Sku"],
+    i["Category"],
+    i["Subcategory"],
+    i["Images (URLs)"],
+    i["UOM"],
+    i["Conversion Factor"],
+    i["Description"],
+    i["Rate"],
+    ]
+  end
+end

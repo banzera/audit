@@ -8,6 +8,10 @@
     = render partial: 'layouts/nav/menu_sku_issues'
     = render partial: 'layouts/nav/menu_billing'
     = render partial: 'layouts/nav/menu_analysis'
+    = render partial: 'layouts/nav/menu_analysis'
+    = nav_dropdown 'Inventory' do
+      = nav_link_to fa_icon('download', text: 'Export'), inventory_path(format: :xlsx)
+
   -# Right navbar links
   %ul.navbar-nav.ml-auto
     -#= render partial: 'layouts/nav/search'
