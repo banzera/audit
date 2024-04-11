@@ -44,6 +44,9 @@ Rails.application.routes.draw do
     member do
       get :billing
       get 'sku_infos(/:scope)', to: "customers#sku_infos"
+
+      get :order_history
+      get :sku_history
     end
   end
 

@@ -5,6 +5,20 @@ class CustomersController < ApplicationController
 
   button :sku_infos, false
 
+  def order_history
+    @datatable = OrdersDatatable.new(customer: @customer)
+    @datatable.effective_resource = Effective::Resource.new(Order)
+
+    render :other_action
+  end
+
+  def sku_history
+    @datatable = CustomerItemsDatatable.new(customer: @customer)
+    @datatable.effective_resource = Effective::Resource.new(PreOrderItem)
+
+    render :other_action
+  end
+
   def billing
     @page_title = "#{@customer} Billing Dashboard"
     @datatable  = MarginReportDatatable.new(customer: @customer)

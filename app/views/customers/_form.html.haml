@@ -133,20 +133,20 @@
                 = f.input :custtyemail, label: 'Email'
 
           - if local_assigns[:readonly]
-            = tab 'Orders' do
-              = render_datatable OrdersDatatable.new(customer: @customer),
-                entries: false,
-                pagination: false,
-                buttons: true,
-                sort: true,
-                search: true
-            = tab 'Items' do
-              = render_datatable CustomerItemsDatatable.new(customer: @customer),
-                entries: false,
-                pagination: false,
-                buttons: true,
-                sort: true,
-                search: true
+            -#= tab 'Orders' do
+            -#  = render_datatable OrdersDatatable.new(customer: @customer),
+            -#    entries: false,
+            -#    pagination: false,
+            -#    buttons: true,
+            -#    sort: true,
+            -#    search: true
+            -#= tab 'Items' do
+            -#  = render_datatable CustomerItemsDatatable.new(customer: @customer),
+            -#    entries: false,
+            -#    pagination: false,
+            -#    buttons: true,
+            -#    sort: true,
+            -#    search: true
             = tab 'SKU Preferences' do
               = render_datatable SkuCustInfosDatatable.new(customer: @customer)
 

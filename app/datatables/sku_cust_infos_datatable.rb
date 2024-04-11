@@ -17,7 +17,6 @@ class SkuCustInfosDatatable < Effective::Datatable
   datatable do
     col :skucustinfoid, visible: false
     col :sku
-    col :customer
     col :skuonly
     col :skuonlydate, as: :date
     col :skunever

@@ -25,7 +25,7 @@ class OrdersDatatable < Effective::Datatable
     col :orderdate, as: :date
     col :orderbatch
     unless attributes[:customer].present?
-      col :customer, action: :show
+      col :customer, action: :show#, sql_column: 'custid'
     end
     col :ordertaxrate,         visible: false
     col :orderdelivereddate,   visible: attributes[:customer].present?, as: :date

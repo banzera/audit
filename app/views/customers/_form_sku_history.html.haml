@@ -1,0 +1,13 @@
+- content_for :page_title do
+  SKU History for #{@customer}
+
+.content
+  .row
+    .col-12
+      = lte_card title: 'SKU History', style: [:primary, :outline] do
+        = render_datatable @datatable,
+          entries: false,
+          pagination: false,
+          buttons: true,
+          sort: true,
+          search: true
