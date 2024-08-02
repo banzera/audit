@@ -17,6 +17,7 @@ xlsx_package
     "Conversion Factor",
     "Description",
     "Rate",
+    "Current Qty",
   ]
 
   @items.each do |i|
@@ -35,6 +36,7 @@ xlsx_package
     i["Conversion Factor"],
     i["Description"],
     i["Rate"],
+    i["Current Qty"],
     ]
   end
 end
