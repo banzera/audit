@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_15_152558) do
+ActiveRecord::Schema.define(version: 2024_08_02_193311) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -724,6 +724,11 @@ ActiveRecord::Schema.define(version: 2023_09_15_152558) do
       CREATE TRIGGER tsvectorupdate BEFORE INSERT OR UPDATE ON public.tblsku FOR EACH ROW EXECUTE FUNCTION update_sku_tsvector()
   SQL
 
+  create_view "pg_stat_statements_info", sql_definition: <<-SQL
+      SELECT pg_stat_statements_info.dealloc,
+      pg_stat_statements_info.stats_reset
+     FROM pg_stat_statements_info() pg_stat_statements_info(dealloc, stats_reset);
+  SQL
   create_view "frm_preorder_subform1", sql_definition: <<-SQL
       SELECT tblpreorder.preorderid,
       (tblpreorder.preorderdate)::date AS preorderdate,
@@ -2025,7 +2030,7 @@ ActiveRecord::Schema.define(version: 2023_09_15_152558) do
       t.orders,
       t.current_total,
       t.accelerate_total,
-      t.gross_savings,
+      COALESCE(t.gross_savings, (0)::numeric) AS gross_savings,
       r.return_orders,
       r.total_returns,
       f.subscription_amount,
@@ -2033,5 +2038,34 @@ ActiveRecord::Schema.define(version: 2023_09_15_152558) do
      FROM ((sums t
        JOIN fees f USING (custid))
        FULL JOIN returns r USING (custid, month));
+  SQL
+  create_view "faliam_inventory_exports", sql_definition: <<-SQL
+      WITH h AS (
+           SELECT pohist.skuid,
+              max(pohist.priceeachlesstax) AS price,
+              max(ic.dccurquant) AS current_qty
+             FROM (qryskupohistau2 pohist
+               JOIN qryinventorycounts ic USING (skuid))
+            WHERE (ic.dccurquant > 0)
+            GROUP BY pohist.skuid
+          )
+   SELECT 'Accelerate Supply'::text AS "Provider",
+      t.skuid AS "Provider SKU",
+      ''::text AS "Title",
+      ''::text AS "Product",
+      ''::text AS "PageURL",
+      t.manf AS "Manufacturer",
+      t.itemno AS "Manufacturer Sku",
+      c.skuclassdesc AS "Category",
+      ''::text AS "Subcategory",
+      ''::text AS "Images (URLs)",
+      t.skuminunitstype AS "UOM",
+      t.skuminunits AS "Conversion Factor",
+      t.skudesc AS "Description",
+      round(((h.price * (1.2)::double precision))::numeric, 2) AS "Rate",
+      h.current_qty AS "Current Qty"
+     FROM ((tblsku t
+       JOIN h USING (skuid))
+       JOIN tblskuclass c USING (skuclassid));
   SQL
 end
