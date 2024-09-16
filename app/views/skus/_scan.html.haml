@@ -1,0 +1,40 @@
+- @resource = @sku
+= default_resource_form(read_only: true) do |f|
+  =f.input :sku
+  =f.input :manf
+  =f.input :itemno
+  =f.input :skudesc
+  =f.input :unitweight
+  =f.association :category, collection: []
+  =f.input :skuminunits
+  =f.input :skuminunitstype
+  =f.input :skuminpercs
+
+  =f.association :sku_class, collection: []
+  =f.input :skumaxtemp
+  =f.input :skumintemp
+  =f.input :skunotes
+
+  =f.input :dcloc
+  - inv = @sku.inventory_count
+  %table.table.table-sm
+    %thead
+      %tr
+        %th DC Current Qty
+        %th=inv&.dccurquant
+    %tbody
+      %tr
+        %td Total Received
+        %td=inv&.totalrcvd
+      %tr
+        %td Total Cases Received
+        %td=inv&.totalcasesrcvd
+      %tr
+        %td Total Units Received
+        %td=inv&.totalunitsrcvd
+      %tr
+        %td Bought
+        %td=inv&.bought
+      %tr
+        %td Sold
+        %td=inv&.sold
