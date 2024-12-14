@@ -3,6 +3,9 @@ class ScansController < ActionController::Base
 
   skip_forgery_protection
 
+  def audit
+    @sku = Sku.where(id: scan_params[:tid]).first
+  end
 
   def post
     @scan = InventoryScanOperation.new
