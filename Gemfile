@@ -144,3 +144,5 @@ gem "seedbank", "~> 0.5.0"
 gem "blazer", "~> 2.5"
 
 gem "dry-initializer", "~> 3.1"
+
+gem "matrix", "~> 0.4.2"

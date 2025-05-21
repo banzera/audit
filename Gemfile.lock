@@ -462,6 +462,7 @@ DEPENDENCIES
   jbuilder (~> 2.7)
   listen (~> 3.3)
   lograge (~> 0.11.2)
+  matrix (~> 0.4.2)
   paper_trail (~> 12.3)
   pdfkit
   pg
