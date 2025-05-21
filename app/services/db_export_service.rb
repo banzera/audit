@@ -1,4 +1,16 @@
+# monkey patch zippy since we're running on Ruby where File.exists? no longer
+# exists 🫠
+class Zippy
+  def self.create(filename, options_and_entries={}, &b)
+    File.unlink(filename) if File.exist?(filename)
+    z = new({:filename => filename}.merge(options_and_entries), &b)
+    z.close
+    z
+  end
+end
+
 class DbExportService
+
 
   def self.export
     Tempfile.create(['export', '.zip']) do |file|
