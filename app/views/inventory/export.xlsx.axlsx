@@ -18,6 +18,7 @@ xlsx_package
     "Description",
     "Rate",
     "Current Qty",
+    "DC Location",
   ]
 
   @items.each do |i|
@@ -37,6 +38,7 @@ xlsx_package
     i["Description"],
     i["Rate"],
     i["Current Qty"],
+    i["DC Location"],
     ]
   end
 end
